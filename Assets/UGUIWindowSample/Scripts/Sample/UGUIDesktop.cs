@@ -28,11 +28,8 @@ namespace UGUIWindow
             FindIconInTransformRecursion(transform);
             OnIconClicked.AddListener(DivertOtherIcon);
 
-            // 윈도우 생성
-            UGUIWindowManager.CreateWindow<UGUIWindow>();
-            UGUIWindowManager.CreateWindowEx<UGUIWindowMultipleInstanceSample>(null, -200, 0, 250, 250);
-            UGUIWindowManager.CreateWindowEx<UGUIWindowMultipleInstanceSample>("MultipleInstanceSample", -150, 50, 250, 250);
-            UGUIWindowManager.CreateWindowEx<UGUIWindowMultipleInstanceSample>("MultipleInstanceSample", -100, 100, 250, 250);
+            // 데스크톱은 비어 있는 상태로 시작한다. 창은 사용자가 아이콘을 클릭할 때 열린다.
+            // (기존 샘플의 초기 창 자동 생성 로직 제거 — 포트폴리오용 정리)
         }
 
         private void FindIconInTransformRecursion(Transform transform)
