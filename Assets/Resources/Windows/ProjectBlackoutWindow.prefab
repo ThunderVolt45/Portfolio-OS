@@ -103,6 +103,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -270,7 +271,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7067ceb120d89c49a154291bbc35ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contentText: {fileID: 3425737426381719380}
   _windowMode: 0
   allowMultipleInstance: 0
   useObjectPooling: 1
@@ -281,6 +281,7 @@ MonoBehaviour:
   isMovable: 1
   isResizable: 1
   minimumWindowSize: {x: 100, y: 100}
+  windowIcon: {fileID: 21300000, guid: 79cbcbed61365564faa2d108cd616b84, type: 3}
   OnOpenWindow:
     m_PersistentCalls:
       m_Calls: []
@@ -293,6 +294,7 @@ MonoBehaviour:
   OnMinimizeWindow:
     m_PersistentCalls:
       m_Calls: []
+  contentText: {fileID: 3425737426381719380}
 --- !u!1 &8501604077193396176
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,6 +379,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8565156740118482739}
     m_Modifications:
+    - target: {fileID: 1793496778192565845, guid: 4858a775509a4dc4fae28bf78ee34f1a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2824884922389780811, guid: 4858a775509a4dc4fae28bf78ee34f1a, type: 3}
       propertyPath: m_Name
       value: Borders
@@ -607,6 +613,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4543192031957018131, guid: ac2ce88d16f282946af47e98f4795e76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6403747814931968398, guid: ac2ce88d16f282946af47e98f4795e76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -669,9 +683,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8565156740118482739}
     m_Modifications:
+    - target: {fileID: 1783498052935912979, guid: 7f5b30acbd0eb06479c72263c5691577, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2419745762867701888, guid: 7f5b30acbd0eb06479c72263c5691577, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4449017671718925491, guid: 7f5b30acbd0eb06479c72263c5691577, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989790750496072140, guid: 7f5b30acbd0eb06479c72263c5691577, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8327802550203321378, guid: 7f5b30acbd0eb06479c72263c5691577, type: 3}
       propertyPath: m_Pivot.x
