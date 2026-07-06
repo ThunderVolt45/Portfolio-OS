@@ -66,8 +66,10 @@ mergeInto(LibraryManager.library, {
     var o = window.__pdfOverlay; if (o) o.wrap.style.display = 'none';
   },
 
-  // iframe viewer의 현재 page canvas를 캡처 → base64 PNG → goName.method(base64) 로 SendMessage.
-  // 실패 시 빈 문자열을 넘긴다(C#이 스냅샷 없이 진행).
+  // 현재 보이는 뷰포트를 "실제 페이지 캔버스들"에서 직접 합성 → base64 PNG → SendMessage.
+  // pdf.js가 각 페이지를 <canvas>로 렌더하므로, 현재 스크롤에서 보이는 부분만 drawImage로
+  // 잘라 붙여 픽셀 퍼펙트 스냅샷을 만든다(무의존, 현재 페이지/스크롤 그대로 반영).
+  // 실패 시 빈 문자열(C#이 스냅샷 없이 진행).
   PdfOverlaySnapshot: function (goNamePtr, methodPtr) {
     var goName = UTF8ToString(goNamePtr);
     var method = UTF8ToString(methodPtr);
@@ -75,10 +77,39 @@ mergeInto(LibraryManager.library, {
     function reply(s) { try { SendMessage(goName, method, s); } catch (e) {} }
     if (!o) { reply(''); return; }
     try {
-      var doc = o.iframe.contentDocument;
-      var canvas = doc && doc.querySelector('#viewer canvas');
-      if (!canvas) { reply(''); return; }
-      var url = canvas.toDataURL('image/png'); // 동일 오리진이라 taint 없음
+      var idoc = o.iframe.contentDocument;
+      var vc = idoc && idoc.querySelector('#viewerContainer');
+      var canvases = idoc ? idoc.querySelectorAll('#viewer .canvasWrapper canvas, #viewer .page canvas') : [];
+      if (!vc || !canvases.length) { reply(''); return; }
+
+      var vcRect = vc.getBoundingClientRect();
+      var i, cv, r;
+      var ratio = window.devicePixelRatio || 1;
+      for (i = 0; i < canvases.length; i++) {
+        r = canvases[i].getBoundingClientRect();
+        if (r.width > 0) { ratio = canvases[i].width / r.width; break; }
+      }
+
+      var out = document.createElement('canvas');
+      out.width = Math.max(1, Math.round(vcRect.width * ratio));
+      out.height = Math.max(1, Math.round(vcRect.height * ratio));
+      var ctx = out.getContext('2d');
+      ctx.fillStyle = '#525659'; // pdf.js 뷰어 배경
+      ctx.fillRect(0, 0, out.width, out.height);
+
+      for (i = 0; i < canvases.length; i++) {
+        cv = canvases[i]; r = cv.getBoundingClientRect();
+        var ix1 = Math.max(vcRect.left, r.left), iy1 = Math.max(vcRect.top, r.top);
+        var ix2 = Math.min(vcRect.right, r.right), iy2 = Math.min(vcRect.bottom, r.bottom);
+        if (ix2 <= ix1 || iy2 <= iy1 || r.width === 0 || r.height === 0) continue;
+        var sx = cv.width / r.width, sy = cv.height / r.height;
+        try {
+          ctx.drawImage(cv,
+            (ix1 - r.left) * sx, (iy1 - r.top) * sy, (ix2 - ix1) * sx, (iy2 - iy1) * sy,
+            (ix1 - vcRect.left) * ratio, (iy1 - vcRect.top) * ratio, (ix2 - ix1) * ratio, (iy2 - iy1) * ratio);
+        } catch (e) {}
+      }
+      var url = out.toDataURL('image/png'); // 동일 오리진이라 taint 없음
       reply(url.substring(url.indexOf(',') + 1));
     } catch (e) { reply(''); }
   }
