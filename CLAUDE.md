@@ -122,11 +122,19 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 - 파이프라인: PDF.js(v3.11.174, `Assets/StreamingAssets/pdfjs/`) 브라우저 로드 → 페이지 렌더 → base64 PNG → `SendMessage` → C# `Texture2D` → 창 RawImage. 테스트 문서 `Assets/StreamingAssets/docs/resume.pdf`.
 - ⚠️ **development 빌드는 wasm ~101MB로 GH Pages 100MB 초과** → 배포는 **release 빌드 + IL2CPP 코드 스트리핑** 필요. `Build/`은 .gitignore 대상.
 
+**WebGL 빌드 파이프라인 정비 — 완료 & 검증됨 (반복 검증용)**
+- **재현 빌드 스크립트** `Assets/Editor/PortfolioBuild.cs`(`PortfolioOS.EditorTools.PortfolioBuild`): 배포 설정을 코드로 고정(압축 Disabled·싱글스레드·linker Wasm). 메뉴 **Portfolio → Build WebGL (Release/Development)** + 배치모드(`-executeMethod …BuildWebGLRelease`).
+  - release = **High 매니지드 스트리핑 + IL2CPP `Release`**(Master는 빌드 너무 느려 제외). dev = Minimal/Debug.
+- **결과**: release wasm **37MB**, 전체 배포 **52MB**(모든 파일 <100MB) → **GH Pages 배포 가능**. 빌드 ~4.3분. 브라우저 런타임 정상 초기화(스트리핑 파손 없음) 확인.
+- **로컬 서버** `Tools/serve.py`(wasm MIME=application/wasm, no-store) + **preview MCP** `.claude/launch.json`의 `webgl` 컨피그(port 8000). 브라우저 실구동 검증됨.
+- ⚠️ 빌드는 메인스레드 동기라 **빌드 내내 MCP 브리지 끊김**(정상) → 완료는 `Build/WebGL/Build/WebGL.wasm` mtime 폴링/콘솔 로그로 확인. preview 브라우저는 SwiftShader라 셰이더 에러 로그·`preview_screenshot` 타임아웃 정상 → 검증은 `preview_console_logs`로.
+
 ### 남은 작업 (다음 세션 후보)
 - [ ] `ProjectsWindow`(7종 리스트+상세), `ContactWindow` 등 나머지 앱 창
 - [ ] `DocumentViewerWindow` 다페이지 스크롤 + HTTP Range 요청 + 텍스처 가상화 + "PDF 원본 다운로드" 버튼
 - [ ] 창 내부 콘텐츠 스크롤(ScrollRect) — §4-A
-- [ ] **release WebGL 빌드**로 배포 크기 최적화 → `ThunderVolt45.github.io` 배포(모니터 셸에 임베드)
+- [x] **release WebGL 빌드**로 배포 크기 최적화 (52MB, 위 참조) — 남은 건 `ThunderVolt45.github.io` 배포(모니터 셸에 임베드)
+- [ ] **PDF 하이퍼링크 대응**(설계 확정): 포커스 시 실제 PDF.js viewer DOM을 창 위에 좌표동기 오버레이, 백그라운드 시 텍스처 스냅샷으로 스왑 → 선택·검색·폼 native 지원. 단계 1 = 라이브 viewer + 좌표동기 jslib.
 
 ### 알려진 함정
 - Unity MCP 브리지가 도메인 리로드/플랫폼 전환/서버 재시작 때 자주 끊김 → `manage_editor(telemetry_status)`로 재확인 후 **`set_active_instance`로 인스턴스 재고정**(외부 git 변경 후 AssetDatabase가 stale하면 프리팹이 "없다"고 나올 수 있음 → 강제 refresh).
