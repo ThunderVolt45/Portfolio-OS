@@ -78,11 +78,17 @@ mergeInto(LibraryManager.library, {
     if (!o) { reply(''); return; }
     try {
       var idoc = o.iframe.contentDocument;
+      var de = idoc && idoc.documentElement;
       var vc = idoc && idoc.querySelector('#viewerContainer');
       var canvases = idoc ? idoc.querySelectorAll('#viewer .canvasWrapper canvas, #viewer .page canvas') : [];
-      if (!vc || !canvases.length) { reply(''); return; }
+      if (!de || !vc || !canvases.length) { reply(''); return; }
 
-      var vcRect = vc.getBoundingClientRect();
+      // 출력 프레임 = iframe 전체 뷰포트(=콘텐츠 rect). 페이지-only가 아니라 콘텐츠 rect
+      // 전체 크기로 만들어야 RawImage가 1:1로 표시되어 세로 늘어남이 없다.
+      var fw = de.clientWidth, fh = de.clientHeight;
+      if (fw === 0 || fh === 0) { reply(''); return; }
+      var vcRect = vc.getBoundingClientRect(); // 툴바 아래 페이지 영역(iframe 좌표, top=실측 툴바 높이)
+
       var i, cv, r;
       var ratio = window.devicePixelRatio || 1;
       for (i = 0; i < canvases.length; i++) {
@@ -91,12 +97,21 @@ mergeInto(LibraryManager.library, {
       }
 
       var out = document.createElement('canvas');
-      out.width = Math.max(1, Math.round(vcRect.width * ratio));
-      out.height = Math.max(1, Math.round(vcRect.height * ratio));
+      out.width = Math.max(1, Math.round(fw * ratio));
+      out.height = Math.max(1, Math.round(fh * ratio));
       var ctx = out.getContext('2d');
-      ctx.fillStyle = '#525659'; // pdf.js 뷰어 배경
+      ctx.fillStyle = '#525659'; // 페이지 영역 배경
       ctx.fillRect(0, 0, out.width, out.height);
 
+      // 툴바 영역(0 ~ vcRect.top)을 실제 툴바 배경색으로 채움. 높이는 하드코딩이 아니라
+      // vcRect.top(=페이지 컨테이너 위치=실측 툴바 높이)이라 반응형/숨김에도 적응.
+      var tb = idoc.querySelector('#toolbarContainer') || idoc.querySelector('.toolbar');
+      var tbColor = (tb && tb.ownerDocument.defaultView) ? tb.ownerDocument.defaultView.getComputedStyle(tb).backgroundColor : '';
+      if (!tbColor || tbColor === 'rgba(0, 0, 0, 0)' || tbColor === 'transparent') tbColor = '#38383d';
+      ctx.fillStyle = tbColor;
+      ctx.fillRect(0, 0, out.width, Math.max(0, Math.round(vcRect.top * ratio)));
+
+      // 페이지 캔버스: viewerContainer 영역으로 클리핑, iframe 뷰포트 좌표 그대로 그림(툴바 침범 방지)
       for (i = 0; i < canvases.length; i++) {
         cv = canvases[i]; r = cv.getBoundingClientRect();
         var ix1 = Math.max(vcRect.left, r.left), iy1 = Math.max(vcRect.top, r.top);
@@ -106,7 +121,7 @@ mergeInto(LibraryManager.library, {
         try {
           ctx.drawImage(cv,
             (ix1 - r.left) * sx, (iy1 - r.top) * sy, (ix2 - ix1) * sx, (iy2 - iy1) * sy,
-            (ix1 - vcRect.left) * ratio, (iy1 - vcRect.top) * ratio, (ix2 - ix1) * ratio, (iy2 - iy1) * ratio);
+            ix1 * ratio, iy1 * ratio, (ix2 - ix1) * ratio, (iy2 - iy1) * ratio);
         } catch (e) {}
       }
       var url = out.toDataURL('image/png'); // 동일 오리진이라 taint 없음

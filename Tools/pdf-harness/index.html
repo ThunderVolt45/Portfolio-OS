@@ -141,9 +141,11 @@ requestAnimationFrame(syncOverlay);
 // pdf.js가 각 페이지를 <canvas>로 렌더하므로, 현재 스크롤에서 보이는 부분을
 // drawImage로 잘라 붙이면 픽셀 퍼펙트 스냅샷이 된다(무의존, 현재 페이지/스크롤 반영).
 function compositeVisible(idoc) {
+  const de = idoc.documentElement;
+  const fw = de.clientWidth, fh = de.clientHeight;   // iframe 전체 뷰포트(=콘텐츠 rect)
   const vc = idoc.querySelector('#viewerContainer');
-  if (!vc) return null;
-  const vcRect = vc.getBoundingClientRect();
+  if (!vc || fw === 0 || fh === 0) return null;
+  const vcRect = vc.getBoundingClientRect();          // 툴바 아래 페이지 영역(iframe 좌표)
   const canvases = idoc.querySelectorAll('#viewer .canvasWrapper canvas, #viewer .page canvas');
   if (!canvases.length) return null;
 
@@ -154,26 +156,35 @@ function compositeVisible(idoc) {
     if (r.width > 0) { ratio = cv.width / r.width; break; }
   }
 
+  // 출력 캔버스 = 콘텐츠 rect 전체 크기 → RawImage가 1:1로 표시(늘어남 없음)
   const out = document.createElement('canvas');
-  out.width = Math.max(1, Math.round(vcRect.width * ratio));
-  out.height = Math.max(1, Math.round(vcRect.height * ratio));
+  out.width = Math.max(1, Math.round(fw * ratio));
+  out.height = Math.max(1, Math.round(fh * ratio));
   const ctx = out.getContext('2d');
-  ctx.fillStyle = '#2a2d40';
+  ctx.fillStyle = '#525659';                           // 페이지 영역 배경
   ctx.fillRect(0, 0, out.width, out.height);
 
+  // 툴바 영역(0 ~ vcRect.top)을 실제 툴바 배경색으로 채움(늘어난 페이지 대신 깔끔한 바)
+  const tb = idoc.querySelector('#toolbarContainer') || idoc.querySelector('.toolbar');
+  let tbColor = (tb && tb.ownerDocument.defaultView) ? tb.ownerDocument.defaultView.getComputedStyle(tb).backgroundColor : '';
+  if (!tbColor || tbColor === 'rgba(0, 0, 0, 0)' || tbColor === 'transparent') tbColor = '#38383d';
+  ctx.fillStyle = tbColor;
+  ctx.fillRect(0, 0, out.width, Math.max(0, Math.round(vcRect.top * ratio)));
+
+  // 페이지 캔버스: viewerContainer 영역으로 클리핑해 원래 위치에 그림(툴바 침범 방지)
   for (const cv of canvases) {
     const r = cv.getBoundingClientRect();
-    // 뷰포트와의 교집합(보이는 부분만)
     const ix1 = Math.max(vcRect.left, r.left), iy1 = Math.max(vcRect.top, r.top);
     const ix2 = Math.min(vcRect.right, r.right), iy2 = Math.min(vcRect.bottom, r.bottom);
     if (ix2 <= ix1 || iy2 <= iy1 || r.width === 0 || r.height === 0) continue;
 
     const sx = cv.width / r.width, sy = cv.height / r.height;
-    const srcX = (ix1 - r.left) * sx, srcY = (iy1 - r.top) * sy;
-    const srcW = (ix2 - ix1) * sx, srcH = (iy2 - iy1) * sy;
-    const dstX = (ix1 - vcRect.left) * ratio, dstY = (iy1 - vcRect.top) * ratio;
-    const dstW = (ix2 - ix1) * ratio, dstH = (iy2 - iy1) * ratio;
-    try { ctx.drawImage(cv, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH); } catch (e) {}
+    // dest는 iframe 뷰포트 좌표 그대로(출력 원점=뷰포트 원점 0,0)
+    try {
+      ctx.drawImage(cv,
+        (ix1 - r.left) * sx, (iy1 - r.top) * sy, (ix2 - ix1) * sx, (iy2 - iy1) * sy,
+        ix1 * ratio, iy1 * ratio, (ix2 - ix1) * ratio, (iy2 - iy1) * ratio);
+    } catch (e) {}
   }
   return out.toDataURL('image/png');
 }
