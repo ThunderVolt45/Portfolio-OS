@@ -107,7 +107,14 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 
 ### 2026-07-06 기준 — 최근 작업
 
-**upstream 동기화 (`git merge upstream/main`, → 4c36133, 7커밋)** — 프레임워크 개선 반영:
+**upstream 2차 동기화 (`git merge upstream/main`, `4c36133..edb7939`, 2커밋 → merge `cc5485c`)** — 창 전환 오버레이 반영:
+`Feat: 창 전환 오버레이 추가`(a1bf9f5) + `Feat: 창 전환 오버레이 프리팹 관리 개선`(edb7939). 신규 `UGUIWindowSwitcher.cs`/프리팹 추가, `UGUIWindowManager.cs`(+197)·`UGUIWindow.cs`(+3) 수정, docs 갱신.
+- **씬만 충돌 → 1차와 동일하게 Unity Smart Merge**(`UnityYAMLMerge.exe merge -p <base> <theirs> <ours> <out>`, 인덱스 `:1/:3/:2`)로 fileID 병합 → **내 아이콘 3개(About/ProjectBlackout/DocumentViewer) 전부 보존**, upstream 요소 유지, 충돌 마커 0. 스크립트/프리팹은 auto-merge.
+- 병합 전 미커밋 폰트 SDF 7개는 `git checkout --`로 되돌림. `ProjectSettings.preloadedAssets`(InputSystem) 노이즈는 이번에도 스테이징 제외(병합이 안 건드림). productName 영향 없음.
+- **컴파일 검증됨(MCP)**: `refresh_unity(force/compile)` 후 `read_console` 에러 0건. 내가 구독하는 `UGUIWindowManager.OnManagedWindowFocused/Minimized/Closed` 이벤트 + `CreateWindow/CreateWindowEx` 시그니처 불변 확인.
+- ⚠️ 남은 것: 신규 `UGUIWindowSwitcher`(창 전환 오버레이)를 포트폴리오에서 실제로 쓸지/동작 확인은 미검증. 내 PDF 포커스-스왑 오버레이와 상호작용 여부도 점검 후보.
+
+**upstream 1차 동기화 (`git merge upstream/main`, → 4c36133, 7커밋)** — 프레임워크 개선 반영:
 `Feat: 창 본문 스크롤 처리 추가`(§4-A 본문 스크롤!), 작업표시줄/최대화 영역 복구 fix, 샘플 디자인 수정 등.
 - **씬 충돌은 Unity Smart Merge로 해결**: `UnityYAMLMerge.exe merge -p <base> <theirs> <ours> <out>`(git 인덱스 `:1/:3/:2` 추출) → fileID 기준 병합으로 **내 아이콘 3개 + upstream InputSystem_Actions 블록 모두 보존**(손 병합 금지, 이 도구 쓸 것). 프리팹/스크립트는 auto-merge.
 - 병합 전 미커밋 폰트 SDF 7개(`_typelessdata` 아틀라스 노이즈)는 `git checkout --`로 되돌린 뒤 merge(§2). productName=Portfolio-OS 유지 확인.
