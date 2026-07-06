@@ -51,8 +51,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         sys.stderr.write("[serve] " + (fmt % args) + "\n")
 
 
+# 멀티스레드: pdf.js 뷰어/WebGL은 아이콘·워커·PDF 등 수십 개를 동시 요청한다.
+# 단일 스레드 서버는 keep-alive 연결에 물려 backlog가 넘치고 연결이 거부된다.
+class Server(socketserver.ThreadingMixIn, http.server.HTTPServer):
+    allow_reuse_address = True  # TIME_WAIT 재바인딩 시 WinError 10048 회피
+    daemon_threads = True       # 종료 시 요청 스레드가 프로세스를 붙잡지 않도록
+
+
 def main():
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    with Server(("", PORT), Handler) as httpd:
         print(f"[serve] Serving '{DIRECTORY}' at http://localhost:{PORT}/")
         httpd.serve_forever()
 

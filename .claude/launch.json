@@ -6,6 +6,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["Tools/serve.py", "8000", "Build/WebGL"],
       "port": 8000
+    },
+    {
+      "name": "pdf-harness",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["Tools/serve.py", "8123", "Tools/pdf-harness"],
+      "port": 8123
     }
   ]
 }
