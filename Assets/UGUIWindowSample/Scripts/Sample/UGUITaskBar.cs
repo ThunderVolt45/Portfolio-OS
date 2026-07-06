@@ -56,8 +56,10 @@ namespace UGUIWindow
         private readonly Dictionary<UGUIWindow, UGUITaskIcon> icons = new();
 
         private UGUIWindowManager subscribedManager;
+        private UGUIWindowManager maximizedWindowAreaManager;
         private RectTransform rectTransform;
         private bool isSubscribed;
+        private bool registeredMaximizedWindowArea;
 
         private void Awake()
         {
@@ -75,6 +77,7 @@ namespace UGUIWindow
 
         private void OnEnable()
         {
+            ConfigureTaskBarRect();
             SubscribeToManager();
             RebuildFromManager();
         }
@@ -82,6 +85,7 @@ namespace UGUIWindow
         private void OnDisable()
         {
             UnsubscribeFromManager();
+            ClearMaximizedWindowArea();
         }
 
         private void OnDestroy()
@@ -92,6 +96,8 @@ namespace UGUIWindow
             {
                 _instance = null;
             }
+
+            ClearMaximizedWindowArea();
         }
 
         public void AttachToDesktop(UGUIDesktop desktop)
@@ -114,6 +120,10 @@ namespace UGUIWindow
             }
 
             subscribedManager = UGUIWindowManager.Instance;
+            if (subscribedManager == null)
+            {
+                return;
+            }
 
             subscribedManager.OnManagedWindowOpened.AddListener(HandleWindowOpened);
             subscribedManager.OnManagedWindowClosed.AddListener(HandleWindowClosed);
@@ -315,6 +325,34 @@ namespace UGUIWindow
             rectTransform.pivot = new Vector2(0.5f, 0f);
             rectTransform.anchoredPosition = Vector2.zero;
             rectTransform.sizeDelta = new Vector2(0f, taskBarHeight);
+
+            var manager = UGUIWindowManager.Instance;
+            if (manager == null)
+            {
+                return;
+            }
+
+            manager.SetMaximizedWindowOffsets(
+                new Vector2(0f, taskBarHeight),
+                Vector2.zero);
+            maximizedWindowAreaManager = manager;
+            registeredMaximizedWindowArea = true;
+        }
+
+        private void ClearMaximizedWindowArea()
+        {
+            if (!registeredMaximizedWindowArea)
+            {
+                return;
+            }
+
+            if (maximizedWindowAreaManager != null)
+            {
+                maximizedWindowAreaManager.ClearMaximizedWindowOffsets();
+            }
+
+            maximizedWindowAreaManager = null;
+            registeredMaximizedWindowArea = false;
         }
 
         private void RefreshItems(UGUIWindow focusedWindow)

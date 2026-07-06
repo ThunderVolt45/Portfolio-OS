@@ -12,6 +12,7 @@ namespace UGUIWindow
     {
         private static UGUIWindowManager _instance;
         private static object locker = new object(); // Thread-Safe한 싱글톤 패턴을 구현하기 위한 lock
+        private static bool isShuttingDown;
 
         public static UGUIWindowManager Instance
         {
@@ -20,6 +21,11 @@ namespace UGUIWindow
                 // 인스턴스가 존재하지 않을 경우
                 if (_instance == null)
                 {
+                    if (isShuttingDown)
+                    {
+                        return null;
+                    }
+
                     // 일단 인스턴스가 존재하는 지 확인
                     _instance = FindAnyObjectByType<UGUIWindowManager>(FindObjectsInactive.Include);
 
@@ -38,6 +44,11 @@ namespace UGUIWindow
                         {
                             if (_instance == null)
                             {
+                                if (isShuttingDown)
+                                {
+                                    return null;
+                                }
+
                                 var managerPrefab = Resources.Load<GameObject>("UGUIWindowManager");
                                 var managerGameObject = Instantiate(managerPrefab);
                                 _instance = managerGameObject.GetComponent<UGUIWindowManager>();
@@ -46,11 +57,18 @@ namespace UGUIWindow
                     }
                 }
 
-                _instance.EnsureRuntimeState();
+                _instance?.EnsureRuntimeState();
 
                 // 인스턴스 반환
                 return _instance;
             }
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStaticState()
+        {
+            _instance = null;
+            isShuttingDown = false;
         }
 
         [Header("Settings")]
@@ -64,6 +82,13 @@ namespace UGUIWindow
         [Header("Default Window")]
         [Tooltip("활성화된 Window가 없는 상태에서 Escape를 받았을 때 생성할 Window")]
         [SerializeField] private UGUIWindow defaultWindowOnEscape;
+
+        [Header("Maximized Window Area")]
+        [Tooltip("최대화된 Window가 부모 Rect의 왼쪽/아래쪽에서 띄울 여백")]
+        [SerializeField] private Vector2 maximizedWindowOffsetMin = Vector2.zero;
+
+        [Tooltip("최대화된 Window가 부모 Rect의 오른쪽/위쪽에서 띄울 여백")]
+        [SerializeField] private Vector2 maximizedWindowOffsetMax = Vector2.zero;
 
         [Header("Object Pool")]
         [Tooltip("Window가 최소화되었을 때 이동할 오브젝트의 CanvasScaler")]
@@ -100,7 +125,11 @@ namespace UGUIWindow
 
         public static float CurrentDPI
         {
-            get { return Instance._currentDPI; }
+            get
+            {
+                var manager = Instance;
+                return manager != null ? manager._currentDPI : 2f;
+            }
         }
 
         public float ScreenMultiplierWidth
@@ -111,6 +140,16 @@ namespace UGUIWindow
         public float ScreenMultiplierHeight
         {
             get { return _screenMultiplierHeight; }
+        }
+
+        public Vector2 MaximizedWindowOffsetMin
+        {
+            get { return maximizedWindowOffsetMin; }
+        }
+
+        public Vector2 MaximizedWindowOffsetMax
+        {
+            get { return maximizedWindowOffsetMax; }
         }
 
         public IEnumerable<UGUIWindow> ManagedVisibleWindows
@@ -137,6 +176,7 @@ namespace UGUIWindow
             }
 
             _instance = this;
+            isShuttingDown = false;
             
             EnsureRuntimeState();
 
@@ -145,6 +185,22 @@ namespace UGUIWindow
 
             // 씬 이동으로 인해 파괴되지 않도록 설정
             DontDestroyOnLoad(gameObject);
+        }
+
+        private void OnApplicationQuit()
+        {
+            isShuttingDown = true;
+        }
+
+        private void OnDestroy()
+        {
+            Application.lowMemory -= OnLowMemory;
+
+            if (_instance == this)
+            {
+                isShuttingDown = true;
+                _instance = null;
+            }
         }
 
         private void EnsureRuntimeState()
@@ -183,8 +239,14 @@ namespace UGUIWindow
         /// <param name="dpi">목표 DPI % (1f = 100%)</param>
         public static void SetDPI(int screenWidth, int screenHeight, float dpi)
         {
+            var manager = Instance;
+            if (manager == null)
+            {
+                return;
+            }
+
             // 화면 해상도와 DPI 값에 맞춰 캔버스의 설정을 변경한다.
-            Instance.ChangeCanvasResolution(screenWidth, screenHeight, dpi);
+            manager.ChangeCanvasResolution(screenWidth, screenHeight, dpi);
 
             // PlayerPrefs에 DPI 값을 기록한다.
             PlayerPrefs.SetFloat("DPI Settings", dpi);
@@ -210,6 +272,22 @@ namespace UGUIWindow
 
             // DPI 설정이 바뀌었음을 알림
             OnDPIChanged?.Invoke(screenWidth, screenHeight, dpi);
+        }
+
+        public void SetMaximizedWindowOffsets(Vector2 offsetMin, Vector2 offsetMax)
+        {
+            maximizedWindowOffsetMin = offsetMin;
+            maximizedWindowOffsetMax = offsetMax;
+
+            foreach (var window in ManagedVisibleWindows)
+            {
+                window.RefreshMaximizedLayout();
+            }
+        }
+
+        public void ClearMaximizedWindowOffsets()
+        {
+            SetMaximizedWindowOffsets(Vector2.zero, Vector2.zero);
         }
         #endregion
 
@@ -311,7 +389,8 @@ namespace UGUIWindow
                 throw new ArgumentException($"Passing {windowType.Name} as a parameter is not allowed");
             }
 
-            return Instance.GetOrCreateWindow(windowType, windowName, null);
+            var manager = Instance;
+            return manager != null ? manager.GetOrCreateWindow(windowType, windowName, null) : null;
         }
 
         /// <summary>
@@ -335,7 +414,8 @@ namespace UGUIWindow
 
             // 공통 메소드 호출
             Type windowType = typeof(T);
-            return Instance.GetOrCreateWindow(windowType, windowName, setupAction);
+            var manager = Instance;
+            return manager != null ? manager.GetOrCreateWindow(windowType, windowName, setupAction) : null;
         }
 
         /// <summary>
@@ -362,7 +442,8 @@ namespace UGUIWindow
 
             // 공통 메소드 호출
             Type windowType = typeof(T);
-            return Instance.GetOrCreateWindow(windowType, windowName, setupAction);
+            var manager = Instance;
+            return manager != null ? manager.GetOrCreateWindow(windowType, windowName, setupAction) : null;
         }
         #endregion
 
