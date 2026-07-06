@@ -105,6 +105,16 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 
 > 세션 간 인계용. 새 세션은 §0~§5 통독 후 **여기서 최신 상태 파악**하고, 작업 후 이 섹션을 갱신할 것.
 
+### 2026-07-06 기준 — 최근 작업
+
+**upstream 동기화 (`git merge upstream/main`, → 4c36133, 7커밋)** — 프레임워크 개선 반영:
+`Feat: 창 본문 스크롤 처리 추가`(§4-A 본문 스크롤!), 작업표시줄/최대화 영역 복구 fix, 샘플 디자인 수정 등.
+- **씬 충돌은 Unity Smart Merge로 해결**: `UnityYAMLMerge.exe merge -p <base> <theirs> <ours> <out>`(git 인덱스 `:1/:3/:2` 추출) → fileID 기준 병합으로 **내 아이콘 3개 + upstream InputSystem_Actions 블록 모두 보존**(손 병합 금지, 이 도구 쓸 것). 프리팹/스크립트는 auto-merge.
+- 병합 전 미커밋 폰트 SDF 7개(`_typelessdata` 아틀라스 노이즈)는 `git checkout --`로 되돌린 뒤 merge(§2). productName=Portfolio-OS 유지 확인.
+- ⚠️ **병합 후 Unity 에디터에서 컴파일 검증 필요**(MCP 다운 상태로 정적 확인만 함 — 내가 쓰는 `UGUIWindow` API 시그니처는 불변 확인).
+
+**빌드 파이프라인 + PDF 오버레이 하니스 커밋됨** (f70d278, 10379d3) — 아래 상세.
+
 ### 2026-07-03 기준 — 완료 & 검증됨
 
 **포트폴리오 앱 창 (§4-B) — 부분 완료** (모두 `Assets/Scripts/Portfolio/`, 프리팹은 `Assets/Resources/Windows/`)
@@ -132,7 +142,7 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 ### 남은 작업 (다음 세션 후보)
 - [ ] `ProjectsWindow`(7종 리스트+상세), `ContactWindow` 등 나머지 앱 창
 - [ ] `DocumentViewerWindow` 다페이지 스크롤 + HTTP Range 요청 + 텍스처 가상화 + "PDF 원본 다운로드" 버튼
-- [ ] 창 내부 콘텐츠 스크롤(ScrollRect) — §4-A
+- [~] 창 내부 콘텐츠 스크롤(ScrollRect) — §4-A: **upstream `Feat: 창 본문 스크롤 처리 추가`로 프레임워크에 들어옴**(2026-07-06 병합). 포트폴리오 창에 실제 적용/동작 확인 필요.
 - [x] **release WebGL 빌드**로 배포 크기 최적화 (52MB, 위 참조) — 남은 건 `ThunderVolt45.github.io` 배포(모니터 셸에 임베드)
 - [ ] **PDF 하이퍼링크 대응**(설계 확정): 포커스 시 실제 PDF.js viewer DOM을 창 위에 좌표동기 오버레이, 백그라운드 시 텍스처 스냅샷으로 스왑 → 선택·검색·폼 native 지원. 단계 1 = 라이브 viewer + 좌표동기 jslib.
 
