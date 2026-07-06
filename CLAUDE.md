@@ -115,6 +115,15 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 
 **빌드 파이프라인 + PDF 오버레이 하니스 커밋됨** (f70d278, 10379d3) — 아래 상세.
 
+**PDF 포커스-스왑 오버레이 Unity 통합 — 완료 & WebGL 실빌드 검증** (c0efc8c):
+- `DocumentViewerWindow` 재작성: 포커스 시 실제 pdf.js viewer(iframe)를 창 위에 좌표동기 오버레이(`Assets/Plugins/WebGL/PdfOverlay.jslib`)로 띄워 **선택·검색·폼·하이퍼링크 native**, 백그라운드 시 page canvas 스냅샷을 텍스처로 굳혀 RawImage 표시(z-order 정상). `UGUIWindowManager.OnManagedWindowFocused/Minimized/Closed` 구독으로 스왑.
+- 좌표매핑: 콘텐츠 RectTransform world corners → `RectTransformUtility.WorldToScreenPoint`(Unity px) → jslib에서 `canvas.getBoundingClientRect()`+버퍼크기로 CSS 변환·Y뒤집기·캔버스 경계 클리핑.
+- pdf.js **정식 viewer(3.11.174)를 `Assets/StreamingAssets/pdfjs/{build,web}`에 추가**(dev 잔여 제거, ~9MB). release 빌드 60MB(여전히 <100MB).
+- `PortfolioBootstrap.cs`: URL 해시 `#open=클래스명` 딥링크로 특정 앱 자동 오픈(테스트+monitor.html 딥링크). `Type.GetType` 방식이라 스트리핑 안전(아이콘과 동일).
+- 검증(release 브라우저): 딥링크 오픈→좌표동기 정합, resume 렌더, 뷰포트 리사이즈 재계산·클리핑, 타 창 포커스 시 스냅샷 스왑(overlay display:none) 확인. JS 에러 0.
+- ⚠️ **남은 것**: ①복귀(백그라운드→라이브) 경로는 대칭 로직이나 헤드리스 preview에서 클릭검증 못 함 — 실브라우저 눈확인 권장. ②포커스아웃 시 스냅샷이 async라 도착 전 짧은 플래시 가능. ③**monitor.html 셸**(스케일/오프셋 캔버스) 좌표 정합 검증 필요(docs 세션 조율). ④다중 DocumentViewerWindow는 단일 오버레이 PoC.
+- ⚠️ **미커밋 곁가지**: 폰트 SDF 7개(동적 아틀라스에 한글 글리프 구워짐, 1392줄) + `ProjectSettings.preloadedAssets`(InputSystem 자동추가) — PDF와 무관해 제외. 별도 처리 필요. 또한 일부 TMP 텍스트에서 한글 글리프 미스 경고(□) 관측 — 폰트 폴백 재점검 후보.
+
 ### 2026-07-03 기준 — 완료 & 검증됨
 
 **포트폴리오 앱 창 (§4-B) — 부분 완료** (모두 `Assets/Scripts/Portfolio/`, 프리팹은 `Assets/Resources/Windows/`)
@@ -144,7 +153,7 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 - [ ] `DocumentViewerWindow` 다페이지 스크롤 + HTTP Range 요청 + 텍스처 가상화 + "PDF 원본 다운로드" 버튼
 - [~] 창 내부 콘텐츠 스크롤(ScrollRect) — §4-A: **upstream `Feat: 창 본문 스크롤 처리 추가`로 프레임워크에 들어옴**(2026-07-06 병합). 포트폴리오 창에 실제 적용/동작 확인 필요.
 - [x] **release WebGL 빌드**로 배포 크기 최적화 (52MB, 위 참조) — 남은 건 `ThunderVolt45.github.io` 배포(모니터 셸에 임베드)
-- [ ] **PDF 하이퍼링크 대응**(설계 확정): 포커스 시 실제 PDF.js viewer DOM을 창 위에 좌표동기 오버레이, 백그라운드 시 텍스처 스냅샷으로 스왑 → 선택·검색·폼 native 지원. 단계 1 = 라이브 viewer + 좌표동기 jslib.
+- [x] **PDF 하이퍼링크 대응** 단계 1(포커스-스왑 오버레이) — WebGL 통합·검증 완료(c0efc8c, 위 상세). 남은 refinement는 §6 ⚠️ 참조(복귀경로 눈확인·플래시·셸 정합·다중창).
 
 ### 알려진 함정
 - Unity MCP 브리지가 도메인 리로드/플랫폼 전환/서버 재시작 때 자주 끊김 → `manage_editor(telemetry_status)`로 재확인 후 **`set_active_instance`로 인스턴스 재고정**(외부 git 변경 후 AssetDatabase가 stale하면 프리팹이 "없다"고 나올 수 있음 → 강제 refresh).
