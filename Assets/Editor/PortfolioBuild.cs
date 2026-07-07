@@ -11,7 +11,9 @@ namespace PortfolioOS.EditorTools
     /// 코드로 고정한다(에디터 UI 상태에 의존하지 않음).
     ///
     /// GitHub Pages 제약 반영:
-    ///  - compressionFormat = Disabled (Pages가 Content-Encoding 헤더 못 넣음)
+    ///  - compressionFormat = Brotli + decompressionFallback = Enabled
+    ///    (Pages가 Content-Encoding 헤더를 못 넣으므로, Unity 내장 JS 디컴프레서가
+    ///     클라이언트에서 .br을 해제하도록 fallback을 켠다. 배포 산출물 ~30MB.)
     ///  - 싱글스레드 (SharedArrayBuffer/COOP·COEP 불가)
     ///  - 파일당 100MB 하드 제한 → release + High 스트리핑으로 wasm 경량화
     ///
@@ -39,8 +41,10 @@ namespace PortfolioOS.EditorTools
             var nbt = NamedBuildTarget.WebGL;
 
             // --- 배포 결정적 설정 ---
-            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
-            PlayerSettings.WebGL.decompressionFallback = false; // Disabled면 무의미하나 명시
+            // Brotli 압축 + 디컴프레션 폴백: GH Pages는 Content-Encoding 헤더를 못 넣으므로
+            // Unity 내장 JS 디컴프레서가 클라이언트에서 .br을 풀도록 fallback을 켠다(§4-C).
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
+            PlayerSettings.WebGL.decompressionFallback = true;
             PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Wasm;
             PlayerSettings.WebGL.threadsSupport = false; // 싱글스레드
             PlayerSettings.WebGL.dataCaching = false;
