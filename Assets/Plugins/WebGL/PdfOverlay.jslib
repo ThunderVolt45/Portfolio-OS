@@ -1,40 +1,33 @@
 // PDF 오버레이 브리지 (WebGL 전용)
 // Unity 캔버스 "위"에 실제 pdf.js viewer(iframe) DOM을 좌표동기 오버레이로 띄운다.
-// 포커스 창일 때 라이브(선택·검색·폼·링크 native), 백그라운드일 때 텍스처 스냅샷으로 스왑.
+// 창마다 자기 전용 iframe을 id로 키잉해 1개씩 만들어 살려 둔다(파괴하지 않음).
+// 포커스 창일 때만 자기 iframe을 보이고(라이브: 선택·검색·폼·링크 native),
+// 백그라운드일 때 자기 iframe을 텍스처 스냅샷으로 굳힌 뒤 숨긴다(z-order 정상, 리로드 없음).
 // C#이 창 콘텐츠의 Unity 스크린 rect(좌하단 원점, px)를 넘기면 여기서 CSS 좌표로 변환·클리핑한다.
 mergeInto(LibraryManager.library, {
 
-  // 오버레이 1개 생성. viewerUrl = StreamingAssets 기준 절대 URL(?file=... 포함).
-  // z-order 때문에 iframe은 1개만 두고, 포커스된 창의 문서로 src를 전환한다(PdfOverlaySetSrc).
-  PdfOverlayInit: function (viewerUrlPtr) {
+  // 이 창(id) 전용 오버레이 iframe을 생성한다(이미 있으면 유지 → 리로드 방지).
+  // viewerUrl = StreamingAssets 기준 절대 URL(?file=... 포함).
+  PdfOverlayInit: function (idPtr, viewerUrlPtr) {
+    var id = UTF8ToString(idPtr);
     var viewerUrl = UTF8ToString(viewerUrlPtr);
-    if (window.__pdfOverlay) return;
+    if (!window.__pdfOverlays) window.__pdfOverlays = {};
+    if (window.__pdfOverlays[id]) return;
     var wrap = document.createElement('div');
-    wrap.id = 'pdf-overlay';
+    wrap.id = 'pdf-overlay-' + id;
     wrap.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;overflow:hidden;z-index:10;display:none;background:#fff;';
     var ifr = document.createElement('iframe');
     ifr.style.cssText = 'border:0;display:block;';
     ifr.src = viewerUrl;
     wrap.appendChild(ifr);
     document.body.appendChild(wrap);
-    window.__pdfOverlay = { wrap: wrap, iframe: ifr, url: viewerUrl };
+    window.__pdfOverlays[id] = { wrap: wrap, iframe: ifr, url: viewerUrl };
   },
-
-  // 단일 오버레이의 문서를 전환한다(포커스된 창의 문서). 같은 문서면 리로드하지 않는다.
-  PdfOverlaySetSrc: function (viewerUrlPtr) {
-    var viewerUrl = UTF8ToString(viewerUrlPtr);
-    var o = window.__pdfOverlay; if (!o) return;
-    if (o.url === viewerUrl) return;
-    o.url = viewerUrl;
-    o.iframe.src = viewerUrl;
-  },
-
-  // Unity 캔버스 엘리먼트를 찾는다(빌드 템플릿에 따라 id가 다를 수 있어 폴백 체인).
-  // 내부 헬퍼가 아니라 각 함수에서 직접 찾음(jslib는 함수 간 공유가 까다로움).
 
   // 창 콘텐츠의 Unity 스크린 rect(x,y=좌하단, w,h; Unity px) → CSS 좌표 변환 + 캔버스 경계 클리핑.
-  PdfOverlaySetRect: function (xPx, yPx, wPx, hPx) {
-    var o = window.__pdfOverlay; if (!o) return;
+  PdfOverlaySetRect: function (idPtr, xPx, yPx, wPx, hPx) {
+    var id = UTF8ToString(idPtr);
+    var o = window.__pdfOverlays && window.__pdfOverlays[id]; if (!o) return;
     var canvas = (typeof Module !== 'undefined' && Module.canvas) ||
                  document.querySelector('#unity-canvas') ||
                  document.querySelector('canvas');
@@ -68,22 +61,27 @@ mergeInto(LibraryManager.library, {
     o.iframe.style.marginTop = (cssTop - clipT) + 'px';
   },
 
-  PdfOverlayShow: function () {
-    var o = window.__pdfOverlay; if (o) o.wrap.style.display = 'block';
+  PdfOverlayShow: function (idPtr) {
+    var id = UTF8ToString(idPtr);
+    var o = window.__pdfOverlays && window.__pdfOverlays[id];
+    if (o) o.wrap.style.display = 'block';
   },
 
-  PdfOverlayHide: function () {
-    var o = window.__pdfOverlay; if (o) o.wrap.style.display = 'none';
+  PdfOverlayHide: function (idPtr) {
+    var id = UTF8ToString(idPtr);
+    var o = window.__pdfOverlays && window.__pdfOverlays[id];
+    if (o) o.wrap.style.display = 'none';
   },
 
-  // 현재 보이는 뷰포트를 "실제 페이지 캔버스들"에서 직접 합성 → base64 PNG → SendMessage.
+  // 이 창(id) iframe의 현재 보이는 뷰포트를 "실제 페이지 캔버스들"에서 직접 합성 → base64 PNG → SendMessage.
   // pdf.js가 각 페이지를 <canvas>로 렌더하므로, 현재 스크롤에서 보이는 부분만 drawImage로
   // 잘라 붙여 픽셀 퍼펙트 스냅샷을 만든다(무의존, 현재 페이지/스크롤 그대로 반영).
   // 실패 시 빈 문자열(C#이 스냅샷 없이 진행).
-  PdfOverlaySnapshot: function (goNamePtr, methodPtr) {
+  PdfOverlaySnapshot: function (idPtr, goNamePtr, methodPtr) {
+    var id = UTF8ToString(idPtr);
     var goName = UTF8ToString(goNamePtr);
     var method = UTF8ToString(methodPtr);
-    var o = window.__pdfOverlay;
+    var o = window.__pdfOverlays && window.__pdfOverlays[id];
     function reply(s) { try { SendMessage(goName, method, s); } catch (e) {} }
     if (!o) { reply(''); return; }
     try {

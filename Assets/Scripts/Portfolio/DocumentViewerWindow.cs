@@ -8,9 +8,11 @@ namespace UGUIWindow
 {
     /// <summary>
     /// PDF 문서 뷰어 — 포커스-스왑 오버레이 방식.
-    /// 포커스 상태에서는 실제 pdf.js viewer(iframe) DOM을 창 위에 좌표동기 오버레이로 띄워
-    /// 선택·검색·폼·하이퍼링크를 native로 지원한다. 백그라운드로 밀리면 현재 화면을
-    /// 텍스처 스냅샷으로 굳혀 RawImage로 표시(다른 창이 정상적으로 위를 덮음).
+    /// 각 창은 자기 전용 pdf.js viewer(iframe)를 DOM에 1개 만들어 살려 둔다(id로 키잉).
+    /// 포커스(또는 최상단) 창일 때만 자기 iframe을 좌표동기로 보여(선택·검색·폼·링크 native),
+    /// 백그라운드로 밀리면 자기 iframe을 텍스처 스냅샷으로 굳혀 RawImage로 표시하고 iframe을 숨긴다
+    /// (z-order상 iframe은 항상 캔버스 위라, 한 번에 하나만 보여야 다른 창이 정상적으로 덮인다).
+    /// iframe을 파괴하지 않고 숨겼다 다시 보이므로 문서 전환 시 리로드/상태소실이 없다.
     /// WebGL 전용. 에디터/비 WebGL에서는 안내 텍스트만 표시한다.
     /// </summary>
     public class DocumentViewerWindow : UGUIWindow
@@ -29,33 +31,29 @@ namespace UGUIWindow
         private TMP_Text _statusText;
 
         private bool _overlayInited;
-        private bool _live;          // 현재 라이브 오버레이 표시 중인가
+        private bool _live;          // 현재 내 iframe이 보이는(라이브) 상태인가
         private bool _subscribed;
         private string _viewerUrl;   // 이 창의 문서를 가리키는 viewer URL
-
-        // 단일 오버레이(iframe)를 z-order 때문에 한 번에 하나만 띄운다 → 현재 라이브 창을 전역 추적.
-        // 새 창이 라이브가 되기 직전, 이전 라이브 창을 (오버레이가 아직 그 문서를 보이는 동안)
-        // 동기 스냅샷으로 굳혀야 각 창이 자기 문서를 정확히 보존한다.
-        private static DocumentViewerWindow s_live;
+        private string _overlayId;   // 이 창 전용 iframe 키(타입명 = 인스턴스 단일이라 유일)
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        [DllImport("__Internal")] private static extern void PdfOverlayInit(string viewerUrl);
-        [DllImport("__Internal")] private static extern void PdfOverlaySetSrc(string viewerUrl);
-        [DllImport("__Internal")] private static extern void PdfOverlaySetRect(float x, float y, float w, float h);
-        [DllImport("__Internal")] private static extern void PdfOverlayShow();
-        [DllImport("__Internal")] private static extern void PdfOverlayHide();
-        [DllImport("__Internal")] private static extern void PdfOverlaySnapshot(string goName, string method);
+        [DllImport("__Internal")] private static extern void PdfOverlayInit(string id, string viewerUrl);
+        [DllImport("__Internal")] private static extern void PdfOverlaySetRect(string id, float x, float y, float w, float h);
+        [DllImport("__Internal")] private static extern void PdfOverlayShow(string id);
+        [DllImport("__Internal")] private static extern void PdfOverlayHide(string id);
+        [DllImport("__Internal")] private static extern void PdfOverlaySnapshot(string id, string goName, string method);
 #endif
 
         protected override void OnEnable()
         {
             base.OnEnable();
+            _overlayId = GetType().Name;   // 타입별 단일 인스턴스 → iframe 키로 안정적
             Resize(560, 720);
             Move(0, 0);
             EnsureUi();
             Subscribe();
             InitOverlay();
-            // 창이 방금 열렸으면 포커스 상태로 가정 → 라이브
+            // 창이 방금 열렸으면 최상단(포커스)로 가정 → 라이브
             GoLive();
         }
 
@@ -112,7 +110,7 @@ namespace UGUIWindow
             _viewerUrl = Application.streamingAssetsPath +
                 "/pdfjs/web/viewer.html?file=../../" + DocumentPath + "#zoom=page-width";
 #if UNITY_WEBGL && !UNITY_EDITOR
-            PdfOverlayInit(_viewerUrl);
+            PdfOverlayInit(_overlayId, _viewerUrl);   // 이 창 전용 iframe 생성(존재하면 유지)
             _overlayInited = true;
 #else
             _overlayInited = true;
@@ -126,7 +124,10 @@ namespace UGUIWindow
             if (_subscribed) return;
             var mgr = UGUIWindowManager.Instance;
             if (mgr == null) return;
-            mgr.OnManagedWindowFocused.AddListener(OnAnyWindowFocused);
+            // Open()은 포커스 이벤트를 발생시키지 않으므로 Opened도 구독해야
+            // "다른 PDF 창이 새로 열릴 때" 내가 백그라운드로 내려간다.
+            mgr.OnManagedWindowOpened.AddListener(OnAnyWindowActivated);
+            mgr.OnManagedWindowFocused.AddListener(OnAnyWindowActivated);
             mgr.OnManagedWindowMinimized.AddListener(OnThisWindowHidden);
             mgr.OnManagedWindowClosed.AddListener(OnThisWindowHidden);
             _subscribed = true;
@@ -138,15 +139,17 @@ namespace UGUIWindow
             var mgr = UGUIWindowManager.Instance;
             if (mgr != null)
             {
-                mgr.OnManagedWindowFocused.RemoveListener(OnAnyWindowFocused);
+                mgr.OnManagedWindowOpened.RemoveListener(OnAnyWindowActivated);
+                mgr.OnManagedWindowFocused.RemoveListener(OnAnyWindowActivated);
                 mgr.OnManagedWindowMinimized.RemoveListener(OnThisWindowHidden);
                 mgr.OnManagedWindowClosed.RemoveListener(OnThisWindowHidden);
             }
             _subscribed = false;
         }
 
-        // 어떤 창이든 포커스되면: 그게 나면 라이브로 전환, 아니면 (내가 라이브였다면) 스냅샷으로 굳힘.
-        private void OnAnyWindowFocused(UGUIWindow w)
+        // 어떤 창이 열리거나 포커스되면: 그게 나면 라이브(내 iframe 표시),
+        // 아니면 (내가 라이브였다면) 내 iframe을 스냅샷으로 굳히고 숨긴다.
+        private void OnAnyWindowActivated(UGUIWindow w)
         {
             if (w == (UGUIWindow)this) GoLive();
             else FreezeToSnapshot();
@@ -157,47 +160,39 @@ namespace UGUIWindow
             if (w == (UGUIWindow)this) HideOverlay();
         }
 
-        // 이 창을 라이브로 만든다. 단일 오버레이를 내 문서로 전환하되,
-        // 전환 전에 이전 라이브 창을 (오버레이가 아직 그 문서를 보이는 동안) 동기 스냅샷으로 굳힌다.
+        // 이 창을 라이브로: 내 전용 iframe을 (숨겨져 있었다면) 다시 보인다 → 리로드 없음, 상태 보존.
         private void GoLive()
         {
             if (!_overlayInited) return;
-
-            if (s_live != null && s_live != this)
-                s_live.FreezeToSnapshot();   // 오버레이가 아직 이전 문서를 보임 → 정확한 스냅샷
-
-            s_live = this;
             _live = true;
             if (_snapshotImage != null) _snapshotImage.enabled = false;
 #if UNITY_WEBGL && !UNITY_EDITOR
-            PdfOverlaySetSrc(_viewerUrl);    // 단일 오버레이를 내 문서로 전환(같은 문서면 리로드 생략)
+            PdfOverlayShow(_overlayId);
             SyncRect();
-            PdfOverlayShow();
 #endif
         }
 
-        // 현재 라이브면: 지금 화면(=내 문서)을 스냅샷으로 굳히고 오버레이를 숨긴다.
-        // 반드시 오버레이가 이 창의 문서를 보이는 동안 호출되어야 정확하다.
+        // 현재 라이브면: 내 iframe의 현재 화면을 스냅샷으로 굳히고(백그라운드 텍스처) iframe을 숨긴다.
+        // iframe은 파괴하지 않으므로 다음에 다시 라이브가 될 때 리로드가 없다.
         private void FreezeToSnapshot()
         {
             if (!_overlayInited || !_live) return;
             _live = false;
 #if UNITY_WEBGL && !UNITY_EDITOR
-            // 동기 콜백(OnSnapshotCaptured)에서 텍스처 적용 + 오버레이 숨김
-            PdfOverlaySnapshot(gameObject.name, nameof(OnSnapshotCaptured));
+            // 동기 콜백(OnSnapshotCaptured)에서 텍스처 적용 + 내 iframe 숨김
+            PdfOverlaySnapshot(_overlayId, gameObject.name, nameof(OnSnapshotCaptured));
 #endif
         }
 
         private void HideOverlay()
         {
             _live = false;
-            if (s_live == this) s_live = null;
 #if UNITY_WEBGL && !UNITY_EDITOR
-            if (_overlayInited) PdfOverlayHide();
+            if (_overlayInited) PdfOverlayHide(_overlayId);
 #endif
         }
 
-        // jslib SendMessage 콜백: 백그라운드 스냅샷(base64 PNG) 수신
+        // jslib SendMessage 콜백: 내 iframe의 백그라운드 스냅샷(base64 PNG) 수신
         public void OnSnapshotCaptured(string base64Png)
         {
             try
@@ -217,8 +212,8 @@ namespace UGUIWindow
                 Debug.LogError("[DocumentViewerWindow] 스냅샷 텍스처 실패: " + e.Message);
             }
 #if UNITY_WEBGL && !UNITY_EDITOR
-            // 스냅샷 적용 후 라이브 오버레이 숨김(순서: 굳힌 뒤 숨겨 깜빡임 최소화)
-            PdfOverlayHide();
+            // 스냅샷 적용 후 내 iframe 숨김(순서: 굳힌 뒤 숨겨 깜빡임 최소화)
+            PdfOverlayHide(_overlayId);
 #endif
         }
 
@@ -229,7 +224,7 @@ namespace UGUIWindow
 #endif
         }
 
-        // 콘텐츠 RectTransform의 Unity 스크린 rect(좌하단 원점, px)를 계산해 오버레이에 전달
+        // 콘텐츠 RectTransform의 Unity 스크린 rect(좌하단 원점, px)를 계산해 내 오버레이에 전달
         private void SyncRect()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -241,7 +236,7 @@ namespace UGUIWindow
             Vector2 bl = RectTransformUtility.WorldToScreenPoint(cam, corners[0]);
             Vector2 tr = RectTransformUtility.WorldToScreenPoint(cam, corners[2]);
             float x = bl.x, y = bl.y, w = tr.x - bl.x, h = tr.y - bl.y;
-            if (w > 0 && h > 0) PdfOverlaySetRect(x, y, w, h);
+            if (w > 0 && h > 0) PdfOverlaySetRect(_overlayId, x, y, w, h);
 #endif
         }
     }

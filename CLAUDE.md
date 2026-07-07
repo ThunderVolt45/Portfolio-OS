@@ -123,11 +123,13 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 - **⚠️ 남은 것**: ①아이콘 스프라이트는 미지정(사용자 할당 예정) — 프리팹 windowIcon에 넣으면 데스크톱+작업표시줄 자동 적용. ②PDF 실제 렌더는 WebGL 전용(에디터는 안내 텍스트) → release 빌드에서 각 아이콘→해당 PDF 눈확인 필요. ③배포 크기 +~9MB(여전히 <100MB 예상, 재빌드 후 확인).
 - **⚠️ 미커밋**: 위 전부(About/Doc 변형 2 + ProjectBlackout 4 삭제 + 서브클래스 3 + 변형프리팹 3 + PDF 3 + 씬 + DocumentViewerWindow.cs + 에디터툴) 아직 커밋 안 함. 폰트 SDF 노이즈는 매번 `git checkout --`로 되돌림.
 
-**다중 PDF 창 "같은 문서만 보임" 버그 수정 (미커밋)**:
-- **원인**: `PdfOverlay.jslib`의 `PdfOverlayInit`이 `if (window.__pdfOverlay) return;`로 **첫 문서 URL을 고정한 단일 iframe**만 생성 → 이후 어떤 PDF 창을 열어도 같은 문서 표시(단일 오버레이 PoC의 한계). 오버레이는 z-order상 한 번에 하나만 떠야 하므로 iframe 다중화는 불가.
-- **수정**: 단일 오버레이의 **src를 포커스된 창의 문서로 전환**. jslib에 `PdfOverlaySetSrc(url)` 추가(같은 문서면 리로드 생략). `DocumentViewerWindow`는 `_viewerUrl` 보관 + `GoLive()`에서 `PdfOverlaySetSrc(_viewerUrl)` 호출.
-- **스냅샷 정합(핵심)**: 전역 `static s_live`로 현재 라이브 창 추적. 새 창 `GoLive()`가 **src 전환 직전** 이전 라이브 창을 `FreezeToSnapshot()`로 굳힘 → jslib `SendMessage`는 **동기**라 오버레이가 아직 이전 문서를 보이는 동안 스냅샷 캡처(재포커스 시 리스너 순서와 무관하게 정확). 비-PDF 창 포커스 시엔 각 창이 `FreezeToSnapshot`(자기가 라이브였으면 굳히고 숨김).
-- **검증**: 컴파일 0에러. 에디터 플레이 스모크(PDF 3개 순차 오픈→재포커스→About 포커스) 예외/에러 0. **⚠️ 오버레이는 WebGL 전용이라 실제 문서 전환 시각 확인은 release 빌드에서 아이콘 간 클릭으로 눈확인 필요**(헤드리스 preview는 Unity 캔버스 클릭 구동 불가).
+**다중 PDF 창 오버레이 — 2단계 수정 (커밋됨/미커밋)**:
+- **1차(같은 문서만 보임) — 커밋 `2494c1e`**: 원인은 `PdfOverlayInit`이 `if (window.__pdfOverlay) return;`로 첫 문서 URL 고정한 단일 iframe만 생성. 1차 수정은 단일 오버레이 src를 포커스 창 문서로 전환(`PdfOverlaySetSrc`)+`static s_live`로 전환 직전 이전 라이브 창 동기 스냅샷. → **그러나 문서 전환마다 pdf.js가 리로드(스크롤·검색 상태 소실)되는 후속 문제 발생.**
+- **2차(포커스 전환 시 리로드) — 미커밋, 최종**: **창마다 자기 전용 iframe을 1개씩 만들어 살려 둔다**(파괴 안 함, `id`=`GetType().Name`로 키잉). 포커스/최상단 창만 자기 iframe 표시(`PdfOverlayShow(id)`), 백그라운드로 밀리면 자기 iframe을 스냅샷으로 굳히고 숨김(`PdfOverlayHide(id)`). 다시 라이브가 되면 숨김만 해제 → **리로드/상태소실 없음**. `PdfOverlaySetSrc`·`s_live` 제거.
+  - **핵심**: 각 창이 **자기** iframe만 스냅샷하므로 1차의 리스너-순서 경합이 사라짐(교차오염 불가).
+  - **Open은 포커스 이벤트 미발생**(`UGUIWindow.Open()`은 `OnOpenWindow`만) → `OnManagedWindowOpened`**도** 구독해야 새 PDF 창이 열릴 때 기존 라이브 창이 백그라운드로 내려감. `OnAnyWindowActivated`가 Opened+Focused 공용 핸들러.
+  - jslib는 `window.__pdfOverlays[id] = {wrap,iframe,url}` 딕셔너리, 모든 함수 첫 인자 `id`.
+- **검증**: 사용자 수동 WebGL 빌드에서 다중 PDF 열기 + 문서 간 포커스 전환 정상(리로드 없음) 확인. (에디터 MCP 컴파일 검증은 에디터 미기동으로 생략 — 정적으로 심볼 정합만 확인.)
 
 **upstream 2차 동기화 (`git merge upstream/main`, `4c36133..edb7939`, 2커밋 → merge `cc5485c`)** — 창 전환 오버레이 반영:
 `Feat: 창 전환 오버레이 추가`(a1bf9f5) + `Feat: 창 전환 오버레이 프리팹 관리 개선`(edb7939). 신규 `UGUIWindowSwitcher.cs`/프리팹 추가, `UGUIWindowManager.cs`(+197)·`UGUIWindow.cs`(+3) 수정, docs 갱신.
