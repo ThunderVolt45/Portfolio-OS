@@ -25,7 +25,7 @@ namespace PortfolioOS.EditorTools
     {
         static readonly string[] Scenes =
         {
-            "Assets/UGUIWindowSample/Scenes/UGUIWindowSampleScene.unity",
+            "Assets/Scenes/PortfolioOS.unity",
         };
 
         const string OutDir = "Build/WebGL";
