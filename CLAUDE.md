@@ -14,7 +14,8 @@
 1. 이 문서를 통독한다.
 2. **Unity MCP 연결 확인**: `claude mcp list` → `UnityMCP: http://127.0.0.1:8080/mcp — ✔ Connected` 이어야 함.
    - 안 뜨면 Unity 에디터가 열려있는지, **Window → MCP for Unity**가 Connected인지 확인.
-3. 프레임워크 구조 파악: `Assets/UGUIWindowSample/Scripts/`(§3), 샘플 씬 `Assets/UGUIWindowSample/Scenes/UGUIWindowSampleScene.unity`.
+3. 프레임워크 구조 파악: `Assets/UGUIWindowSample/Scripts/`(§3). 프레임워크 원본 샘플 씬은 `Assets/UGUIWindowSample/Scenes/UGUIWindowSampleScene.unity`.
+   - **⚠️ 우리가 작업하는 포트폴리오 씬은 `Assets/Scenes/PortfolioOS.unity`** (데스크톱/아이콘/창 배치는 이 씬에 한다). 프레임워크 샘플 씬이 아님.
 4. **콘텐츠·인적사항의 단일 진실 공급원(SSOT)은 별도 docs 프로젝트에 있음**(§1) — 절대경로로 읽어 참조.
 
 ---
