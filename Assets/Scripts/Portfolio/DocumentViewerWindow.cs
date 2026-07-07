@@ -18,6 +18,11 @@ namespace UGUIWindow
         [Header("Document")]
         [SerializeField] private string documentRelativePath = "docs/resume.pdf";
 
+        // PDF별 전용 창(서브클래스)이 문서 경로·제목을 지정할 수 있도록 오버라이드 지점을 연다.
+        // 기본 구현은 직렬화 필드/고정값을 그대로 사용한다.
+        protected virtual string DocumentPath { get { return documentRelativePath; } }
+        protected virtual string DocumentTitle { get { return "Resume.pdf"; } }
+
         private RectTransform _contentRT;
         private Canvas _canvas;
         private RawImage _snapshotImage;
@@ -26,9 +31,16 @@ namespace UGUIWindow
         private bool _overlayInited;
         private bool _live;          // 현재 라이브 오버레이 표시 중인가
         private bool _subscribed;
+        private string _viewerUrl;   // 이 창의 문서를 가리키는 viewer URL
+
+        // 단일 오버레이(iframe)를 z-order 때문에 한 번에 하나만 띄운다 → 현재 라이브 창을 전역 추적.
+        // 새 창이 라이브가 되기 직전, 이전 라이브 창을 (오버레이가 아직 그 문서를 보이는 동안)
+        // 동기 스냅샷으로 굳혀야 각 창이 자기 문서를 정확히 보존한다.
+        private static DocumentViewerWindow s_live;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")] private static extern void PdfOverlayInit(string viewerUrl);
+        [DllImport("__Internal")] private static extern void PdfOverlaySetSrc(string viewerUrl);
         [DllImport("__Internal")] private static extern void PdfOverlaySetRect(float x, float y, float w, float h);
         [DllImport("__Internal")] private static extern void PdfOverlayShow();
         [DllImport("__Internal")] private static extern void PdfOverlayHide();
@@ -55,7 +67,7 @@ namespace UGUIWindow
 
         private void Start()
         {
-            SetWindowTitle("Resume.pdf");
+            SetWindowTitle(DocumentTitle);
         }
 
         private void EnsureUi()
@@ -95,14 +107,15 @@ namespace UGUIWindow
         private void InitOverlay()
         {
             if (_overlayInited) return;
-#if UNITY_WEBGL && !UNITY_EDITOR
             // viewer.html은 pdfjs/web/ 아래, 문서는 StreamingAssets/docs/ 아래
             // → viewer 기준 상대경로 ../../docs/... (동일 오리진, origin 검증 통과)
-            string viewerUrl = Application.streamingAssetsPath +
-                "/pdfjs/web/viewer.html?file=../../" + documentRelativePath + "#zoom=page-width";
-            PdfOverlayInit(viewerUrl);
+            _viewerUrl = Application.streamingAssetsPath +
+                "/pdfjs/web/viewer.html?file=../../" + DocumentPath + "#zoom=page-width";
+#if UNITY_WEBGL && !UNITY_EDITOR
+            PdfOverlayInit(_viewerUrl);
             _overlayInited = true;
 #else
+            _overlayInited = true;
             if (_statusText != null)
                 _statusText.text = "PDF 뷰어는 WebGL 빌드에서만 동작합니다 (에디터 미지원).";
 #endif
@@ -132,11 +145,11 @@ namespace UGUIWindow
             _subscribed = false;
         }
 
-        // 어떤 창이든 포커스되면: 그게 나면 라이브, 아니면 백그라운드로 스왑
+        // 어떤 창이든 포커스되면: 그게 나면 라이브로 전환, 아니면 (내가 라이브였다면) 스냅샷으로 굳힘.
         private void OnAnyWindowFocused(UGUIWindow w)
         {
             if (w == (UGUIWindow)this) GoLive();
-            else GoBackground();
+            else FreezeToSnapshot();
         }
 
         private void OnThisWindowHidden(UGUIWindow w)
@@ -144,23 +157,33 @@ namespace UGUIWindow
             if (w == (UGUIWindow)this) HideOverlay();
         }
 
+        // 이 창을 라이브로 만든다. 단일 오버레이를 내 문서로 전환하되,
+        // 전환 전에 이전 라이브 창을 (오버레이가 아직 그 문서를 보이는 동안) 동기 스냅샷으로 굳힌다.
         private void GoLive()
         {
             if (!_overlayInited) return;
+
+            if (s_live != null && s_live != this)
+                s_live.FreezeToSnapshot();   // 오버레이가 아직 이전 문서를 보임 → 정확한 스냅샷
+
+            s_live = this;
             _live = true;
             if (_snapshotImage != null) _snapshotImage.enabled = false;
 #if UNITY_WEBGL && !UNITY_EDITOR
+            PdfOverlaySetSrc(_viewerUrl);    // 단일 오버레이를 내 문서로 전환(같은 문서면 리로드 생략)
             SyncRect();
             PdfOverlayShow();
 #endif
         }
 
-        // 백그라운드: 현재 뷰를 스냅샷으로 캡처 요청 → 콜백에서 텍스처 적용 후 오버레이 숨김
-        private void GoBackground()
+        // 현재 라이브면: 지금 화면(=내 문서)을 스냅샷으로 굳히고 오버레이를 숨긴다.
+        // 반드시 오버레이가 이 창의 문서를 보이는 동안 호출되어야 정확하다.
+        private void FreezeToSnapshot()
         {
             if (!_overlayInited || !_live) return;
             _live = false;
 #if UNITY_WEBGL && !UNITY_EDITOR
+            // 동기 콜백(OnSnapshotCaptured)에서 텍스처 적용 + 오버레이 숨김
             PdfOverlaySnapshot(gameObject.name, nameof(OnSnapshotCaptured));
 #endif
         }
@@ -168,6 +191,7 @@ namespace UGUIWindow
         private void HideOverlay()
         {
             _live = false;
+            if (s_live == this) s_live = null;
 #if UNITY_WEBGL && !UNITY_EDITOR
             if (_overlayInited) PdfOverlayHide();
 #endif

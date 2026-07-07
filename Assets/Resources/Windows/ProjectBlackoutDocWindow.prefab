@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1140666036111263145
+--- !u!1 &2233748838428715229
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 433299673993240929}
-  - component: {fileID: 5871931601132987301}
-  - component: {fileID: 3741454255625935911}
+  - component: {fileID: 6455344177867699699}
+  - component: {fileID: 1214467049121566558}
+  - component: {fileID: 5208345493996693879}
   m_Layer: 0
   m_Name: ContentText
   m_TagString: Untagged
@@ -18,40 +18,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &433299673993240929
+--- !u!224 &6455344177867699699
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1140666036111263145}
+  m_GameObject: {fileID: 2233748838428715229}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5857074927351073891}
+  m_Father: {fileID: 34299443568521374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5871931601132987301
+--- !u!222 &1214467049121566558
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1140666036111263145}
+  m_GameObject: {fileID: 2233748838428715229}
   m_CullTransparentMesh: 1
---- !u!114 &3741454255625935911
+--- !u!114 &5208345493996693879
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1140666036111263145}
+  m_GameObject: {fileID: 2233748838428715229}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1001 &2049514401725633012
+--- !u!1001 &5566466497852337417
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -147,7 +147,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2047303880260269141, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       propertyPath: m_Name
-      value: AboutWindow
+      value: ProjectBlackoutDocWindow
       objectReference: {fileID: 0}
     - target: {fileID: 8565156740118482739, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       propertyPath: m_Pivot.x
@@ -240,29 +240,34 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5564712873524780439, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 433299673993240929}
+      addedObject: {fileID: 6455344177867699699}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2047303880260269141, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -1181352811182607728}
+      addedObject: {fileID: 2516952601983981198}
   m_SourcePrefab: {fileID: 100100000, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
---- !u!1 &6802083165922721 stripped
+--- !u!224 &34299443568521374 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5564712873524780439, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
+  m_PrefabInstance: {fileID: 5566466497852337417}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5848332866578602332 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2047303880260269141, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
-  m_PrefabInstance: {fileID: 2049514401725633012}
+  m_PrefabInstance: {fileID: 5566466497852337417}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-1181352811182607728
+--- !u!114 &2516952601983981198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6802083165922721}
+  m_GameObject: {fileID: 5848332866578602332}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04abf9529dd5ae441866f4f82eb80b68, type: 3}
+  m_Script: {fileID: 11500000, guid: fa2be1b4280ba344a871d301a4c7b34e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UGUIWindow.AboutWindow
+  m_EditorClassIdentifier: Assembly-CSharp::UGUIWindow.ProjectBlackoutDocWindow
   _windowMode: 0
   allowMultipleInstance: 0
   useObjectPooling: 1
@@ -273,7 +278,7 @@ MonoBehaviour:
   isMovable: 1
   isResizable: 1
   minimumWindowSize: {x: 100, y: 100}
-  windowIcon: {fileID: 21300000, guid: b09b0480943a6a94e8bdf0e0b2f284cf, type: 3}
+  windowIcon: {fileID: 0}
   OnOpenWindow:
     m_PersistentCalls:
       m_Calls: []
@@ -286,9 +291,4 @@ MonoBehaviour:
   OnMinimizeWindow:
     m_PersistentCalls:
       m_Calls: []
-  contentText: {fileID: 3741454255625935911}
---- !u!224 &5857074927351073891 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5564712873524780439, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
-  m_PrefabInstance: {fileID: 2049514401725633012}
-  m_PrefabAsset: {fileID: 0}
+  documentRelativePath: docs/resume.pdf

@@ -107,6 +107,28 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 
 ### 2026-07-06 기준 — 최근 작업
 
+**포트폴리오 창 프리팹을 Prefab Variant로 재생성 + ProjectBlackout 제거 (미커밋)**:
+- **AboutWindow / DocumentViewerWindow 프리팹을 base `UGUIWindow.prefab`(guid `23a3495e…`)의 Prefab Variant로 재생성.** 기존엔 GUID 교체 독립 복제본이라 upstream 창 구조 개선(스크롤 등)을 못 받았음 → 변형으로 전환해 자동 상속.
+  - **핵심 난점**: Unity는 변형에서 컴포넌트 m_Script 교체 불가 → **에디터 스크립트**(`Assets/Editor/PortfolioPrefabTools.cs`, 메뉴 **Portfolio → Rebuild Window Prefab Variants**)로 우회: base 인스턴스화 → root의 `UGUIWindow` 컴포넌트 제거 + subclass(About/Doc) 추가 + `SerializedObject`로 설정필드 복사(RequireComponent은 `UGUIWindowView`만이라 안전, base 컴포넌트 역참조 0 확인) → `SaveAsPrefabAsset`으로 Variant 저장.
+  - base 창 body는 `Content/Viewport/ScrollContent` 구조(ScrollRect). 데모 텍스트 5개 제거하고 단일 `ContentText`(TMP, stretch)를 ScrollContent에 배선 → About은 `contentText` 필드 연결, Doc은 `documentRelativePath="docs/resume.pdf"` + 런타임 status text. 아이콘은 About.png/Resume.png.
+  - **검증**: `isVariant=True`, `m_SourcePrefab`=base guid, root 컴포넌트=`UGUIWindowView`+subclass(base UGUIWindow 잔존 0). 플레이모드 스모크: `CreateWindow(typeof(AboutWindow/DocumentViewerWindow))` → 각각 정확한 타입 반환, 콘솔 에러/경고 0.
+- **ProjectBlackout(전용 창) 완전 제거**: `ProjectBlackoutWindow.prefab`(+meta), `Assets/Scripts/Portfolio/ProjectBlackoutWindow.cs`(+meta) `git rm`, 씬의 `Icon_ProjectBlackout` GameObject 삭제 후 씬 저장. 프리팹 GUID/클래스 외부 참조 0 확인 → 컴파일 에러 없음. (ProjectBlackout은 아래 PDF 문서 뷰어로 대체됨.)
+
+**PDF별 전용 문서 창 + 데스크톱 아이콘 3종 (미커밋)**:
+- 매니저가 **타입명으로 프리팹을 로드**(`Resources.Load("Windows/"+typeName)`)하므로 PDF별 구분엔 별도 타입 필수 → **`DocumentViewerWindow`를 상속한 얇은 서브클래스 3개**: `BrawlStarsTPSDocWindow`/`NovaRevolutionDocWindow`/`ProjectBlackoutDocWindow`(모두 namespace `UGUIWindow`, `Assets/Scripts/Portfolio/`). base를 리팩터링해 `protected virtual string DocumentPath/DocumentTitle` override 지점 신설(서브클래스는 경로·제목만 지정).
+- 각 서브클래스용 **Variant 프리팹**을 base `UGUIWindow.prefab`에서 생성(에디터툴 메뉴 **Portfolio → Build PDF Doc Windows + Icons**). **스프라이트(windowIcon)는 미지정**(iconPath=null → windowIcon=null) — 사용자가 추후 직접 할당. UGUIIcon.ApplyTargetWindowIcon은 windowIcon null이면 스킵하므로 아이콘 이미지는 빈 상태(기존 About/Resume 아이콘도 sprite null이라 시각적 일관).
+- **씬 아이콘 3개**를 `UGUI_Desktop/IconGrid`에 `Icon_About` 복제로 추가(targetClassName+라벨+anchoredPosition만 변경). 세로 열: About(50,-60)/Resume(50,-170) 뒤로 (50,-280)/(50,-390)/(50,-500). 라벨: "BrawlStars/TPS", "Nova/Revolution", "Project/Blackout".
+- **PDF 실파일 3종을 `Assets/StreamingAssets/docs/`로 ASCII명 복사**: `brawlstarstps.pdf`(3.3MB)/`novarevolution.pdf`(3.2MB)/`projectblackout.pdf`(2.6MB) — SSOT는 docs 프로젝트 `portfolio/projects/*.pdf`. `DocumentPath`가 각각 `docs/<name>.pdf` 반환(viewerUrl `../../docs/...` 규칙 유지).
+- **검증**: 5개 변형 모두 `isVariant=True`. 플레이모드 스모크에서 `CreateWindow(typeof(각 서브클래스))` → 정확한 타입 반환, 콘솔 에러/경고 0. 씬 아이콘 5개 targetClassName 확인(About/DocumentViewer/BrawlStarsTPS/Nova/ProjectBlackout).
+- **⚠️ 남은 것**: ①아이콘 스프라이트는 미지정(사용자 할당 예정) — 프리팹 windowIcon에 넣으면 데스크톱+작업표시줄 자동 적용. ②PDF 실제 렌더는 WebGL 전용(에디터는 안내 텍스트) → release 빌드에서 각 아이콘→해당 PDF 눈확인 필요. ③배포 크기 +~9MB(여전히 <100MB 예상, 재빌드 후 확인).
+- **⚠️ 미커밋**: 위 전부(About/Doc 변형 2 + ProjectBlackout 4 삭제 + 서브클래스 3 + 변형프리팹 3 + PDF 3 + 씬 + DocumentViewerWindow.cs + 에디터툴) 아직 커밋 안 함. 폰트 SDF 노이즈는 매번 `git checkout --`로 되돌림.
+
+**다중 PDF 창 "같은 문서만 보임" 버그 수정 (미커밋)**:
+- **원인**: `PdfOverlay.jslib`의 `PdfOverlayInit`이 `if (window.__pdfOverlay) return;`로 **첫 문서 URL을 고정한 단일 iframe**만 생성 → 이후 어떤 PDF 창을 열어도 같은 문서 표시(단일 오버레이 PoC의 한계). 오버레이는 z-order상 한 번에 하나만 떠야 하므로 iframe 다중화는 불가.
+- **수정**: 단일 오버레이의 **src를 포커스된 창의 문서로 전환**. jslib에 `PdfOverlaySetSrc(url)` 추가(같은 문서면 리로드 생략). `DocumentViewerWindow`는 `_viewerUrl` 보관 + `GoLive()`에서 `PdfOverlaySetSrc(_viewerUrl)` 호출.
+- **스냅샷 정합(핵심)**: 전역 `static s_live`로 현재 라이브 창 추적. 새 창 `GoLive()`가 **src 전환 직전** 이전 라이브 창을 `FreezeToSnapshot()`로 굳힘 → jslib `SendMessage`는 **동기**라 오버레이가 아직 이전 문서를 보이는 동안 스냅샷 캡처(재포커스 시 리스너 순서와 무관하게 정확). 비-PDF 창 포커스 시엔 각 창이 `FreezeToSnapshot`(자기가 라이브였으면 굳히고 숨김).
+- **검증**: 컴파일 0에러. 에디터 플레이 스모크(PDF 3개 순차 오픈→재포커스→About 포커스) 예외/에러 0. **⚠️ 오버레이는 WebGL 전용이라 실제 문서 전환 시각 확인은 release 빌드에서 아이콘 간 클릭으로 눈확인 필요**(헤드리스 preview는 Unity 캔버스 클릭 구동 불가).
+
 **upstream 2차 동기화 (`git merge upstream/main`, `4c36133..edb7939`, 2커밋 → merge `cc5485c`)** — 창 전환 오버레이 반영:
 `Feat: 창 전환 오버레이 추가`(a1bf9f5) + `Feat: 창 전환 오버레이 프리팹 관리 개선`(edb7939). 신규 `UGUIWindowSwitcher.cs`/프리팹 추가, `UGUIWindowManager.cs`(+197)·`UGUIWindow.cs`(+3) 수정, docs 갱신.
 - **씬만 충돌 → 1차와 동일하게 Unity Smart Merge**(`UnityYAMLMerge.exe merge -p <base> <theirs> <ours> <out>`, 인덱스 `:1/:3/:2`)로 fileID 병합 → **내 아이콘 3개(About/ProjectBlackout/DocumentViewer) 전부 보존**, upstream 요소 유지, 충돌 마커 0. 스크립트/프리팹은 auto-merge.

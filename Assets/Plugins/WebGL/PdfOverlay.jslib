@@ -4,7 +4,8 @@
 // C#이 창 콘텐츠의 Unity 스크린 rect(좌하단 원점, px)를 넘기면 여기서 CSS 좌표로 변환·클리핑한다.
 mergeInto(LibraryManager.library, {
 
-  // 오버레이 1개 생성(PoC). viewerUrl = StreamingAssets 기준 절대 URL(?file=... 포함).
+  // 오버레이 1개 생성. viewerUrl = StreamingAssets 기준 절대 URL(?file=... 포함).
+  // z-order 때문에 iframe은 1개만 두고, 포커스된 창의 문서로 src를 전환한다(PdfOverlaySetSrc).
   PdfOverlayInit: function (viewerUrlPtr) {
     var viewerUrl = UTF8ToString(viewerUrlPtr);
     if (window.__pdfOverlay) return;
@@ -16,7 +17,16 @@ mergeInto(LibraryManager.library, {
     ifr.src = viewerUrl;
     wrap.appendChild(ifr);
     document.body.appendChild(wrap);
-    window.__pdfOverlay = { wrap: wrap, iframe: ifr };
+    window.__pdfOverlay = { wrap: wrap, iframe: ifr, url: viewerUrl };
+  },
+
+  // 단일 오버레이의 문서를 전환한다(포커스된 창의 문서). 같은 문서면 리로드하지 않는다.
+  PdfOverlaySetSrc: function (viewerUrlPtr) {
+    var viewerUrl = UTF8ToString(viewerUrlPtr);
+    var o = window.__pdfOverlay; if (!o) return;
+    if (o.url === viewerUrl) return;
+    o.url = viewerUrl;
+    o.iframe.src = viewerUrl;
   },
 
   // Unity 캔버스 엘리먼트를 찾는다(빌드 템플릿에 따라 id가 다를 수 있어 폴백 체인).
