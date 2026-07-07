@@ -107,6 +107,11 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 
 ### 2026-07-06 기준 — 최근 작업
 
+**upstream 3차 동기화 (`git merge upstream/main`, `edb7939..a64fde2`, 1커밋 → merge `d01dbac`)**:
+`Fix: 스케일 환경에서 창 드래그 거리 보정`(a64fde2). `UGUIWindowManager`에 `GetPointerDeltaInRect(eventData, relativeTo)` 헬퍼 추가(+35, 순수 추가) + Border/Edge/Header.cs 드래그 델타 계산을 이 헬퍼로 교체, docs 갱신.
+- **충돌 0**(ort auto-merge) — 씬·프리팹 미변경이라 이번엔 Smart Merge 불필요. 병합 전 미커밋 폰트 SDF 7개만 `git checkout --`로 되돌림.
+- 내가 구독하는 이벤트 4종(`OnManagedWindowOpened/Focused/Minimized/Closed`) + `CreateWindow/Ex` 시그니처 불변 확인 → PDF 오버레이 코드 영향 없음. (에디터 미기동으로 MCP 컴파일 검증은 생략, 정적 확인.)
+
 **포트폴리오 창 프리팹을 Prefab Variant로 재생성 + ProjectBlackout 제거 (미커밋)**:
 - **AboutWindow / DocumentViewerWindow 프리팹을 base `UGUIWindow.prefab`(guid `23a3495e…`)의 Prefab Variant로 재생성.** 기존엔 GUID 교체 독립 복제본이라 upstream 창 구조 개선(스크롤 등)을 못 받았음 → 변형으로 전환해 자동 상속.
   - **핵심 난점**: Unity는 변형에서 컴포넌트 m_Script 교체 불가 → **에디터 스크립트**(`Assets/Editor/PortfolioPrefabTools.cs`, 메뉴 **Portfolio → Rebuild Window Prefab Variants**)로 우회: base 인스턴스화 → root의 `UGUIWindow` 컴포넌트 제거 + subclass(About/Doc) 추가 + `SerializedObject`로 설정필드 복사(RequireComponent은 `UGUIWindowView`만이라 안전, base 컴포넌트 역참조 0 확인) → `SaveAsPrefabAsset`으로 Variant 저장.
