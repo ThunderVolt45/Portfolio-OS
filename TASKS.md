@@ -156,11 +156,14 @@
 | E5-T3 | 아이콘 프리팹 `windowIcon` 스프라이트 할당 (About/Contact/Resume/Projects + 런처 항목) | ⬜ |
 | E5-T4 | 폰트 SDF 노이즈 처리 방침 확정 | 🔄 |
 | E5-T5 | `ProjectSettings.preloadedAssets`(InputSystem) 노이즈 관리 | 🔄 |
+| E5-T6 | 외부 유료 에셋(MPUIKit) gitignore 제외 | ✅ |
 
 **구현 노트**
 - E5-T1: 기본 TMP(LiberationSans)에 한글 없어 □로 깨짐 → WantedSans 동적 SDF를 TMP Settings `m_fallbackFontAssets`(전역 폴백)에 추가. 창 텍스트 한글 정상 렌더 확인.
 - E5-T3: `UGUIIcon.ApplyTargetWindowIcon`은 `windowIcon`이 있으면 데스크톱+작업표시줄에 **자동 적용**, null이면 스킵(현재 빈 아이콘 = 시각적 일관). 각 프리팹 `windowIcon`에 스프라이트를 넣으면 자동 반영.
 - E5-T4: `Assets/UGUIWindowSample/Fonts/WantedSans-*.asset` 7개가 동적 아틀라스에 한글 글리프가 구워지며 매번 "수정됨"으로 뜸(`_typelessdata`, ~1392줄). 지금은 작업/병합 때마다 `git checkout --`로 되돌리는 중 → 근본 처리(정적 pre-bake 또는 커밋/ignore 정책) 필요.
+- E5-T6: **MPUIKit** = 에셋스토어 **유료** 에셋(재배포 불가) → 저장소에서 **제외**. `.gitignore`에 `/[Aa]ssets/MPUIKit/`·`/[Aa]ssets/MPUIKit.meta` 추가. 빌드는 이 에셋이 설치된 로컬에서 수행(타 환경/CI에는 미설치 → UI 깨질 수 있음, 필요 시 설치 안내 메모로 대체).
+  - ⚠️ WantedSans 폰트를 `Assets/Fonts/`에 별도 반입하려다 철회 — **이미 `Assets/UGUIWindowSample/Fonts/`에 동일 7종이 존재**(중복). 폰트는 그쪽을 SSOT로 사용.
 
 ---
 

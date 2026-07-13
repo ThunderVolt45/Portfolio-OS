@@ -70,6 +70,10 @@ crashlytics-build.properties
 # 로컬 개발 서버(Tools/serve.py)가 생성하는 self-signed TLS 인증서
 /Tools/.certs/
 
+# 외부 유료 에셋(재배포 불가) — 로컬에만 두고 저장소에서 제외
+/[Aa]ssets/MPUIKit/
+/[Aa]ssets/MPUIKit.meta
+
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
