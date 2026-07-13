@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 7529917838379571335}
   - component: {fileID: 1542590673490217103}
   - component: {fileID: 739004389650410004}
+  - component: {fileID: 2823173125523538999}
   m_Layer: 0
   m_Name: UGUIWindow
   m_TagString: Untagged
@@ -288,7 +289,7 @@ MonoBehaviour:
     m_CornerRadius: {x: 0, y: 0, z: 0}
     m_UniformCornerRadius: 0
   m_Rectangle:
-    m_CornerRadius: {x: 15, y: 15, z: 0, w: 0}
+    m_CornerRadius: {x: 10, y: 10, z: 0, w: 0}
     m_UniformCornerRadius: 0
   m_ChamferBox:
     m_ChamferSize: 0
@@ -417,6 +418,19 @@ MonoBehaviour:
   OnMinimizeWindow:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2823173125523538999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047303880260269141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b265134d33e83c74c89a618bdb2bf54d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UGUIWindow.UGUIWindowRounding
+  cornerRadius: 10
 --- !u!1 &2250902510662933148
 GameObject:
   m_ObjectHideFlags: 0
