@@ -48,9 +48,11 @@ namespace UGUIWindow
         [SerializeField] private UGUITaskIcon taskIconPrefab = null;
 
         [Header("Layout")]
-        [SerializeField] private float taskBarHeight = 48f;
-        [SerializeField] private float iconSize = 36f;
-        [SerializeField] private float iconSpacing = 6f;
+        [SerializeField] private float taskBarHeight = 64f;
+        [SerializeField] private float iconSize = 44f;
+        [SerializeField] private float iconSpacing = 10f;
+        [Tooltip("화면 하단과 도크 사이 간격(px). macOS 스타일 플로팅 도크.")]
+        [SerializeField] private float bottomMargin = 12f;
         [SerializeField] private int sortingOrder = 10;
 
         private readonly Dictionary<UGUIWindow, UGUITaskIcon> icons = new();
@@ -236,7 +238,7 @@ namespace UGUIWindow
             iconRect.sizeDelta = new Vector2(iconSize, iconSize);
 
             var background = iconObject.GetComponent<Image>();
-            background.color = new Color(0.18f, 0.2f, 0.24f, 0.96f);
+            background.color = new Color(1f, 1f, 1f, 0f); // 평소 투명(호버 하이라이트용)
 
             var layoutElement = iconObject.GetComponent<LayoutElement>();
             layoutElement.preferredWidth = iconSize;
@@ -289,28 +291,37 @@ namespace UGUIWindow
 
         private RectTransform CreateDefaultContainer()
         {
-            var containerObject = new GameObject(
-                "IconContainer",
-                typeof(RectTransform),
-                typeof(HorizontalLayoutGroup));
+            // macOS 도크: 루트 자체가 아이콘 컨테이너 역할을 맡아, 배경 패널이 아이콘 수에 맞춰
+            // 폭을 hug 하도록 HorizontalLayoutGroup + ContentSizeFitter를 루트에 구성한다.
+            var layout = gameObject.GetComponent<HorizontalLayoutGroup>();
+            if (layout == null)
+            {
+                layout = gameObject.AddComponent<HorizontalLayoutGroup>();
+            }
 
-            containerObject.transform.SetParent(transform, false);
-
-            var containerRect = containerObject.transform as RectTransform;
-            containerRect.anchorMin = Vector2.zero;
-            containerRect.anchorMax = Vector2.one;
-            containerRect.offsetMin = new Vector2(8f, 6f);
-            containerRect.offsetMax = new Vector2(-8f, -6f);
-
-            var layout = containerObject.GetComponent<HorizontalLayoutGroup>();
+            layout.padding = new RectOffset(14, 14, 8, 12);
             layout.spacing = iconSpacing;
-            layout.childAlignment = TextAnchor.MiddleLeft;
-            layout.childControlWidth = false;
-            layout.childControlHeight = false;
+            layout.childAlignment = TextAnchor.LowerCenter; // 아래 정렬 → 확대 시 위로 성장
+            layout.childControlWidth = true;
+            layout.childControlHeight = false; // 세로는 매그니파이어가 직접 제어(도크 위로 성장)
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
 
-            return containerRect;
+            var fitter = gameObject.GetComponent<ContentSizeFitter>();
+            if (fitter == null)
+            {
+                fitter = gameObject.AddComponent<ContentSizeFitter>();
+            }
+
+            fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+            if (gameObject.GetComponent<UGUITaskDockMagnifier>() == null)
+            {
+                gameObject.AddComponent<UGUITaskDockMagnifier>();
+            }
+
+            return rectTransform;
         }
 
         private void ConfigureTaskBarRect()
@@ -320,11 +331,13 @@ namespace UGUIWindow
                 return;
             }
 
-            rectTransform.anchorMin = Vector2.zero;
-            rectTransform.anchorMax = new Vector2(1f, 0f);
+            // macOS 스타일: 하단 중앙에 콘텐츠 폭만큼만 차지하는 플로팅 도크.
+            // 폭(sizeDelta.x)은 ContentSizeFitter가 아이콘 수에 맞춰 제어하므로 여기서 건드리지 않는다.
+            rectTransform.anchorMin = new Vector2(0.5f, 0f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0f);
             rectTransform.pivot = new Vector2(0.5f, 0f);
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.sizeDelta = new Vector2(0f, taskBarHeight);
+            rectTransform.anchoredPosition = new Vector2(0f, bottomMargin);
+            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, taskBarHeight);
 
             var manager = UGUIWindowManager.Instance;
             if (manager == null)
@@ -332,8 +345,9 @@ namespace UGUIWindow
                 return;
             }
 
+            // 최대화 창이 도크 밑으로 숨지 않도록 하단에 도크 높이 + 간격만큼 예약.
             manager.SetMaximizedWindowOffsets(
-                new Vector2(0f, taskBarHeight),
+                new Vector2(0f, taskBarHeight + bottomMargin),
                 Vector2.zero);
             maximizedWindowAreaManager = manager;
             registeredMaximizedWindowArea = true;
