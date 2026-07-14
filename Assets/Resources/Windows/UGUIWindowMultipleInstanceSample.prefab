@@ -94,19 +94,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5564712873524780439, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5564712873524780439, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5564712873524780439, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5564712873524780439, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5564712873524780439, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
       propertyPath: m_SizeDelta.x
@@ -252,6 +252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8490153895677333877, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
+    - {fileID: 739004389650410004, guid: 23a3495e1b35e8a4f87f76ef10a0cfb0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -285,7 +286,7 @@ MonoBehaviour:
   _hasMaximizeButton: 1
   isMovable: 1
   isResizable: 1
-  minimumWindowSize: {x: 200, y: 100}
+  minimumWindowSize: {x: 300, y: 200}
   windowIcon: {fileID: 21300000, guid: c62986808f914fbd9cba83e68c7ff977, type: 3}
   OnOpenWindow:
     m_PersistentCalls:
