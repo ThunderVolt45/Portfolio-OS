@@ -48,7 +48,7 @@
   ```
   ⚠️ GitHub Desktop은 `upstream`을 못 봄(이 repo는 GitHub상 fork가 아님) → **반드시 CLI**로 동기화.
   ⚠️ Windows LF/CRLF 노이즈로 merge가 막히면(내용 변화 없이 "수정됨"), 해당 파일을 `git checkout -- <경로>`로 되돌린 뒤 merge.
-- MCP 개발 툴(`Packages/com.coplaydev.unity-mcp`)은 의도적으로 **vendoring**됨(원본 repo에서도 MCP 개발 예정) — 유지.
+- **원칙: Package Manager로 관리 가능한 플러그인은 vendoring하지 않는다.** MCP 개발 툴(`com.coplaydev.unity-mcp`)은 **Package Manager git 의존성**으로 관리한다(`manifest.json` → `https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main`, `Library/PackageCache`에 설치). 과거엔 `Packages/com.coplaydev.unity-mcp`에 임베드 벤더링했으나 2026-07 git 의존성으로 전환하고 임베드 사본(~699파일)을 정리함.
 
 ---
 
