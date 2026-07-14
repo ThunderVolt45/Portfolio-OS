@@ -136,7 +136,7 @@ MonoBehaviour:
     m_CornerRadius: {x: 0, y: 0, z: 0}
     m_UniformCornerRadius: 0
   m_Rectangle:
-    m_CornerRadius: {x: 22, y: 22, z: 22, w: 22}
+    m_CornerRadius: {x: 16, y: 16, z: 16, w: 16}
     m_UniformCornerRadius: 1
   m_ChamferBox:
     m_ChamferSize: 0

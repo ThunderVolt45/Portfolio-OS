@@ -55,13 +55,20 @@ namespace UGUIWindow
         [SerializeField] private float bottomMargin = 12f;
         [SerializeField] private int sortingOrder = 10;
 
+        [Header("Visibility")]
+        [Tooltip("빈 도크(아이콘 0개) 페이드 속도. 클수록 빠름.")]
+        [SerializeField] private float visibilityFadeSpeed = 14f;
+
         private readonly Dictionary<UGUIWindow, UGUITaskIcon> icons = new();
 
         private UGUIWindowManager subscribedManager;
         private UGUIWindowManager maximizedWindowAreaManager;
         private RectTransform rectTransform;
+        private CanvasGroup canvasGroup;
         private bool isSubscribed;
         private bool registeredMaximizedWindowArea;
+        // 아이콘이 하나라도 있으면 도크를 보인다(핀 고정 앱이 없으므로 빈 도크는 숨김).
+        private bool dockShouldShow;
 
         private void Awake()
         {
@@ -82,6 +89,30 @@ namespace UGUIWindow
             ConfigureTaskBarRect();
             SubscribeToManager();
             RebuildFromManager();
+            UpdateDockVisibility(true); // 활성화 시점의 상태로 즉시 스냅(빈 상태면 플래시 없이 숨김)
+        }
+
+        private void Update()
+        {
+            if (canvasGroup == null)
+            {
+                return;
+            }
+
+            float target = dockShouldShow ? 1f : 0f;
+            if (!Mathf.Approximately(canvasGroup.alpha, target))
+            {
+                float t = 1f - Mathf.Exp(-visibilityFadeSpeed * Time.unscaledDeltaTime);
+                canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, target, t);
+                if (Mathf.Abs(canvasGroup.alpha - target) < 0.004f)
+                {
+                    canvasGroup.alpha = target;
+                }
+
+                bool visible = canvasGroup.alpha > 0.01f;
+                canvasGroup.blocksRaycasts = visible;
+                canvasGroup.interactable = visible;
+            }
         }
 
         private void OnDisable()
@@ -177,6 +208,7 @@ namespace UGUIWindow
             }
 
             RefreshItems(window);
+            UpdateDockVisibility(false);
         }
 
         private void HandleWindowClosed(UGUIWindow window)
@@ -188,6 +220,7 @@ namespace UGUIWindow
 
             icons.Remove(window);
             Destroy(icon.gameObject);
+            UpdateDockVisibility(false);
         }
 
         private void HandleWindowFocused(UGUIWindow window)
@@ -208,6 +241,7 @@ namespace UGUIWindow
             }
 
             RefreshItems(null);
+            UpdateDockVisibility(false);
         }
 
         private UGUITaskIcon CreateIcon(UGUIWindow window)
@@ -283,9 +317,34 @@ namespace UGUIWindow
             canvas.overrideSorting = true;
             canvas.sortingOrder = sortingOrder;
 
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+
             if (iconContainer == null)
             {
                 iconContainer = CreateDefaultContainer();
+            }
+        }
+
+        // 빈 도크(아이콘 0개)는 숨기고, 창이 하나라도 열리면 다시 보인다.
+        // instant=true면 페이드 없이 즉시 적용(활성화 첫 프레임의 플래시 방지).
+        private void UpdateDockVisibility(bool instant)
+        {
+            dockShouldShow = icons.Count > 0;
+
+            if (canvasGroup == null)
+            {
+                canvasGroup = GetComponent<CanvasGroup>();
+            }
+
+            if (instant && canvasGroup != null)
+            {
+                canvasGroup.alpha = dockShouldShow ? 1f : 0f;
+                canvasGroup.blocksRaycasts = dockShouldShow;
+                canvasGroup.interactable = dockShouldShow;
             }
         }
 
