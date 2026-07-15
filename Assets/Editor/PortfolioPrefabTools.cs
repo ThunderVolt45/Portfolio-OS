@@ -40,13 +40,43 @@ namespace PortfolioOS.EditorTools
                 "Assets/Portfolio/Icons/Resume.png",
                 wireContentText: false, docPath: "docs/resume.pdf");
 
+            // UGUI-Window-Sample 소개 창(PDF 미사용, 순수 UGUI). 아이콘은 추후 직접 할당.
+            BuildVariant(basePrefab, typeof(UGUIWindow.UGUISampleWindow),
+                "Assets/Resources/Windows/UGUISampleWindow.prefab",
+                "Assets/Portfolio/Icons/UGUISample.png", wireContentText: false, docPath: null);
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
             // About 변형 스켈레톤 위에 이력서 1페이지 콘텐츠를 다시 구축한다.
             PortfolioAboutContent.Build();
+            // UGUISample 변형 스켈레톤 위에 프레임워크 소개 콘텐츠를 다시 구축한다.
+            PortfolioUGUISampleContent.Build();
 
             Debug.Log("[PortfolioPrefabTools] Done. Variants rebuilt.");
+        }
+
+        // UGUISampleWindow만 단독으로 (스켈레톤 변형 + 콘텐츠) 빌드한다.
+        // About/Doc 변형은 건드리지 않는다.
+        [MenuItem("Portfolio/Build UGUISample Window")]
+        public static void BuildUGUISampleWindow()
+        {
+            var basePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(BasePath);
+            if (basePrefab == null)
+            {
+                Debug.LogError("[PortfolioPrefabTools] base prefab not found: " + BasePath);
+                return;
+            }
+
+            BuildVariant(basePrefab, typeof(UGUIWindow.UGUISampleWindow),
+                "Assets/Resources/Windows/UGUISampleWindow.prefab",
+                "Assets/Portfolio/Icons/UGUISample.png", wireContentText: false, docPath: null);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            PortfolioUGUISampleContent.Build();
+            Debug.Log("[PortfolioPrefabTools] Done. UGUISample window + content built.");
         }
 
         [MenuItem("Portfolio/Build PDF Doc Windows + Icons")]
