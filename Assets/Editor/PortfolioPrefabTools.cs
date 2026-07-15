@@ -28,10 +28,12 @@ namespace PortfolioOS.EditorTools
                 return;
             }
 
+            // About: 단일 ContentText 배선 없이 스켈레톤만 만들고(콘텐츠는 아래 Build),
+            // 구조화된 이력서 1페이지 레이아웃은 PortfolioAboutContent가 채운다.
             BuildVariant(basePrefab, typeof(UGUIWindow.AboutWindow),
                 "Assets/Resources/Windows/AboutWindow.prefab",
                 "Assets/Portfolio/Icons/About.png",
-                wireContentText: true, docPath: null);
+                wireContentText: false, docPath: null);
 
             BuildVariant(basePrefab, typeof(UGUIWindow.DocumentViewerWindow),
                 "Assets/Resources/Windows/DocumentViewerWindow.prefab",
@@ -40,6 +42,10 @@ namespace PortfolioOS.EditorTools
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+
+            // About 변형 스켈레톤 위에 이력서 1페이지 콘텐츠를 다시 구축한다.
+            PortfolioAboutContent.Build();
+
             Debug.Log("[PortfolioPrefabTools] Done. Variants rebuilt.");
         }
 

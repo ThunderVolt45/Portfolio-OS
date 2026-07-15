@@ -64,7 +64,7 @@
 
 | ID | Task | 상태 |
 |---|---|---|
-| E2-T1 | `AboutWindow` (정체성 + 핵심역량 + 연락처) | ✅ |
+| E2-T1 | `AboutWindow` — 이력서 1페이지 전체(소개·핵심역량·경력·학력/자격/교육·프로필·슬로건)를 구조화 UGUI 레이아웃으로 구현 | ✅ |
 | E2-T2 | `DocumentViewerWindow` + PDF별 서브클래스 3 (`BrawlStarsTPSDocWindow`/`NovaRevolutionDocWindow`/`ProjectBlackoutDocWindow`) | ✅ |
 | E2-T3 | 구 `ProjectBlackoutWindow`(전용 창) 제거 → PDF 뷰어로 대체 | ✅ |
 | E2-T4 | **`ProjectsWindow`(런처)** — 7종 리스트+상세, 항목 선택 시 라우팅(PDF 뷰어 / UGUI 창 / 런처 내 상세) | ⬜ |
@@ -84,7 +84,14 @@
   - 메뉴 **Portfolio → Rebuild Window Prefab Variants** (About/Doc)
   - 메뉴 **Portfolio → Build PDF Doc Windows + Icons** (PDF 서브클래스 3 + 씬 아이콘)
   - 동작: base 인스턴스화 → root `UGUIWindow` 컴포넌트 제거 + subclass 추가 → `SerializedObject`로 필드 복사 → `SaveAsPrefabAsset`. 검증: `isVariant=True`, root 컴포넌트 = `UGUIWindowView` + subclass.
-- base body는 `Content/Viewport/ScrollContent`(ScrollRect). 단일 `ContentText`(TMP, stretch)를 ScrollContent에 배선 → About은 `contentText` 필드, Doc은 `documentRelativePath`.
+- base body는 `Content/Viewport/ScrollContent`(ScrollRect). **Doc**은 단일 `ContentText`(TMP, stretch) + `documentRelativePath`. **About**은 단일 텍스트 블록을 폐기하고 구조화 레이아웃을 사용 → 아래 별도 노트.
+
+**구현 노트 — AboutWindow 콘텐츠(이력서 1페이지)**
+- 디자인 기반: HTML/CSS 시안 `scratchpad/about-mockup.html`(macOS 프로필 카드 톤, 라이트 테마) → UGUI로 이식. 콘텐츠 SSOT는 `C:\Users\zxc98\Documents\GitHub\-\김민영_이력서_2026.pptx`의 **1페이지**(markitdown으로 추출).
+- 빌드 툴: `Assets/Editor/PortfolioAboutContent.cs`, 메뉴 **Portfolio → Build About Content**. `PrefabUtility.LoadPrefabContents`로 변형 유지한 채 `ScrollContent` 하위를 재구축(Vertical/HorizontalLayoutGroup + `ContentSizeFitter`로 세로 성장). `RebuildVariants`도 마지막에 이 Build를 호출(스켈레톤 재생성 시 콘텐츠 자동 복원).
+- 폰트: **WantedSans SDF** 가중치별(ExtraBold 이름 / Bold 회사 / SemiBold 헤더·라벨 / Medium 값 / Regular 본문). 카드 라운드/원형 아바타·dot는 **MPUIKit `MPImage`**(SerializedObject로 `m_DrawShape`=Rectangle/Circle, 사각형 `m_Rectangle.m_CornerRadius`, 원형 `m_Circle.m_FitRadius`=bool). ⚠️ `m_FitRadius`는 float 아님(bool) — floatValue 쓰면 "type is not a supported float value" 경고.
+- 창 크기: `AboutWindow.OnEnable`이 `Resize(480,580)`(가로 스크롤 없이 넉넉, 세로만 스크롤). `contentText` 필드/텍스트 주입 제거.
+- 검증(play mode 스크린샷): 7개 섹션 전부 렌더 + 한글 글리프 정상 + 무경고 확인. 폰트 동적 SDF 노이즈(5종)는 E5-T4 방침대로 `git checkout --`로 되돌림(런타임 재베이크).
 - `DocumentViewerWindow` base에 `protected virtual string DocumentPath/DocumentTitle` override 지점(서브클래스는 경로·제목만). 매니저가 **타입명으로 프리팹 로드**(`Resources.Load("Windows/"+typeName)`)라 PDF별 별도 타입 필수.
 
 **구현 노트 — 함정**
@@ -162,6 +169,9 @@
 - E5-T1: 기본 TMP(LiberationSans)에 한글 없어 □로 깨짐 → WantedSans 동적 SDF를 TMP Settings `m_fallbackFontAssets`(전역 폴백)에 추가. 창 텍스트 한글 정상 렌더 확인.
 - E5-T3: `UGUIIcon.ApplyTargetWindowIcon`은 `windowIcon`이 있으면 데스크톱+작업표시줄에 **자동 적용**, null이면 스킵(현재 빈 아이콘 = 시각적 일관). 각 프리팹 `windowIcon`에 스프라이트를 넣으면 자동 반영.
 - E5-T4: `Assets/UGUIWindowSample/Fonts/WantedSans-*.asset` 7개가 동적 아틀라스에 한글 글리프가 구워지며 매번 "수정됨"으로 뜸(`_typelessdata`, ~1392줄). 지금은 작업/병합 때마다 `git checkout --`로 되돌리는 중 → 근본 처리(정적 pre-bake 또는 커밋/ignore 정책) 필요.
+- **E5-T4 잠정 방침(2026-07-13)**: 콘텐츠(등장 문자)가 아직 미확정이라 static pre-bake는 시기상조 → **일단 dynamic 유지 + git 노이즈 감수**, 최종 단계(문자셋 확정/E4 배포 직전)에서 static 전환 재결정.
+  - 설정 목표: `WantedSans-Regular SDF`(전역 폴백, E5-T1)의 **Multi Atlas Textures = ON**(현재 `m_IsMultiAtlasTexturesEnabled: 0`). Population=Dynamic·1024²는 이미 맞음. 1024² 멀티는 총 바이트 동일(면적 불변)이라 100MB 우려와 무관, 오버플로 시 □ 방지용.
+  - ⚠️ **다음 세션 처리**: 이번 세션엔 Unity MCP가 config에 미등록(`~/.claude.json`의 `mcpServers: {}` 비어 있음)이고 브리지(`127.0.0.1:8080`)도 무응답이라 MCP로 못 바꿨음. → Unity **MCP for Unity 창 → MCP Client Configuration → Auto Configure**(uvx 커맨드 자동 기록)로 Claude Code에 서버 등록 + Bridge=Connected 확인 → **세션 재시작** 후 `manage_asset`로 플래그 변경. (설정 변경은 노이즈 파일과 엉키니 되돌린 뒤 재적용하거나 별도 커밋.)
 - E5-T6: **MPUIKit** = 에셋스토어 **유료** 에셋(재배포 불가) → 저장소에서 **제외**. `.gitignore`에 `/[Aa]ssets/MPUIKit/`·`/[Aa]ssets/MPUIKit.meta` 추가. 빌드는 이 에셋이 설치된 로컬에서 수행(타 환경/CI에는 미설치 → UI 깨질 수 있음, 필요 시 설치 안내 메모로 대체).
   - ⚠️ WantedSans 폰트를 `Assets/Fonts/`에 별도 반입하려다 철회 — **이미 `Assets/UGUIWindowSample/Fonts/`에 동일 7종이 존재**(중복). 폰트는 그쪽을 SSOT로 사용.
 
