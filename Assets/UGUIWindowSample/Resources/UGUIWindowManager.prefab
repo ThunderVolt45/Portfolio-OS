@@ -332,10 +332,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultWindowPath: Windows/
   mainCanvasScaler: {fileID: 4188884711273754665}
-  defaultWindowOnEscape: {fileID: 8499739566993383437, guid: 5982d1f7b47cb984a8b849da55389920, type: 3}
+  defaultWindowOnEscape: {fileID: 0}
+  enableWindowSwitcher: 1
+  maximizedWindowOffsetMin: {x: 0, y: 0}
+  maximizedWindowOffsetMax: {x: 0, y: 0}
   minimizedObjectPool: {fileID: 2917278411185820424}
   disabledObjectPool: {fileID: 6756472301620760573}
   OnDPIChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnManagedWindowOpened:
+    m_PersistentCalls:
+      m_Calls: []
+  OnManagedWindowClosed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnManagedWindowFocused:
+    m_PersistentCalls:
+      m_Calls: []
+  OnManagedWindowMinimized:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1763255437106800547

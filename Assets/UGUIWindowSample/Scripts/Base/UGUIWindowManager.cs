@@ -793,7 +793,10 @@ namespace UGUIWindow
             }
 
             // 열려있는 윈도우가 없다면
-            CreateWindow(defaultWindowOnEscape.GetType());
+            if (defaultWindowOnEscape != null)
+            {
+                CreateWindow(defaultWindowOnEscape.GetType());
+            }
         }
         #endregion
     }
