@@ -23,6 +23,8 @@ namespace PortfolioOS.EditorTools
         const string AboutPrefab = "Assets/Resources/Windows/AboutWindow.prefab";
         const string FontDir = "Assets/UGUIWindowSample/Fonts/";
         const string HandCursorPath = "Assets/UGUIWindowSample/Posys-Cursors-Improved-by-wrinkdater/BandiView_Posy hand.png";
+        // 프로필 사진(원형 아바타). 없으면 "김" 이니셜로 폴백.
+        const string AvatarPhotoPath = "Assets/Textures/김민영 1대1.png";
 
         // 링크 hover 커서(손가락). 없어도 링크 클릭은 동작.
         static Texture2D FHandCursor;
@@ -93,6 +95,7 @@ namespace PortfolioOS.EditorTools
                 Fitter(scroll.gameObject);
 
                 BuildHero(scroll);
+                BuildResumeCta(scroll);
                 BuildIntro(scroll);
                 BuildCompetency(scroll);
                 BuildCareer(scroll);
@@ -119,14 +122,34 @@ namespace PortfolioOS.EditorTools
             var hero = Row("Hero", parent, 14, TextAnchor.MiddleLeft, false);
             hero.padding = new RectOffset(0, 0, 0, 0);
 
-            // Avatar (원형)
+            // Avatar (원형): 원형 MPImage를 마스크로 삼아 프로필 사진을 원형 클리핑.
+            // 사진이 없으면 "김" 이니셜 텍스트로 폴백.
             var avatar = new GameObject("Avatar", typeof(RectTransform));
             avatar.transform.SetParent(hero.transform, false);
             Circle(avatar, Accent);
             var le = avatar.AddComponent<LayoutElement>();
             le.minWidth = le.preferredWidth = 66; le.minHeight = le.preferredHeight = 66; le.flexibleWidth = 0;
-            var init = AddText(avatar.transform, "Initial", "김", FExtraBold, 30, White, TextAlignmentOptions.Center, false);
-            Stretch((RectTransform)init.transform);
+
+            var photo = AssetDatabase.LoadAssetAtPath<Sprite>(AvatarPhotoPath);
+            if (photo != null)
+            {
+                // 원형 MPImage를 마스크 그래픽으로: 자식 사진을 원으로 클리핑
+                var mask = avatar.AddComponent<Mask>();
+                mask.showMaskGraphic = true;
+                var imgGo = new GameObject("Image", typeof(RectTransform));
+                imgGo.transform.SetParent(avatar.transform, false);
+                var pimg = imgGo.AddComponent<Image>();
+                pimg.sprite = photo;
+                pimg.preserveAspect = false;
+                pimg.raycastTarget = true;
+                Stretch((RectTransform)imgGo.transform);
+            }
+            else
+            {
+                Debug.LogWarning("[About] 프로필 사진 없음(" + AvatarPhotoPath + "). '김' 이니셜로 폴백.");
+                var init = AddText(avatar.transform, "Initial", "김", FExtraBold, 30, White, TextAlignmentOptions.Center, false);
+                Stretch((RectTransform)init.transform);
+            }
 
             // Who (이름 + 역할)
             var who = new GameObject("Who", typeof(RectTransform));
@@ -138,6 +161,45 @@ namespace PortfolioOS.EditorTools
             AddText(who.transform, "Role",
                 "Kim Min-Yeong · 유니티 · 언리얼 멀티 스택 게임 클라이언트 프로그래머",
                 FMedium, 12.5f, Ink2, TextAlignmentOptions.Left, true);
+        }
+
+        // 이력서 전체 PDF(DocumentViewerWindow)를 여는 주요 CTA 버튼.
+        // onClick 배선은 런타임(AboutWindow.Start의 WireResumeButton)이 이름("ResumeCta")으로 찾아 연결한다.
+        // (에디터 persistent listener 대신 코드 배선 — 프리팹 재베이크에 안전)
+        static void BuildResumeCta(Transform parent)
+        {
+            var go = NewChild("ResumeCta", parent);
+
+            // 라운드 accent 배경 (Button 타깃 그래픽)
+            var img = go.AddComponent<MPImage>();
+            var so = new SerializedObject(img);
+            so.FindProperty("m_Color").colorValue = Accent;
+            so.FindProperty("m_DrawShape").enumValueIndex = 3; // Rectangle
+            so.FindProperty("m_FalloffDistance").floatValue = 0.5f;
+            so.FindProperty("m_Rectangle.m_UniformCornerRadius").boolValue = false;
+            so.FindProperty("m_Rectangle.m_CornerRadius").vector4Value = new Vector4(12, 12, 12, 12);
+            so.ApplyModifiedPropertiesWithoutUndo();
+            img.raycastTarget = true;
+
+            var le = go.AddComponent<LayoutElement>();
+            le.minHeight = le.preferredHeight = 46;
+
+            var btn = go.AddComponent<Button>();
+            btn.transition = Selectable.Transition.ColorTint;
+            btn.targetGraphic = img;
+            var cb = btn.colors;
+            cb.normalColor      = White;
+            cb.highlightedColor = new Color(0.90f, 0.90f, 0.90f, 1f);
+            cb.pressedColor     = new Color(0.80f, 0.80f, 0.80f, 1f);
+            cb.selectedColor    = White;
+            cb.disabledColor    = new Color(0.7f, 0.7f, 0.7f, 0.5f);
+            cb.colorMultiplier  = 1f;
+            cb.fadeDuration     = 0.1f;
+            btn.colors = cb;
+
+            var label = AddText(go.transform, "Label", "이력서 전체 보기  (PDF)",
+                FSemiBold, 14, White, TextAlignmentOptions.Center, false);
+            Stretch((RectTransform)label.transform);
         }
 
         static void BuildIntro(Transform parent)
@@ -212,7 +274,7 @@ namespace PortfolioOS.EditorTools
             Circle(dotGo, Accent);
             var drt = (RectTransform)dotGo.transform;
             drt.anchorMin = drt.anchorMax = new Vector2(0.5f, 1); drt.pivot = new Vector2(0.5f, 0.5f);
-            drt.sizeDelta = new Vector2(10, 10); drt.anchoredPosition = new Vector2(0, -7);
+            drt.sizeDelta = new Vector2(7, 7); drt.anchoredPosition = new Vector2(0, -7);
 
             // 콘텐츠 컬럼
             var col = NewChild("Content", job.transform);
@@ -355,7 +417,7 @@ namespace PortfolioOS.EditorTools
             var card = Card("Slogan", parent, AccentSoft, 14);
             Vlg(card, 20, 20, 18, 18, 0, true);
             AddText(card.transform, "Quote",
-                "<size=200%><color=#0A84FF><b>“</b></color></size>  교육으로 기초를 다지고, 현업과 프로젝트로 이를 검증하는 — " +
+                "<b><color=#0A84FF>교육으로 기초를 다지고, 현업과 프로젝트로 이를 검증하는</color></b>\n" +
                 "유니티와 언리얼, C#과 C++ 어느 환경에서도 대응할 수 있는 넓은 기술 폭과, " +
                 "서비스를 출시까지 끝맺는 개발의 깊이를 갖춘 개발자",
                 FMedium, 12.5f, Ink, TextAlignmentOptions.TopLeft, true, 6f);
