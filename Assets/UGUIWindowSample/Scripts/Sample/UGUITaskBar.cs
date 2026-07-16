@@ -59,12 +59,17 @@ namespace UGUIWindow
         [Tooltip("빈 도크(아이콘 0개) 페이드 속도. 클수록 빠름.")]
         [SerializeField] private float visibilityFadeSpeed = 14f;
 
+        [Tooltip("전체화면일 때 화면 아래쪽 이 범위 안으로 포인터가 들어오면 도크가 다시 나온다. " +
+                 "캔버스 단위가 아니라 실제 화면 픽셀이라, 화면 배율이나 창 크기가 바뀌어도 손에 잡히는 폭은 같다.")]
+        [SerializeField] private float fullScreenRevealZonePixels = 32f;
+
         private readonly Dictionary<UGUIWindow, UGUITaskIcon> icons = new();
 
         private UGUIWindowManager subscribedManager;
         private UGUIWindowManager maximizedWindowAreaManager;
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
+        private Canvas canvas;
         private bool isSubscribed;
         private bool registeredMaximizedWindowArea;
         // 아이콘이 하나라도 있으면 도크를 보인다(핀 고정 앱이 없으므로 빈 도크는 숨김).
@@ -94,6 +99,9 @@ namespace UGUIWindow
 
         private void Update()
         {
+            // 전체화면 여부와 포인터 위치는 매 프레임 바뀔 수 있으므로 여기서 다시 판단한다.
+            UpdateDockVisibility(false);
+
             if (canvasGroup == null)
             {
                 return;
@@ -313,7 +321,7 @@ namespace UGUIWindow
 
             ConfigureTaskBarRect();
 
-            var canvas = GetComponent<Canvas>();
+            canvas = GetComponent<Canvas>();
             canvas.overrideSorting = true;
             canvas.sortingOrder = sortingOrder;
 
@@ -330,10 +338,12 @@ namespace UGUIWindow
         }
 
         // 빈 도크(아이콘 0개)는 숨기고, 창이 하나라도 열리면 다시 보인다.
+        // 전체화면 중에는 macOS처럼 도크를 숨기고, 화면 아래쪽에 포인터를 대면 다시 꺼낸다.
         // instant=true면 페이드 없이 즉시 적용(활성화 첫 프레임의 플래시 방지).
         private void UpdateDockVisibility(bool instant)
         {
-            dockShouldShow = icons.Count > 0;
+            dockShouldShow = icons.Count > 0
+                && (!IsFullScreenActive() || IsPointerInRevealZone());
 
             if (canvasGroup == null)
             {
@@ -346,6 +356,48 @@ namespace UGUIWindow
                 canvasGroup.blocksRaycasts = dockShouldShow;
                 canvasGroup.interactable = dockShouldShow;
             }
+        }
+
+        private bool IsFullScreenActive()
+        {
+            var manager = subscribedManager != null ? subscribedManager : UGUIWindowManager.Instance;
+            return manager != null && manager.HasFullScreenWindow;
+        }
+
+        // 도크가 숨어 있을 때는 raycast를 받지 못하므로, 포인터 이벤트가 아니라 좌표로 판정한다.
+        private bool IsPointerInRevealZone()
+        {
+            var parentRect = rectTransform != null ? rectTransform.parent as RectTransform : null;
+            if (parentRect == null)
+            {
+                return false;
+            }
+
+            if (!UGUIWindowManager.TryGetPointerScreenPosition(out Vector2 screenPosition))
+            {
+                return false;
+            }
+
+            // 캔버스가 ScreenSpaceOverlay이므로 카메라는 null.
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    parentRect,
+                    screenPosition,
+                    null,
+                    out Vector2 localPointer))
+            {
+                return false;
+            }
+
+            // 도크가 이미 나와 있으면 감지 범위를 도크 높이까지 넓혀,
+            // 포인터를 도크 위에 올려둔 채로 아이콘을 누를 수 있게 한다.
+            Rect area = parentRect.rect;
+            float zoneHeight = dockShouldShow
+                ? taskBarHeight + bottomMargin
+                : UGUIWindowManager.PixelsToCanvasUnits(fullScreenRevealZonePixels, canvas);
+
+            return localPointer.y <= area.yMin + zoneHeight
+                && localPointer.x >= area.xMin
+                && localPointer.x <= area.xMax;
         }
 
         private RectTransform CreateDefaultContainer()
