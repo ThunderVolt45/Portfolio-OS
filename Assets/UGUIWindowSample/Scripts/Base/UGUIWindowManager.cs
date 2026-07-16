@@ -138,7 +138,7 @@ namespace UGUIWindow
             get
             {
                 var manager = Instance;
-                return manager != null ? manager._currentDPI : 2f;
+                return manager != null ? manager._currentDPI : 1f;
             }
         }
 
@@ -204,7 +204,7 @@ namespace UGUIWindow
             }
         }
 
-        private float _currentDPI = 2f;
+        private float _currentDPI = 1f;
         private float _screenMultiplierWidth = 1f;
         private float _screenMultiplierHeight = 1f;
 
@@ -269,7 +269,7 @@ namespace UGUIWindow
         private void InitializeCanvas()
         {
             var currentResolution = Screen.currentResolution;
-            var dpi = PlayerPrefs.GetFloat("DPI Settings", 2f);
+            var dpi = PlayerPrefs.GetFloat("DPI Settings", 1f);
 
             SetDPI(currentResolution.width, currentResolution.height, dpi);
         }
