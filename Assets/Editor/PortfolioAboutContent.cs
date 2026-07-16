@@ -372,7 +372,7 @@ namespace PortfolioOS.EditorTools
             ProfileCell(r2, "Address", "경기도 고양시 일산서구 킨텍스로 300");
 
             var r3 = ProfileRow(grid);
-            ProfileCell(r3, "Phone", "");
+            ProfileCell(r3, "Phone", "이메일로 연락 바랍니다");
             ProfileCell(r3, "E-mail", "zxc9876zxc@gmail.com", "mailto:zxc9876zxc@gmail.com");
 
             var r4 = ProfileRow(grid);
