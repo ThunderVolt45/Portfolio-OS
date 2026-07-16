@@ -11,7 +11,8 @@
 
 방문자가 경험하는 최종 흐름. 모든 Epic/Task는 이 시나리오를 실현하기 위한 것.
 
-1. **접속** — GitHub Pages 랜딩 페이지(모니터 셸 `monitor.html` 안에 Unity WebGL 캔버스).
+1. **접속** — GitHub Pages 랜딩 페이지에서 Unity WebGL 캔버스가 **페이지 전체(뷰포트)를 차지**한다.
+   - ⚠️ **모니터 셸(`monitor.html`) 구상은 폐기**(2026-07-16). 셸 없이 Unity가 페이지 전체를 쓰는 방식으로 확정 → 커스텀 템플릿 `Assets/WebGLTemplates/PortfolioFull`.
 2. **부팅 연출** — 기본 Unity WebGL 로딩 화면을 **부팅 연출로 대체**(커스텀 WebGL 템플릿).
    - 부팅 진행은 `createUnityInstance(..., onProgress)`의 **실제 로드 progress**로 구동 → ~30MB 다운로드/초기화 시간을 부팅 연출이 그대로 가린다(진행 막대 노출 없음).
    - **부팅 연출은 템플릿에서 완결**되고, Unity ready 시 데스크톱으로 **매끄럽게 핸드오프**(플래시/점프 없이). Unity 쪽 연장 연출은 없음.
@@ -31,12 +32,14 @@
 |---|---|---|---|
 | **E1** | 창 프레임워크 유지 (upstream 동기화) | ✅ 최신 | `UGUIWindowSwitcher` 실사용 점검 (E1-T2) |
 | **E2** | 포트폴리오 앱 창 & 콘텐츠 | 🔄 진행 | Projects 런처 창 (E2-T4) |
-| **E3** | PDF 문서 뷰어 (PDF.js 오버레이) | 🔄 핵심완결 | monitor.html 셸 좌표 정합 (E3-T3) |
-| **E4** | WebGL 빌드 & 배포 | 🔄 빌드완료 | `ThunderVolt45.github.io` 배포 (E4-T4) |
+| **E3** | PDF 문서 뷰어 (PDF.js 오버레이) | 🔄 핵심완결 | release 빌드에서 PDF 눈확인 (E3-T6) |
+| **E4** | WebGL 빌드 & 배포 | ✅ **배포됨** | 모바일/미지원 폴백 재설계 (E4-T5) |
 | **E5** | 폴리시 & 위생 | 🔄 진행 | 폰트 SDF 노이즈 방침 (E5-T4) |
 | **E6** | 부팅 & 데스크톱 셸 연출 | ⬜ 미착수 | 커스텀 WebGL 템플릿 부팅 (E6-T1) |
 
-> **프로젝트 최종 목표 = E4-T4**(WebGL 빌드를 모니터 셸에 임베드해 GitHub Pages 발행).
+> **프로젝트 최종 목표 = E4-T4 → 달성**(2026-07-16). 공개 발행: **https://thundervolt45.github.io/Portfolio-OS/**
+> 모니터 셸 임베드 대신 **Unity가 페이지 전체를 쓰는 방식**으로 확정했고, 별도 `ThunderVolt45.github.io` repo 없이
+> **이 저장소의 `gh-pages` 브랜치**로 배포한다(저장소는 public 전환됨). 재배포는 `python Tools/deploy_ghpages.py`.
 
 ---
 
@@ -118,7 +121,7 @@
 |---|---|---|
 | E3-T1 | 포커스-스왑 오버레이 (창별 iframe 유지, 다중창, 좌표 동기) | ✅ |
 | E3-T2 | URL 해시 `#open=클래스명` 딥링크 (`PortfolioBootstrap.cs`) | ✅ |
-| E3-T3 | monitor.html 셸(스케일/오프셋 캔버스) 좌표 정합 검증 — docs 세션 조율 | 🔒 |
+| E3-T3 | ~~monitor.html 셸 좌표 정합 검증~~ — **폐기**(모니터 셸 미사용, 캔버스가 뷰포트 전체라 스케일/오프셋 없음) | ❌ |
 | E3-T4 | 복귀(백그라운드→라이브) 경로 실브라우저 눈확인 + 포커스아웃 스냅샷 플래시 refinement | ⬜ |
 | E3-T5 | 고도화: 다페이지 스크롤 + HTTP Range + 텍스처 가상화 + "PDF 원본 다운로드" 버튼 | ⬜ |
 | E3-T6 | release 빌드에서 각 PDF 항목 → 해당 PDF 눈확인 (실렌더는 WebGL 전용) | ⬜ |
@@ -135,17 +138,20 @@
 
 ---
 
-## E4 — WebGL 빌드 & 배포 · 🔄 빌드 완료, 배포 대기
+## E4 — WebGL 빌드 & 배포 · ✅ 배포 완료
 
-> 목표: GitHub Pages 제약(싱글스레드·파일당 100MB·Content-Encoding 못 넣음) 안에서 재현 가능한 배포 빌드를 만들고, 모니터 셸에 임베드해 발행.
+> 목표: GitHub Pages 제약(싱글스레드·파일당 100MB·Content-Encoding 못 넣음) 안에서 재현 가능한 배포 빌드를 만들어 발행.
+> **발행됨 → https://thundervolt45.github.io/Portfolio-OS/** (2026-07-16)
 
 | ID | Task | 상태 |
 |---|---|---|
 | E4-T1 | 재현 빌드 스크립트 `PortfolioBuild.cs` (메뉴 + 배치모드) | ✅ |
-| E4-T2 | Brotli 압축 + Decompression Fallback 채택 (~30MB) — 스크립트에 반영 완료, 재빌드 눈확인 남음 | 🔄 |
+| E4-T2 | Brotli 압축 + Decompression Fallback 채택 — 공개 URL에서 폴백 로드 확인 완료 | ✅ |
 | E4-T3 | 로컬 서버 `Tools/serve.py`(`.br` 서빙 + HTTPS) + preview `launch.json` | ✅ |
-| E4-T4 | **`ThunderVolt45.github.io` repo 생성 + 배포** (모니터 셸 HTML + WebGL 임베드) — 최종 목표 | ⬜ |
-| E4-T5 | 모바일/WebGL 미지원 폴백: 정적 안내+링크 페이지 + capable 모바일 "그래도 입장" 허용 — monitor.html/docs 세션 조율 | ⬜ |
+| E4-T4 | **GitHub Pages 배포** — 이 저장소 `gh-pages` 루트 + 저장소 public 전환 (최종 목표) | ✅ |
+| E4-T5 | 모바일/WebGL 미지원 폴백: 정적 안내+링크 페이지 + capable 모바일 "그래도 입장" 허용 | ⬜ |
+| E4-T6 | 배포 스크립트 `Tools/deploy_ghpages.py` (payload 검증 + orphan force-push + URL 확인) | ✅ |
+| E4-T7 | 전체화면 템플릿 `Assets/WebGLTemplates/PortfolioFull` + 기본 UI 배율(`PortfolioUIScale`) | ✅ |
 
 **구현 노트 — 빌드 설정**
 - `Assets/Editor/PortfolioBuild.cs`(`PortfolioOS.EditorTools.PortfolioBuild`) — 배포 설정을 코드로 고정(에디터 UI 상태에 의존 X). 메뉴 **Portfolio → Build WebGL (Release/Development)** + 배치모드(`-executeMethod …BuildWebGLRelease`).
@@ -153,8 +159,24 @@
 - 배포 크기: 압축 Disabled 52MB → **Brotli ~30MB**. GH Pages가 Content-Encoding을 못 넣지만 Unity 내장 JS 디컴프레서(fallback)가 클라이언트에서 `.br`을 풀어 배포 가능.
 - 로컬 `serve.py`: wasm MIME `application/wasm`, `.br`/`.gz` 사전압축 서빙 + `Content-Encoding` 헤더, HTTPS(self-signed; Brotli는 보안 컨텍스트 필요), `Cache-Control: no-store`. preview는 `.claude/launch.json`의 `webgl`(port 8000).
 
-> **E4-T2가 아직 🔄인 이유**: `PortfolioBuild.cs`를 Brotli로 바꾼 건 코드뿐. 실제 재빌드로 산출물이 `.br`로 나오고 브라우저에서 폴백 로드되는지 눈확인해야 ✅.
-> **E4-T5 참고**: capable 모바일 진입 강행은 monitor.html이 WebGL/디바이스 판정 후 "그래도 입장" 경로를 노출하는 방식(docs 세션과 셸 스펙 합의 필요).
+**구현 노트 — 배포 (E4-T4/T6/T7)**
+- **배포 경로**: 별도 `ThunderVolt45.github.io` repo를 만들지 않고 **이 저장소의 `gh-pages` 브랜치 루트**로 발행한다.
+  저장소는 **public**. Pages 설정 = `gh-pages` / `/`.
+- **왜 로컬 빌드를 푸시하나**: MPUIKit(유료 에셋)이 gitignore라 **CI 빌드가 불가** → 로컬 `Build/WebGL`을 그대로 배포.
+- **재배포**: `python Tools/deploy_ghpages.py [--yes] [--verify]`. payload 검증(필수 파일·100MB 하드리밋·빌드 시각) →
+  `.nojekyll` 추가 → **매번 커밋 1개짜리 orphan 히스토리로 force-push**(빌드 산출물이 히스토리에 누적돼 저장소가
+  비대해지는 것을 방지) → `--verify`면 공개 URL 200 확인. 작업 저장소는 건드리지 않고 임시 디렉터리에서 수행.
+- **공개 URL에서 검증됨**: `.unityweb` 응답에 `Content-Encoding` 없음 + `Content-Type: application/vnd.unity` →
+  Unity 내장 JS 디컴프레서가 클라이언트에서 `.br`을 풀어 정상 로드(= §4-C 설계대로 동작).
+- **전체화면 템플릿**: 기본 Unity 플레이어(960x600 고정 캔버스)가 작아 `Assets/WebGLTemplates/PortfolioFull`로 교체.
+  캔버스에 고정 크기를 주지 않고 CSS로 뷰포트를 채우며, `matchWebGLToCanvasSize`(기본 true)가 렌더 타깃을 맞춘다.
+  `PlayerSettings.WebGL.template = "PROJECT:PortfolioFull"`을 `PortfolioBuild.cs`에 고정.
+- **기본 UI 배율**: 프레임워크는 시작 시 `PlayerPrefs.GetFloat("DPI Settings", 1f)`를 읽어
+  `referenceResolution = screen / dpi`로 세팅한다(= dpi가 곧 UI 배율). 이 키를 **쓰는 곳이 없어 항상 100%**였으므로,
+  `Assets/Scripts/PortfolioUIScale.cs`가 `BeforeSceneLoad`에 기본 배율을 주입한다. 배율 조정은 `DefaultScale` 한 곳.
+
+> **E4-T5 참고**: 모니터 셸 폐기로 **셸 기반 디바이스 판정 경로가 사라졌다**. 모바일/미지원 폴백은
+> 템플릿(`PortfolioFull/index.html`)에서 WebGL 지원 여부를 판정해 정적 안내로 분기하는 방식으로 **재설계 필요**.
 
 **구현 노트 — 빌드 함정**
 - 빌드는 메인스레드 동기라 **빌드 내내 MCP 브리지 끊김**(정상). 완료는 `Build/WebGL/Build/WebGL.wasm` mtime 폴링/콘솔로 확인.
@@ -204,5 +226,6 @@
 **설계 메모**
 - **부팅은 WebGL 템플릿(HTML/JS/CSS)에 산다** — Unity C# 런타임은 다운로드/초기화 중엔 아직 안 뜨므로, 그 시간을 가리려면 템플릿 레벨이어야 함. 템플릿은 `Assets/WebGLTemplates/<이름>/`에 두고 Player Settings의 `PlayerSettings.WebGL.template = "PROJECT:<이름>"`로 지정 → **E4(빌드) 연동**: `PortfolioBuild.cs`가 템플릿을 코드로 고정해야 재현 빌드에 반영됨.
 - E6-T2 핸드오프: 템플릿 부팅 UI가 Unity ready 시점에 페이드/전환되며 데스크톱으로 이어짐. 자동 오픈은 `PortfolioBootstrap`/부팅 완료 콜백에서 `CreateWindow`. 딥링크(E3-T2) `#open=`가 있으면 자동 오픈 대신 해당 앱 우선.
-- **monitor.html 셸과의 관계**: 셸은 "모니터 그릇"만 제공하고 부팅 연출은 WebGL 템플릿이 담당(진짜 progress 접근이 여기 있음). 셸 좌표/스케일(E3-T3, E4-T5) 가정과 어긋나지 않게 docs 세션과 조율.
+- **셸 없음(2026-07-16 확정)**: monitor.html 셸은 폐기됐고 부팅 연출은 **전적으로 WebGL 템플릿**이 담당한다(진짜 progress 접근이 여기 있음). 조율할 외부 셸이 없으므로 docs 세션 의존도 사라짐.
+- **부팅 연출은 `PortfolioFull` 템플릿 위에 얹는다** — 이미 배포에 쓰이는 템플릿이므로 새로 만들지 말 것. 현재는 중앙 로딩 오버레이(`#unity-loading-bar` + `createUnityInstance(..., onProgress)`)만 있고, 이 자리를 부팅 연출로 대체하면 된다(E6-T1).
 - ⚠️ 커스텀 템플릿은 Unity 기본 로더 스크립트(`{{{ LOADER_FILENAME }}}` 등 플레이스홀더) 구조를 유지해야 빌드가 깨지지 않음.

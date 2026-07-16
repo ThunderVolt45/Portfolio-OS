@@ -2,7 +2,9 @@
 
 이 저장소는 **김민영님의 취업 포트폴리오를 "데스크톱 OS" 형태로 구현**하는 Unity 프로젝트입니다.
 본인이 만든 창(Window) 프레임워크 **UGUI-Window-Sample** 위에 About·Projects·Resume·Contact 등을 "앱 창"으로 얹어,
-**Unity WebGL로 빌드 → HTML '모니터' 셸 안에 임베드**하여 랜딩 페이지로 발행하는 것이 목표입니다.
+**Unity WebGL로 빌드 → GitHub Pages 랜딩 페이지로 발행**하는 것이 목표입니다.
+> 발행됨: **https://thundervolt45.github.io/Portfolio-OS/** (2026-07-16). Unity 캔버스가 **페이지 전체**를 쓰며,
+> 초기 구상이던 HTML '모니터 셸' 임베드는 **폐기**됐습니다(§4-C).
 (자기 프레임워크를 dogfooding해 포트폴리오 UI 자체로 쓰는 것이 핵심 어필 포인트)
 
 > 이 문서는 **다른 세션에서 넘어온 핸드오프 온보딩**입니다. 새 세션은 이 문서를 먼저 통독하세요.
@@ -30,9 +32,8 @@
   `C:\Users\zxc98\Claude\Projects\취업 포트폴리오 프로젝트\portfolio\index.md`
 - **프로젝트별 상세(기술문서/케이스스터디)**:
   `C:\Users\zxc98\Claude\Projects\취업 포트폴리오 프로젝트\portfolio\projects\*.md`
-- **HTML 모니터 셸(이 OS를 담을 그릇)**:
-  `C:\Users\zxc98\Claude\Projects\취업 포트폴리오 프로젝트\portfolio\preview\monitor.html`
-  (docs 프로젝트 세션이 관리. 화면 안 `.desktop` 영역이 이 프로젝트의 Unity WebGL 캔버스로 교체됨)
+- ~~**HTML 모니터 셸**~~ — **폐기**(2026-07-16). 셸 없이 Unity WebGL이 페이지 전체를 차지하는 방식으로 확정했고,
+  랜딩 페이지는 커스텀 템플릿 `Assets/WebGLTemplates/PortfolioFull`이 담당한다. docs 세션 조율 불필요.
 
 > 표기 원칙: 한국어 작성, 기술 용어(영문)는 그대로. 과장·허위 금지, 정량 수치 없으면 지어내지 말 것.
 
@@ -90,7 +91,14 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 - **채택: Compression Format = Brotli + Decompression Fallback = Enabled** → 배포 산출물 **~30MB**(§6 2026-07-07). Unity 내장 JS 디컴프레서가 `.br`을 클라이언트에서 해제하므로 **Content-Encoding 헤더 불필요 → GH Pages에서도 동작.** (대안: 압축 Disabled. GH Pages가 Content-Encoding 헤더를 못 넣으므로 `.br` 직접 서빙은 불가 — 로컬 `serve.py`만 헤더 제어 가능.)
 - **싱글스레드 빌드**(SharedArrayBuffer/COOP·COEP 불가)
 - 파일 1개 **100MB 하드 제한** — 빌드 경량 유지
-- 배포 대상: `ThunderVolt45.github.io`(정적) — 모니터 셸 HTML + 이 WebGL 빌드. (해당 repo 아직 미생성)
+- **배포 완료 (2026-07-16) → https://thundervolt45.github.io/Portfolio-OS/**
+  - 별도 `ThunderVolt45.github.io` repo는 **만들지 않았다**. **이 저장소의 `gh-pages` 브랜치 루트**로 발행하고
+    저장소를 **public**으로 전환했다. Pages 설정 = `gh-pages` / `/`.
+  - **CI 빌드 불가** — MPUIKit(유료 에셋)이 gitignore라 러너에서 빌드할 수 없다. 따라서 **로컬 `Build/WebGL`을 푸시**한다.
+  - **재배포 = `python Tools/deploy_ghpages.py [--yes] [--verify]`**. payload 검증 → `.nojekyll` → **orphan 커밋 1개로
+    force-push**(빌드 산출물이 히스토리에 누적되지 않도록) → 공개 URL 200 확인. 작업 저장소는 건드리지 않는다.
+  - 랜딩 페이지 = 커스텀 템플릿 `Assets/WebGLTemplates/PortfolioFull`(캔버스가 뷰포트 전체). `PortfolioBuild.cs`가
+    `PlayerSettings.WebGL.template`을 고정하므로 재현 빌드에 자동 반영된다.
 
 ---
 
@@ -107,11 +115,14 @@ UGUIWindowManager.CreateWindowEx<T>(string name, int x, int y, int w, int h);
 > **작업 현황은 [`TASKS.md`](TASKS.md)의 Epic/Task 보드에서 관리한다.** (이전의 날짜별 진행 로그는 TASKS.md로 이관 — 이 문서는 온보딩·레퍼런스만 유지.)
 > 새 세션은 §0~§5를 먼저 읽고, "무엇이 되어 있고 무엇이 남았는지"는 `TASKS.md`에서 파악·갱신할 것.
 
-### 현재 상태 요약 (2026-07-07)
+### 현재 상태 요약 (2026-07-16)
 - **창 프레임워크**: upstream 3차 동기화까지 반영, 최신.
 - **앱 창**: `AboutWindow`·`DocumentViewerWindow`(+PDF 문서창 3종) 완료. `ProjectsWindow`·`ContactWindow` 미착수.
-- **PDF 뷰어**: PDF.js 포커스-스왑 오버레이 핵심 완결. monitor.html 셸 좌표 정합 등 잔여.
-- **빌드**: 재현 빌드 스크립트(`PortfolioBuild.cs`) + Brotli ~30MB 완료. `ThunderVolt45.github.io` 배포만 남음.
+- **PDF 뷰어**: PDF.js 포커스-스왑 오버레이 핵심 완결. (모니터 셸 좌표 정합 과제는 셸 폐기로 소멸.)
+- **빌드·배포**: `PortfolioBuild.cs` + Brotli, **배포 완료** → https://thundervolt45.github.io/Portfolio-OS/
+  (이 저장소 `gh-pages`, 저장소 public). 재배포는 `Tools/deploy_ghpages.py`.
+- **공개 전 개인정보**: 전화번호를 소스·PDF 4종·About 창·**git 히스토리 전체**에서 제거했다(filter-repo + force-push).
+  ⚠️ 앞으로 공개 배포물에 **전화번호를 다시 넣지 말 것** — 연락은 이메일(`zxc9876zxc@gmail.com`)로 안내한다.
 - **워킹 트리**: 폰트 SDF 노이즈 7개만 상주(커밋 제외 관리 — TASKS.md §7).
 
 ### 알려진 함정
