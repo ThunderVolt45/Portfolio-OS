@@ -22,6 +22,11 @@ namespace PortfolioOS.EditorTools
     {
         const string AboutPrefab = "Assets/Resources/Windows/AboutWindow.prefab";
         const string FontDir = "Assets/UGUIWindowSample/Fonts/";
+        const string HandCursorPath = "Assets/UGUIWindowSample/Posys-Cursors-Improved-by-wrinkdater/BandiView_Posy hand.png";
+
+        // 링크 hover 커서(손가락). 없어도 링크 클릭은 동작.
+        static Texture2D FHandCursor;
+        static readonly Vector2 HandHotspot = new Vector2(8, 4);
 
         // ---- 팔레트 (about-mockup.html 라이트 테마) ----
         static readonly Color Ink       = Hex("1D1D1F");
@@ -49,6 +54,12 @@ namespace PortfolioOS.EditorTools
             {
                 Debug.LogError("[About] WantedSans SDF 폰트 로드 실패. " + FontDir + " 확인.");
                 return;
+            }
+
+            FHandCursor = AssetDatabase.LoadAssetAtPath<Texture2D>(HandCursorPath);
+            if (FHandCursor == null)
+            {
+                Debug.LogWarning("[About] 손가락 커서 텍스처 없음(" + HandCursorPath + "). 링크 hover 커서 없이 진행.");
             }
 
             var root = PrefabUtility.LoadPrefabContents(AboutPrefab);
@@ -300,10 +311,10 @@ namespace PortfolioOS.EditorTools
 
             var r3 = ProfileRow(grid);
             ProfileCell(r3, "Phone", "");
-            ProfileCell(r3, "E-mail", "zxc9876zxc@gmail.com");
+            ProfileCell(r3, "E-mail", "zxc9876zxc@gmail.com", "mailto:zxc9876zxc@gmail.com");
 
             var r4 = ProfileRow(grid);
-            ProfileCell(r4, "GitHub", "github.com/ThunderVolt45");
+            ProfileCell(r4, "GitHub", "github.com/ThunderVolt45", "https://github.com/ThunderVolt45");
         }
 
         static Transform ProfileRow(Transform parent)
@@ -314,14 +325,29 @@ namespace PortfolioOS.EditorTools
             return row.transform;
         }
 
-        static void ProfileCell(Transform parent, string label, string value)
+        static void ProfileCell(Transform parent, string label, string value, string url = null)
         {
             var cell = Card("Cell", parent, Panel, 12);
             Vlg(cell, 15, 15, 12, 12, 4, true);
             cell.AddComponent<LayoutElement>().flexibleWidth = 1;
             var l = AddText(cell.transform, "L", label.ToUpperInvariant(), FSemiBold, 10, Ink3, TextAlignmentOptions.TopLeft, false);
             l.characterSpacing = 4f;
-            AddText(cell.transform, "V", value, FMedium, 12.5f, Ink, TextAlignmentOptions.TopLeft, true);
+            var v = AddText(cell.transform, "V",
+                url != null ? "<link=\"" + url + "\">" + value + "</link>" : value,
+                FMedium, 12.5f, url != null ? Accent : Ink, TextAlignmentOptions.TopLeft, true);
+            if (url != null)
+            {
+                MakeLink(v);
+            }
+        }
+
+        // 링크 TMP 라벨을 실제 하이퍼링크로: raycast 켜고 런타임 클릭/hover 핸들러 부착.
+        static void MakeLink(TextMeshProUGUI t)
+        {
+            t.raycastTarget = true;
+            var h = t.gameObject.AddComponent<PortfolioOS.TMPLinkHandler>();
+            h.linkCursor = FHandCursor;
+            h.linkCursorHotspot = HandHotspot;
         }
 
         static void BuildSlogan(Transform parent)

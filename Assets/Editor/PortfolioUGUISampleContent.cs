@@ -23,6 +23,11 @@ namespace PortfolioOS.EditorTools
     {
         const string Prefab = "Assets/Resources/Windows/UGUISampleWindow.prefab";
         const string FontDir = "Assets/UGUIWindowSample/Fonts/";
+        const string HandCursorPath = "Assets/UGUIWindowSample/Posys-Cursors-Improved-by-wrinkdater/BandiView_Posy hand.png";
+
+        // 링크 hover 커서(손가락). 없어도 링크 클릭은 동작.
+        static Texture2D FHandCursor;
+        static readonly Vector2 HandHotspot = new Vector2(8, 4);
 
         // ---- 팔레트 (ugui-sample-mockup.html 라이트 테마) ----
         static readonly Color Ink        = Hex("1D1D1F");
@@ -50,6 +55,12 @@ namespace PortfolioOS.EditorTools
             {
                 Debug.LogError("[UGUISample] WantedSans SDF 폰트 로드 실패. " + FontDir + " 확인.");
                 return;
+            }
+
+            FHandCursor = AssetDatabase.LoadAssetAtPath<Texture2D>(HandCursorPath);
+            if (FHandCursor == null)
+            {
+                Debug.LogWarning("[UGUISample] 손가락 커서 텍스처 없음(" + HandCursorPath + "). 링크 hover 커서 없이 진행.");
             }
 
             var root = PrefabUtility.LoadPrefabContents(Prefab);
@@ -339,20 +350,29 @@ namespace PortfolioOS.EditorTools
             var card = Card("Card", s, Panel, 14);
             Vlg(card, 0, 0, 0, 0, 0, true);
 
-            LinkRow(card.transform, "GitHub", "github.com/ThunderVolt45/UGUI-Window-Sample", true);
-            LinkRow(card.transform, "Releases", "github.com/ThunderVolt45/UGUI-Window-Sample/releases", true);
+            LinkRow(card.transform, "GitHub", "github.com/ThunderVolt45/UGUI-Window-Sample", true,
+                "https://github.com/ThunderVolt45/UGUI-Window-Sample");
+            LinkRow(card.transform, "Releases", "github.com/ThunderVolt45/UGUI-Window-Sample/releases", true,
+                "https://github.com/ThunderVolt45/UGUI-Window-Sample/releases");
             LinkRow(card.transform, "API 매뉴얼", "docs/Manual.md · 클래스 다이어그램 8종", false);
         }
 
-        static void LinkRow(Transform parent, string label, string url, bool divider)
+        // href != null 이면 표시 텍스트를 <link>로 감싸 실제 하이퍼링크로 만든다.
+        static void LinkRow(Transform parent, string label, string display, bool divider, string href = null)
         {
             var row = Row("Row", parent, 12, TextAnchor.MiddleLeft, false);
             row.padding = new RectOffset(15, 15, 12, 12);
             var lk = AddText(row.transform, "K", label, FSemiBold, 12, Ink2, TextAlignmentOptions.Left, false);
             var kle = lk.gameObject.AddComponent<LayoutElement>();
             kle.minWidth = kle.preferredWidth = 92; kle.flexibleWidth = 0;
-            AddText(row.transform, "V", url, FMedium, 11.5f, Accent, TextAlignmentOptions.TopLeft, true)
-                .gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
+            var v = AddText(row.transform, "V",
+                href != null ? "<link=\"" + href + "\">" + display + "</link>" : display,
+                FMedium, 11.5f, Accent, TextAlignmentOptions.TopLeft, true);
+            v.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
+            if (href != null)
+            {
+                MakeLink(v);
+            }
 
             if (divider)
             {
@@ -360,6 +380,15 @@ namespace PortfolioOS.EditorTools
                 var img = dv.AddComponent<Image>(); img.color = Divider; img.raycastTarget = false;
                 var le = dv.AddComponent<LayoutElement>(); le.minHeight = le.preferredHeight = 1;
             }
+        }
+
+        // 링크 TMP 라벨을 실제 하이퍼링크로: raycast 켜고 런타임 클릭/hover 핸들러 부착.
+        static void MakeLink(TextMeshProUGUI t)
+        {
+            t.raycastTarget = true;
+            var h = t.gameObject.AddComponent<PortfolioOS.TMPLinkHandler>();
+            h.linkCursor = FHandCursor;
+            h.linkCursorHotspot = HandHotspot;
         }
 
         static void BuildSlogan(Transform parent)
