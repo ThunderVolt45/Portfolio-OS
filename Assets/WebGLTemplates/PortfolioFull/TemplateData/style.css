@@ -1,0 +1,112 @@
+/* Portfolio-OS — full-viewport WebGL template.
+   The Unity canvas fills the entire browser window and stays responsive;
+   Unity keeps the render buffer matched to the canvas (matchWebGLToCanvasSize). */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0e1013;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
+}
+
+#unity-container {
+  position: fixed;
+  inset: 0;
+}
+
+#unity-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #0e1013;
+}
+
+/* ---- loading overlay ---- */
+#unity-loading-bar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  text-align: center;
+  user-select: none;
+}
+
+#unity-logo {
+  color: #e8eaed;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+#unity-logo small {
+  display: block;
+  margin-top: 7px;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #8a8f98;
+  letter-spacing: 0.18em;
+}
+
+#unity-progress-bar-empty {
+  width: 220px;
+  height: 5px;
+  margin: 20px auto 0;
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#unity-progress-bar-full {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #5b8cff, #7aa2ff);
+  border-radius: 3px;
+  transition: width 0.12s ease-out;
+}
+
+/* ---- fullscreen button (appears on hover) ---- */
+#unity-fullscreen-button {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #cfd3da;
+  background: rgba(20, 22, 28, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.25s, background 0.2s;
+}
+
+#unity-container:hover #unity-fullscreen-button { opacity: 0.65; }
+#unity-fullscreen-button:hover { opacity: 1; background: rgba(30, 33, 40, 0.85); }
+
+/* ---- warning / error banner ---- */
+#unity-warning {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  display: none;
+  z-index: 10;
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #fff;
+  color: #111;
+  font-size: 13px;
+}

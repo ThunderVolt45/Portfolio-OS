@@ -45,6 +45,8 @@ namespace PortfolioOS.EditorTools
             // Unity 내장 JS 디컴프레서가 클라이언트에서 .br을 풀도록 fallback을 켠다(§4-C).
             PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
             PlayerSettings.WebGL.decompressionFallback = true;
+            // 전체 화면(뷰포트) 셸: Unity 캔버스가 페이지 전체를 채우도록 커스텀 템플릿 고정.
+            PlayerSettings.WebGL.template = "PROJECT:PortfolioFull";
             PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Wasm;
             PlayerSettings.WebGL.threadsSupport = false; // 싱글스레드
             PlayerSettings.WebGL.dataCaching = false;
