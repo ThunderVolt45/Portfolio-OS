@@ -79,6 +79,29 @@ namespace PortfolioOS.EditorTools
             Debug.Log("[PortfolioPrefabTools] Done. UGUISample window + content built.");
         }
 
+        // DpiSettingWindow만 단독으로 (스켈레톤 변형 + 콘텐츠) 빌드한다.
+        // 아이콘 원본은 CSS 시안 Tools/icons/DpiSetting.html → Tools/render_icon.py 로 렌더링한 PNG.
+        [MenuItem("Portfolio/Build DPI Setting Window")]
+        public static void BuildDpiSettingWindow()
+        {
+            var basePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(BasePath);
+            if (basePrefab == null)
+            {
+                Debug.LogError("[PortfolioPrefabTools] base prefab not found: " + BasePath);
+                return;
+            }
+
+            BuildVariant(basePrefab, typeof(UGUIWindow.DpiSettingWindow),
+                "Assets/Resources/Windows/DpiSettingWindow.prefab",
+                "Assets/Portfolio/Icons/DpiSetting.png", false, null);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            PortfolioDpiSettingContent.Build();
+            Debug.Log("[PortfolioPrefabTools] Done. DPI setting window + content built.");
+        }
+
         [MenuItem("Portfolio/Build PDF Doc Windows + Icons")]
         public static void BuildPdfDocWindows()
         {
