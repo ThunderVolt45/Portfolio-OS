@@ -1,0 +1,122 @@
+<style>
+  /* Portfolio-OS 앱 아이콘: DpiSettingWindow (화면 배율)
+     기존 아이콘(About/UGUISample) 규격에 맞춤:
+       - 아트보드 256x256, 타일 240x240 (8px 인셋), 라운드 반경 50px
+       - 파란 타일 + 흰색 글리프
+       - 그라디언트는 UGUISample(#177DFB -> #5162E9) 계열 */
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .artboard {
+    width: 256px;
+    height: 256px;
+    position: relative;
+  }
+
+  .tile {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 240px;
+    height: 240px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #1E82FF 0%, #3A6BF0 55%, #5B5CE6 100%);
+  }
+
+  /* --- 글리프: 모니터 + 대각 배율 화살표 --- */
+
+  /* 모니터 본체(흰색 화면). 40px 데스크톱 아이콘에서도 읽히도록 크고 두껍게. */
+  .screen {
+    position: absolute;
+    left: 50%;
+    top: 51px; /* 글리프 전체 높이 138(112+14+12)을 타일 240 안에서 수직 중앙 정렬 */
+    transform: translateX(-50%);
+    width: 152px;
+    height: 112px;
+    border-radius: 16px;
+    background: #FFFFFF;
+  }
+
+  /* 모니터 목 */
+  .neck {
+    position: absolute;
+    left: 50%;
+    top: 163px;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 14px;
+    background: #FFFFFF;
+  }
+
+  /* 모니터 받침 */
+  .base {
+    position: absolute;
+    left: 50%;
+    top: 177px;
+    transform: translateX(-50%);
+    width: 84px;
+    height: 12px;
+    border-radius: 6px;
+    background: #FFFFFF;
+  }
+
+  /* 화면 안의 대각 양방향 화살표(배율). 타일 색으로 knock-out. */
+  .arrow {
+    position: absolute;
+    left: 50%;
+    top: 107px; /* screen 중앙 (51 + 112/2) */
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 92px;
+    height: 14px;
+  }
+
+  /* 화살표 몸통 */
+  .arrow .bar {
+    position: absolute;
+    left: 16px;
+    top: 0;
+    width: 60px;
+    height: 14px;
+    border-radius: 7px;
+    background: #3A6BF0;
+  }
+
+  /* 화살촉(좌/우) — CSS 삼각형 */
+  .arrow .head {
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-top: 17px solid transparent;
+    border-bottom: 17px solid transparent;
+  }
+
+  .arrow .head.left {
+    left: 0;
+    transform: translateY(-50%);
+    border-right: 24px solid #3A6BF0;
+  }
+
+  .arrow .head.right {
+    right: 0;
+    transform: translateY(-50%);
+    border-left: 24px solid #3A6BF0;
+  }
+</style>
+
+<div class="artboard">
+  <div class="tile">
+    <div class="screen"></div>
+    <div class="neck"></div>
+    <div class="base"></div>
+    <div class="arrow">
+      <div class="head left"></div>
+      <div class="bar"></div>
+      <div class="head right"></div>
+    </div>
+  </div>
+</div>

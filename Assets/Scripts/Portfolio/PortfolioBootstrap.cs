@@ -21,18 +21,48 @@ namespace UGUIWindow
 
         private void Start()
         {
+            // 딥링크가 있으면 그 창만 연다. 없으면 기본 시작 창 세트를 연다.
+            if (!TryOpenDeepLink())
+            {
+                OpenStartupWindows();
+            }
+        }
+
+        /// <summary>
+        /// 부팅 직후 기본으로 띄우는 창들. 생성 순서 = z-순서이므로
+        /// DPI 설정 창을 마지막에 열어 최상단에 오게 한다.
+        /// 각 창의 크기는 창 자신이 정하므로(CreateWindowEx는 그 크기를 덮어씀)
+        /// CreateWindow + Move로 위치만 겹치지 않게 배치한다.
+        /// </summary>
+        private static void OpenStartupWindows()
+        {
+            UGUIWindowManager.CreateWindow<AboutWindow>()?.Move(-300, 0);
+            UGUIWindowManager.CreateWindow<UGUISampleWindow>()?.Move(270, 0);
+
+            var dpi = UGUIWindowManager.CreateWindow<DpiSettingWindow>();
+            if (dpi != null)
+            {
+                dpi.Move(0, -30);
+                dpi.Focus(); // 최상단 + 포커스 표시를 매니저에 알린다.
+            }
+        }
+
+        /// <summary>URL 해시에서 <c>open=</c> 딥링크를 읽어 해당 창을 연다.</summary>
+        /// <returns>딥링크로 창을 열었으면 true.</returns>
+        private static bool TryOpenDeepLink()
+        {
             try
             {
                 string url = Application.absoluteURL ?? string.Empty;
                 const string key = "open=";
                 int i = url.IndexOf(key, StringComparison.Ordinal);
-                if (i < 0) return;
+                if (i < 0) return false;
 
                 string cls = url.Substring(i + key.Length);
                 int end = cls.IndexOfAny(new[] { '&', '#', '/', '?' });
                 if (end >= 0) cls = cls.Substring(0, end);
                 cls = cls.Trim();
-                if (cls.Length == 0) return;
+                if (cls.Length == 0) return false;
 
                 // 아이콘 오픈 경로와 동일한 방식(Type.GetType) — 스트리핑 안전 검증됨
                 Type t = Type.GetType("UGUIWindow." + cls, false);
@@ -40,15 +70,17 @@ namespace UGUIWindow
                 {
                     UGUIWindowManager.CreateWindow(t);
                     Debug.Log("[PortfolioBootstrap] 딥링크 오픈: " + cls);
+                    return true;
                 }
-                else
-                {
-                    Debug.LogWarning("[PortfolioBootstrap] 알 수 없는 창 클래스: " + cls);
-                }
+
+                // 알 수 없는 창이면 빈 화면으로 두지 않고 기본 시작 창을 연다.
+                Debug.LogWarning("[PortfolioBootstrap] 알 수 없는 창 클래스: " + cls);
+                return false;
             }
             catch (Exception e)
             {
                 Debug.LogError("[PortfolioBootstrap] " + e.Message);
+                return false;
             }
         }
     }
