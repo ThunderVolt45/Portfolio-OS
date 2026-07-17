@@ -1,0 +1,67 @@
+<style>
+  /* Portfolio-OS 앱 아이콘: AboutWindow (내 소개)
+     기존 아이콘(DpiSetting/UGUISample) 규격에 맞춤:
+       - 아트보드 256x256, 타일 240x240 (8px 인셋), 라운드 반경 50px
+       - 파란 타일 + 흰색 글리프
+       - 그라디언트는 UGUISample(#177DFB -> #5162E9) 계열
+
+     구 아이콘은 (1) 그라디언트 없이 단색 #2D7DD2 라 형제 아이콘과 색이 어긋났고
+     (2) 글리프가 타일 아래 가장자리(y=247)까지 닿아 어깨가 잘려 있었다.
+     글리프 전체 높이를 DpiSetting과 같은 138px로 맞춰 타일 안에 수직 중앙 정렬한다. */
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .artboard {
+    width: 256px;
+    height: 256px;
+    position: relative;
+  }
+
+  .tile {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 240px;
+    height: 240px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #1E82FF 0%, #3A6BF0 55%, #5B5CE6 100%);
+  }
+
+  /* --- 글리프: 사람(머리 + 어깨) ---
+     전체 높이 138 = 머리 66 + 간격 10 + 어깨 62.
+     타일(240) 안에서 위아래 51px씩 여백을 두고 중앙 정렬 → top = 51. */
+
+  .head {
+    position: absolute;
+    left: 50%;
+    top: 51px;
+    transform: translateX(-50%);
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    background: #FFFFFF;
+  }
+
+  /* 어깨: 위쪽은 완전한 돔, 아래쪽만 살짝 둥글게. 타일 하단에 닿지 않는다. */
+  .shoulders {
+    position: absolute;
+    left: 50%;
+    top: 127px; /* 51 + 66 + 10 */
+    transform: translateX(-50%);
+    width: 124px;
+    height: 62px;
+    border-radius: 62px 62px 16px 16px;
+    background: #FFFFFF;
+  }
+</style>
+
+<div class="artboard">
+  <div class="tile">
+    <div class="head"></div>
+    <div class="shoulders"></div>
+  </div>
+</div>
