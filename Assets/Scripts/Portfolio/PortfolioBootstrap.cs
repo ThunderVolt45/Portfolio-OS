@@ -39,14 +39,38 @@ namespace UGUIWindow
         {
             // About(500x600) → -470~30, DPI(380x250) → 80~460. 두 창을 합친 폭이 캔버스
             // 중앙에 오도록 잡았다(한 창만 남기면 화면이 한쪽으로 쏠린다).
-            UGUIWindowManager.CreateWindow<AboutWindow>()?.Move(-220, 0);
+            PlaceCentered(UGUIWindowManager.CreateWindow<AboutWindow>(), -220);
 
             var dpi = UGUIWindowManager.CreateWindow<DpiSettingWindow>();
             if (dpi != null)
             {
-                dpi.Move(270, -60);
+                PlaceCentered(dpi, 270);
                 dpi.Focus(); // 최상단 + 포커스 표시를 매니저에 알린다.
             }
+        }
+
+        /// <summary>지정한 x에 놓고 헤더까지 포함한 창 전체가 세로 중앙에 오게 한다.</summary>
+        private static void PlaceCentered(UGUIWindow window, int x)
+        {
+            if (window == null)
+            {
+                return;
+            }
+
+            // 헤더는 창 rect 안이 아니라 그 위에 얹혀 있다. 그래서 rect를 y=0에 두면 눈에 보이는
+            // 창(=rect + 헤더)의 중심은 헤더가 튀어나온 만큼의 절반이 위로 밀린다. 그만큼 내려준다.
+            window.Move(x, Mathf.RoundToInt(-HeaderOverhang(window) * 0.5f));
+        }
+
+        /// <summary>
+        /// 헤더가 창 rect 위로 튀어나온 높이. 헤더는 rect 상단에 앵커·피벗을 두고 그 위로
+        /// anchoredPosition.y만큼 올라가 있으므로 그 값이 곧 튀어나온 양이다.
+        /// (UGUIWindow.ApplyMaximizedLayout이 최대화 시 창 위를 깎는 데 쓰는 값과 동일하다.)
+        /// </summary>
+        private static float HeaderOverhang(UGUIWindow window)
+        {
+            var header = window.GetComponentInChildren<UGUIWindowHeader>(true);
+            return header != null ? ((RectTransform)header.transform).anchoredPosition.y : 0f;
         }
 
         /// <summary>URL 해시에서 <c>open=</c> 딥링크를 읽어 해당 창을 연다.</summary>
