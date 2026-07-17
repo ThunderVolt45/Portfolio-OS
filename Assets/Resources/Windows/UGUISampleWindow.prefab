@@ -20818,6 +20818,9 @@ MonoBehaviour:
   isResizable: 1
   minimumWindowSize: {x: 500, y: 600}
   windowIcon: {fileID: 21300000, guid: 61904881b4cc9984888f6f070ae22ba1, type: 3}
+  defaultTitle: UGUI-Window-Sample
+  fullScreenHeaderRevealZonePixels: 32
+  fullScreenHeaderRevealSpeed: 14
   OnOpenWindow:
     m_PersistentCalls:
       m_Calls: []

@@ -30,13 +30,6 @@ namespace UGUIWindow
             WireResumeButton();
         }
 
-        // 매니저가 생성 시 제목을 클래스명으로 지정하므로, 이후 프레임(Start)에서
-        // 사람이 읽기 좋은 제목으로 교체한다. (실패해도 콘텐츠 표시에는 영향 없음)
-        private void Start()
-        {
-            SetWindowTitle("About");
-        }
-
         // 콘텐츠에 구워진 "이력서 전체 보기" 버튼(ResumeCta)을 이름으로 찾아
         // 클릭 시 이력서 PDF 뷰어(DocumentViewerWindow)를 열도록 배선한다.
         // (베이커는 버튼만 생성하고 배선은 하지 않는다 — 배선은 여기 코드로.)

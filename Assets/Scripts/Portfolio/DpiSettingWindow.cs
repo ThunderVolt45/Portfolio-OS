@@ -57,12 +57,6 @@ namespace UGUIWindow
             Refresh();
         }
 
-        // 매니저가 생성 시 제목을 클래스명으로 지정하므로 이후 프레임에서 교체한다.
-        private void Start()
-        {
-            SetWindowTitle("화면 배율 설정");
-        }
-
         private void Apply(int index)
         {
             if (index < 0 || index >= supportDPI.Length) return;

@@ -24,12 +24,5 @@ namespace UGUIWindow
             // 콘텐츠 폭(시안 500px)에 맞춰 가로 스크롤 없이, 세로만 스크롤 허용.
             Resize(500, 620);
         }
-
-        // 매니저가 생성 시 제목을 클래스명으로 지정하므로, 이후 프레임(Start)에서
-        // 사람이 읽기 좋은 제목으로 교체한다. (실패해도 콘텐츠 표시에는 영향 없음)
-        private void Start()
-        {
-            SetWindowTitle("UGUI-Window-Sample");
-        }
     }
 }

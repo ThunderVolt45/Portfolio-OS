@@ -14002,6 +14002,9 @@ MonoBehaviour:
   isResizable: 1
   minimumWindowSize: {x: 500, y: 300}
   windowIcon: {fileID: 21300000, guid: b09b0480943a6a94e8bdf0e0b2f284cf, type: 3}
+  defaultTitle: About
+  fullScreenHeaderRevealZonePixels: 32
+  fullScreenHeaderRevealSpeed: 14
   OnOpenWindow:
     m_PersistentCalls:
       m_Calls: []
