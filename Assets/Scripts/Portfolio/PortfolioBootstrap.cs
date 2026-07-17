@@ -33,16 +33,18 @@ namespace UGUIWindow
         /// DPI 설정 창을 마지막에 열어 최상단에 오게 한다.
         /// 각 창의 크기는 창 자신이 정하므로(CreateWindowEx는 그 크기를 덮어씀)
         /// CreateWindow + Move로 위치만 겹치지 않게 배치한다.
+        /// UGUI-Window-Sample 창은 시작 세트에서 뺐다 — 도크에서 언제든 열 수 있다.
         /// </summary>
         private static void OpenStartupWindows()
         {
-            UGUIWindowManager.CreateWindow<AboutWindow>()?.Move(-300, 0);
-            UGUIWindowManager.CreateWindow<UGUISampleWindow>()?.Move(270, 0);
+            // About(500x600) → -470~30, DPI(380x250) → 80~460. 두 창을 합친 폭이 캔버스
+            // 중앙에 오도록 잡았다(한 창만 남기면 화면이 한쪽으로 쏠린다).
+            UGUIWindowManager.CreateWindow<AboutWindow>()?.Move(-220, 0);
 
             var dpi = UGUIWindowManager.CreateWindow<DpiSettingWindow>();
             if (dpi != null)
             {
-                dpi.Move(0, -30);
+                dpi.Move(270, -60);
                 dpi.Focus(); // 최상단 + 포커스 표시를 매니저에 알린다.
             }
         }
