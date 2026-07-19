@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -189,12 +190,22 @@ namespace UGUIWindow
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button != PointerEventData.InputButton.Left)
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
-                return;
+                OpenOrFocus();
             }
+            else if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                ShowContextMenu();
+            }
+        }
 
-            // 데스크톱 아이콘과 달리 도크는 한 번 클릭으로 실행한다(macOS/Windows 관례).
+        /// <summary>
+        /// 아이콘을 활성화한다 — 창이 없으면 실행, 최소화면 복원, 아니면 포커스.
+        /// 데스크톱 아이콘과 달리 도크는 한 번 클릭으로 실행한다(macOS/Windows 관례).
+        /// </summary>
+        public void OpenOrFocus()
+        {
             if (targetWindow == null)
             {
                 Launch();
@@ -207,6 +218,28 @@ namespace UGUIWindow
             {
                 targetWindow.Focus();
             }
+        }
+
+        /// <summary>실행 중인 창을 닫는다. 핀 아이콘이면 런처로 도크에 남는다.</summary>
+        public void CloseWindow()
+        {
+            if (targetWindow != null)
+            {
+                targetWindow.Close();
+            }
+        }
+
+        // 우클릭 → 아이콘 위에 열기/닫기 컨텍스트 메뉴를 띄운다.
+        private void ShowContextMenu()
+        {
+            var items = new List<UGUIDockContextMenu.MenuItem>
+            {
+                new("열기", OpenOrFocus),
+                // 창이 없는(핀만 된) 앱은 닫을 게 없으므로 비활성.
+                new("닫기", CloseWindow, targetWindow != null),
+            };
+
+            UGUIDockContextMenu.Instance.Show(RectTransform, items);
         }
 
         private void Launch()
