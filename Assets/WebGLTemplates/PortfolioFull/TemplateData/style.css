@@ -95,6 +95,367 @@ html, body {
 #unity-container:hover #unity-fullscreen-button { opacity: 0.65; }
 #unity-fullscreen-button:hover { opacity: 1; background: rgba(30, 33, 40, 0.85); }
 
+/* ---- unsupported-browser fallback ----
+   WebGL 2 / WebAssembly 를 못 쓰는 브라우저(구형 Safari 등)에서 캔버스 대신 노출.
+   본체가 '데스크톱 OS'이므로 폴백도 macOS 풍 창 + 도크(라이트 테마)로 맞춘다.
+   도크 타일은 장식이 아니라 실제 문서 링크다.
+
+   ⚠️ 이 화면은 '구형 브라우저에서만' 뜬다. 따라서 여기 규칙은 보수적으로 쓴다:
+      - gap / inset / aspect-ratio 금지 (Safari 14.1 미만 미지원) → margin·명시 좌표 사용
+      - :focus-visible 을 :hover 와 한 셀렉터 목록에 묶지 않는다.
+        파싱 못 하는 브라우저는 목록 전체를 버려 hover 까지 날아간다 → 규칙을 분리.
+      - backdrop-filter 는 -webkit- 접두사 병기, 미지원 시 불투명 배경으로 자연 degrade.
+   body 가 overflow:hidden 이라 스크롤은 여기서 되살린다. */
+#unity-container.fallback-active #unity-canvas,
+#unity-container.fallback-active #unity-fullscreen-button { display: none; }
+
+#unity-fallback {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  color: #1d1d1f;
+  /* macOS 풍 라이트 바탕화면: 은은한 파스텔 그라디언트 (이미지 무의존) */
+  background-color: #eef1f8;
+  background-image:
+    radial-gradient(56% 44% at 16% 10%, rgba(122, 156, 255, 0.34) 0%, rgba(122, 156, 255, 0) 100%),
+    radial-gradient(50% 40% at 86% 18%, rgba(214, 150, 235, 0.30) 0%, rgba(214, 150, 235, 0) 100%),
+    radial-gradient(64% 50% at 50% 104%, rgba(255, 176, 148, 0.28) 0%, rgba(255, 176, 148, 0) 100%),
+    linear-gradient(168deg, #f6f8fd 0%, #e9eef9 55%, #f3edf7 100%);
+}
+
+#unity-fallback[hidden] { display: none; }
+
+.fb-desktop {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 26px 16px 18px;
+}
+
+/* 위·아래 auto 마진이 여유 공간을 나눠 가져 창은 가운데, 도크는 바닥에 붙는다.
+   내용이 넘치면 auto 가 0으로 접히며 자연스럽게 스크롤된다. */
+.fb-window {
+  margin-top: auto;
+  width: 100%;
+  max-width: 440px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 11px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 22px 52px rgba(38, 50, 84, 0.18),
+    0 2px 8px rgba(38, 50, 84, 0.10);
+}
+
+/* ---- 창 타이틀바 ---- */
+.fb-titlebar {
+  position: relative;
+  height: 40px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  background: linear-gradient(180deg, #fbfbfc, #eeeef1);
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.fb-lights {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  margin-top: -6px;
+  font-size: 0; /* inline-block 사이 공백 제거 */
+}
+
+.fb-light {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.14) inset;
+}
+
+.fb-light-close { background: #ff5f57; }
+.fb-light-min   { background: #febc2e; }
+.fb-light-zoom  { background: #28c840; margin-right: 0; }
+
+.fb-title {
+  display: inline-block;
+  line-height: 40px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3d3d40;
+  letter-spacing: 0.01em;
+}
+
+/* ---- 창 본문 (이력서 요약) ---- */
+.fb-body { padding: 19px 20px 20px; }
+
+/* 프로필 헤더: 이니셜 아바타 + 이름/직무 */
+.fb-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.fb-avatar {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  margin-right: 13px;
+  border-radius: 12px;
+  background: linear-gradient(160deg, #5b9cff, #2f6ae0);
+  color: #fff;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 46px;
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(31, 90, 214, 0.30);
+}
+
+.fb-profile-text { min-width: 0; }
+
+.fb-name {
+  margin: 0 0 3px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: 0.01em;
+}
+
+.fb-name span {
+  margin-left: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #86868b;
+}
+
+.fb-role {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #0071e3;
+  font-weight: 500;
+}
+
+.fb-intro {
+  margin: 0 0 15px;
+  font-size: 13px;
+  line-height: 1.72;
+  color: #4a4a4f;
+}
+
+.fb-intro b { font-weight: 600; color: #1d1d1f; }
+
+/* 핵심 사실: 라벨 | 값. table 대신 dl+flex 로 구형 Safari 안전 */
+.fb-facts {
+  margin: 0 0 17px;
+  padding: 13px 14px;
+  border-radius: 9px;
+  background: rgba(60, 90, 150, 0.06);
+  border: 1px solid rgba(60, 90, 150, 0.10);
+}
+
+.fb-fact {
+  display: flex;
+  align-items: baseline;
+}
+
+.fb-fact + .fb-fact { margin-top: 8px; }
+
+.fb-fact dt {
+  flex: 0 0 68px;
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #86868b;
+  letter-spacing: 0.02em;
+}
+
+.fb-fact dd {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #2b2b2f;
+}
+
+/* 실행 불가 사유 + 안내: 이제 부차 정보라 창 하단에 조용히 둔다 */
+.fb-notice {
+  margin-top: 15px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.fb-notice-reason {
+  margin: 0 0 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b25000;
+}
+
+.fb-notice-hint {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: #86868b;
+}
+
+/* 이력서 = 가장 중요한 자산. 아이콘 해독에 맡기지 않고 텍스트 버튼으로 노출. */
+.fb-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 16px;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #3b7bf0, #1f5ad6);
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28) inset,
+    0 4px 12px rgba(31, 90, 214, 0.32);
+  transition: filter 0.18s, transform 0.18s;
+}
+
+.fb-primary:hover { filter: brightness(1.07); transform: translateY(-1px); }
+
+.fb-primary:focus-visible {
+  outline: 2px solid #1f5ad6;
+  outline-offset: 2px;
+}
+
+.fb-primary-meta {
+  margin-left: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* ---- 도크 (실제 링크) ---- */
+.fb-dock {
+  margin-top: auto;
+  padding: 8px 10px;
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 10px 30px rgba(40, 52, 86, 0.18);
+}
+
+.fb-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-right: 9px;
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.32) inset,
+    0 3px 8px rgba(30, 40, 70, 0.26);
+  transition: transform 0.18s;
+}
+
+.fb-tile:last-child { margin-right: 0; }
+.fb-tile svg { width: 25px; height: 25px; }
+
+.fb-tile:hover { transform: translateY(-6px); }
+
+.fb-tile:focus-visible {
+  transform: translateY(-6px);
+  outline: 2px solid #1f5ad6;
+  outline-offset: 3px;
+}
+
+.fb-tile-resume   { background: linear-gradient(160deg, #5b9cff, #2f6ae0); }
+.fb-tile-blackout { background: linear-gradient(160deg, #4a5470, #2b3245); }
+.fb-tile-nova     { background: linear-gradient(160deg, #b26cf0, #7d3fd0); }
+.fb-tile-brawl    { background: linear-gradient(160deg, #ffa04a, #ef6a2b); }
+.fb-tile-code     { background: linear-gradient(160deg, #4b515e, #23272f); }
+.fb-tile-mail     { background: linear-gradient(160deg, #58c8f5, #2f86e0); }
+
+.fb-dock-sep {
+  width: 1px;
+  height: 36px;
+  margin: 0 10px 6px 1px;
+  background: rgba(40, 52, 86, 0.18);
+}
+
+/* macOS 도크 라벨. 호버·키보드 포커스에서만 뜬다(터치에서는 aria-label 이 이름을 제공). */
+.fb-tip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  /* 타일이 호버 시 -6px 뜨므로 그만큼 더 띄워야 도크 상단에 붙지 않는다. */
+  margin-bottom: 16px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: rgba(38, 38, 42, 0.94);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+}
+
+.fb-tile:hover .fb-tip { opacity: 1; }
+
+/* :hover 와 분리 — 미지원 브라우저가 위 규칙까지 버리지 않도록 한다. */
+.fb-tile:focus-visible .fb-tip { opacity: 1; }
+
+/* 좁은 화면(모바일 세로): 창을 넓게 쓰고 도크는 줄인다.
+   ⚠️ 도크는 이제 문서 접근 경로이므로 어떤 뷰포트에서도 숨기지 않는다. */
+@media (max-width: 420px) {
+  .fb-desktop { padding: 18px 12px 14px; }
+  .fb-body { padding: 17px 16px 18px; }
+  .fb-tile { width: 42px; height: 42px; margin-right: 7px; border-radius: 11px; }
+  .fb-tile svg { width: 22px; height: 22px; }
+  .fb-dock { border-radius: 16px; padding: 7px 8px; }
+  .fb-dock-sep { margin: 0 8px 5px 0; height: 31px; }
+}
+
+/* 높이가 낮은 창(가로 모드 등): 여백만 줄인다 — 도크는 유지해야 자료에 닿을 수 있다. */
+@media (max-height: 460px) {
+  .fb-desktop { padding: 12px 14px 10px; }
+  .fb-body { padding: 15px 18px 16px; }
+  .fb-hint { margin-bottom: 13px; }
+  .fb-dock-note { margin-top: 11px; }
+  .fb-tile { width: 40px; height: 40px; }
+  .fb-tile svg { width: 21px; height: 21px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fb-primary, .fb-tile, .fb-tip { transition: none; }
+  .fb-primary:hover, .fb-tile:hover { transform: none; }
+  .fb-tile:focus-visible { transform: none; }
+}
+
 /* ---- warning / error banner ---- */
 #unity-warning {
   position: absolute;

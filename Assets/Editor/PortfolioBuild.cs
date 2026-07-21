@@ -15,6 +15,7 @@ namespace PortfolioOS.EditorTools
     ///    (Pages가 Content-Encoding 헤더를 못 넣으므로, Unity 내장 JS 디컴프레서가
     ///     클라이언트에서 .br을 해제하도록 fallback을 켠다. 배포 산출물 ~30MB.)
     ///  - 싱글스레드 (SharedArrayBuffer/COOP·COEP 불가)
+    ///  - wasm2023 = false (구형 Safari 호환 — 아래 주석 참조)
     ///  - 파일당 100MB 하드 제한 → release + High 스트리핑으로 wasm 경량화
     ///
     /// 배치모드:
@@ -48,6 +49,12 @@ namespace PortfolioOS.EditorTools
             // 전체 화면(뷰포트) 셸: Unity 캔버스가 페이지 전체를 채우도록 커스텀 템플릿 고정.
             PlayerSettings.WebGL.template = "PROJECT:PortfolioFull";
             PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Wasm;
+            // WebAssembly 2023(SIMD 등 최신 wasm 기능) 요구를 끈다.
+            // 켜져 있으면 로더가 "Your browser does not support WebAssembly 2023.
+            // ... Safari >= 16.4"로 하드 실패한다. Safari 16.4는 macOS Ventura 이상 전용이라
+            // Monterey/Big Sur Mac(Safari 15.6 고정) + iPadOS 15 이하는 전부 입장 불가였다.
+            // 채용 담당자 단말을 고를 수 없으므로 호환성을 성능보다 우선한다.
+            PlayerSettings.WebGL.wasm2023 = false;
             PlayerSettings.WebGL.threadsSupport = false; // 싱글스레드
             PlayerSettings.WebGL.dataCaching = false;
 

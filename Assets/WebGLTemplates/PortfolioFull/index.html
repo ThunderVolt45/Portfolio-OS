@@ -18,6 +18,90 @@
         </div>
       </div>
       <div id="unity-warning"></div>
+      <!-- 실행 불가 브라우저용 폴백. 본체(데스크톱 OS)의 분위기를 잃지 않도록
+           macOS 스타일 창 + 도크로 꾸민다. 도크가 자료 접근의 주 경로이며,
+           각 타일은 진짜 링크다(aria-label + 호버/포커스 툴팁).
+           이력서만은 창 본문에도 텍스트 버튼으로 중복 배치한다 — 브라우저가 이미
+           실패한 방문자에게 가장 중요한 자산을 아이콘 해독에 맡기지 않기 위해서다.
+           구형 Safari 에서 뜨는 화면이므로 최신 CSS(gap / inset / aspect-ratio /
+           :focus-visible 혼용)는 쓰지 않는다. -->
+      <div id="unity-fallback" hidden>
+        <div class="fb-desktop">
+          <div class="fb-window" role="dialog" aria-labelledby="fb-title">
+            <div class="fb-titlebar">
+              <span class="fb-lights" aria-hidden="true">
+                <i class="fb-light fb-light-close"></i><i class="fb-light fb-light-min"></i><i class="fb-light fb-light-zoom"></i>
+              </span>
+              <span class="fb-title" id="fb-title">김민영 — 포트폴리오</span>
+            </div>
+            <div class="fb-body">
+              <!-- 이력서 1페이지 요약. 원천 = Assets/StreamingAssets/docs/resume.pdf(검열본).
+                   전화번호·상세주소가 제거된 공개 안전본이므로 그대로 옮겨도 된다. -->
+              <div class="fb-profile">
+                <span class="fb-avatar" aria-hidden="true">김</span>
+                <div class="fb-profile-text">
+                  <h2 class="fb-name">김민영 <span>Kim Min-Yeong</span></h2>
+                  <p class="fb-role">유니티·언리얼 멀티 스택 · 게임 클라이언트 프로그래머</p>
+                </div>
+              </div>
+
+              <p class="fb-intro">
+                유니티와 언리얼, C#과 C++, 클라이언트와 서버를 경계 없이 넘나들며
+                기획된 기능을 <b>실제 출시·배포까지 완수</b>하는 멀티 스택 프로그래머입니다.
+              </p>
+
+              <dl class="fb-facts">
+                <div class="fb-fact"><dt>게임 엔진</dt><dd>Unreal Engine · Unity</dd></div>
+                <div class="fb-fact"><dt>네트워크</dt><dd>Colyseus · Photon · Dedicated Server</dd></div>
+                <div class="fb-fact"><dt>언어</dt><dd>C++ · C#</dd></div>
+                <div class="fb-fact"><dt>경력</dt><dd>와이드브레인 — 고아미 캠프 양대 스토어 출시</dd></div>
+              </dl>
+
+              <a class="fb-primary" href="StreamingAssets/docs/resume.pdf" target="_blank" rel="noopener">
+                이력서 전체 보기 <span class="fb-primary-meta">PDF</span>
+              </a>
+
+              <div class="fb-notice">
+                <p class="fb-notice-reason" id="fallback-reason"></p>
+                <p class="fb-notice-hint">
+                  데스크톱 OS 데모는 최신 Chrome·Edge·Firefox 또는 Safari 16.4 이상에서 실행됩니다.
+                  프로젝트 기술문서·연락처는 아래 독에서 바로 열 수 있습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 도크 = 자료 접근 경로. 아이콘만 있으므로 aria-label 로 이름을 주고,
+               호버·키보드 포커스 시 macOS 스타일 라벨(.fb-tip)을 띄운다. -->
+          <div class="fb-dock">
+            <a class="fb-tile fb-tile-resume" href="StreamingAssets/docs/resume.pdf" target="_blank" rel="noopener" aria-label="이력서 (PDF)">
+              <span class="fb-tip" aria-hidden="true">이력서</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><circle cx="12" cy="13" r="1.9"/><path d="M9 18.2c0-1.5 1.3-2.3 3-2.3s3 .8 3 2.3"/></svg>
+            </a>
+            <a class="fb-tile fb-tile-blackout" href="StreamingAssets/docs/projectblackout.pdf" target="_blank" rel="noopener" aria-label="Project Blackout 기술문서 (PDF)">
+              <span class="fb-tip" aria-hidden="true">Project Blackout</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l7 2.6v5.4c0 4.2-2.9 7.7-7 9.6-4.1-1.9-7-5.4-7-9.6V5.8z"/></svg>
+            </a>
+            <a class="fb-tile fb-tile-nova" href="StreamingAssets/docs/novarevolution.pdf" target="_blank" rel="noopener" aria-label="Nova-Revolution 기술문서 (PDF)">
+              <span class="fb-tip" aria-hidden="true">Nova-Revolution</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.4l2.4 5.2 5.6.7-4.1 3.9 1.1 5.6-5-2.8-5 2.8 1.1-5.6L4 9.3l5.6-.7z"/></svg>
+            </a>
+            <a class="fb-tile fb-tile-brawl" href="StreamingAssets/docs/brawlstarstps.pdf" target="_blank" rel="noopener" aria-label="BrawlStarsTPS 기술문서 (PDF)">
+              <span class="fb-tip" aria-hidden="true">BrawlStarsTPS</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.2"/><circle cx="12" cy="12" r="2.4"/><path d="M12 2.4v3.2M12 18.4v3.2M2.4 12h3.2M18.4 12h3.2"/></svg>
+            </a>
+            <span class="fb-dock-sep" aria-hidden="true"></span>
+            <a class="fb-tile fb-tile-code" href="https://github.com/ThunderVolt45" target="_blank" rel="noopener" aria-label="GitHub — ThunderVolt45">
+              <span class="fb-tip" aria-hidden="true">GitHub</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg>
+            </a>
+            <a class="fb-tile fb-tile-mail" href="mailto:zxc9876zxc@gmail.com" aria-label="이메일 — zxc9876zxc@gmail.com">
+              <span class="fb-tip" aria-hidden="true">이메일</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
       <button id="unity-fullscreen-button" title="전체화면 (Fullscreen)" aria-label="전체화면">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
       </button>
@@ -63,23 +147,55 @@
       // matched to the canvas size (matchWebGLToCanvasSize defaults to true),
       // so it stays crisp and responsive on resize — no fixed dimensions here.
 
-      document.querySelector("#unity-loading-bar").style.display = "block";
+      // 실행 불가 브라우저에서 alert 후 백지로 멈추는 대신, 정적 폴백(이력서·문서·연락처)을
+      // 보여준다. 방문자가 채용 담당자일 수 있으므로 "아무것도 못 보는" 결말은 허용하지 않는다.
+      function showFallback(reason) {
+        document.querySelector("#unity-loading-bar").style.display = "none";
+        document.querySelector("#unity-container").classList.add("fallback-active");
+        document.querySelector("#fallback-reason").textContent = reason;
+        document.querySelector("#unity-fallback").hidden = false;
+      }
 
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          document.querySelector("#unity-loading-bar").style.display = "none";
-          document.querySelector("#unity-fullscreen-button").onclick = () => {
-            unityInstance.SetFullscreen(1);
-          };
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
+      // Unity 로더를 받기 전에 실행 가능 여부를 먼저 판정한다. 로더가 자체적으로 던지는
+      // 실패는 catch 되지만, 30MB를 다 받은 뒤에야 실패를 알려주므로 미리 걸러낸다.
+      function unsupportedReason() {
+        if (typeof WebAssembly !== "object" || typeof WebAssembly.instantiate !== "function") {
+          return "이 브라우저는 WebAssembly를 지원하지 않습니다.";
+        }
+        var probe = document.createElement("canvas");
+        var gl = null;
+        try { gl = probe.getContext("webgl2"); } catch (e) { /* 컨텍스트 생성 자체가 throw 하는 브라우저 */ }
+        if (!gl) return "이 브라우저는 WebGL 2를 지원하지 않습니다.";
+        // 탐색용 컨텍스트는 즉시 반납한다 — 동시 WebGL 컨텍스트 수 제한이 빡빡한
+        // Safari에서 정작 Unity 캔버스가 컨텍스트를 못 얻는 일을 막는다.
+        var lose = gl.getExtension("WEBGL_lose_context");
+        if (lose) lose.loseContext();
+        return null;
+      }
+
+      var blocked = unsupportedReason();
+      if (blocked) {
+        showFallback(blocked);
+      } else {
+        document.querySelector("#unity-loading-bar").style.display = "block";
+
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onerror = () => showFallback("실행 파일을 내려받지 못했습니다. 네트워크 상태를 확인해 주세요.");
+        script.onload = () => {
+          createUnityInstance(canvas, config, (progress) => {
+            document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+          }).then((unityInstance) => {
+            document.querySelector("#unity-loading-bar").style.display = "none";
+            document.querySelector("#unity-fullscreen-button").onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          }).catch((message) => {
+            showFallback(String(message));
+          });
+        };
+        document.body.appendChild(script);
+      }
     </script>
   </body>
 </html>
