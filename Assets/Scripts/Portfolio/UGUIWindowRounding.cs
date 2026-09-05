@@ -20,6 +20,8 @@ namespace UGUIWindow
         [Tooltip("모서리 반경(px). macOS Big Sur+ 기준 약 10.")]
         [SerializeField] private float cornerRadius = 10f;
 
+        public float CornerRadius => cornerRadius;
+
         private MPImage windowImage;
         private RectTransform rectTransform;
         // 포트폴리오 창 프리팹(Variant)은 루트에 base UGUIWindow와 서브클래스(AboutWindow 등)가

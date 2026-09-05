@@ -18,6 +18,61 @@ namespace PortfolioOS.EditorTools
     {
         const string BasePath = "Assets/Resources/Windows/UGUIWindow.prefab";
 
+        [MenuItem("Portfolio/Apply Window Soft Shadow")]
+        public static void ApplyWindowSoftShadow()
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(BasePath);
+            if (root == null)
+            {
+                Debug.LogError("[PortfolioPrefabTools] base prefab not found: " + BasePath);
+                return;
+            }
+
+            try
+            {
+                Transform existing = root.transform.Find("SoftShadow");
+                GameObject shadowObject;
+
+                if (existing != null)
+                {
+                    shadowObject = existing.gameObject;
+                }
+                else
+                {
+                    shadowObject = new GameObject("SoftShadow", typeof(RectTransform), typeof(CanvasRenderer));
+                    shadowObject.transform.SetParent(root.transform, false);
+                    shadowObject.transform.SetAsFirstSibling();
+                }
+
+                if (shadowObject.GetComponent<CanvasRenderer>() == null)
+                {
+                    shadowObject.AddComponent<CanvasRenderer>();
+                }
+
+                RectTransform shadowRect = shadowObject.GetComponent<RectTransform>();
+                shadowRect.anchorMin = Vector2.zero;
+                shadowRect.anchorMax = Vector2.one;
+                shadowRect.offsetMin = Vector2.zero;
+                shadowRect.offsetMax = Vector2.zero;
+                shadowRect.pivot = new Vector2(0.5f, 0.5f);
+
+                if (shadowObject.GetComponent<UGUIWindow.UGUISoftShadow>() == null)
+                {
+                    shadowObject.AddComponent<UGUIWindow.UGUISoftShadow>();
+                }
+
+                PrefabUtility.SaveAsPrefabAsset(root, BasePath);
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log("[PortfolioPrefabTools] Applied soft shadow to the base window prefab.");
+        }
+
         [MenuItem("Portfolio/Rebuild Window Prefab Variants")]
         public static void RebuildVariants()
         {

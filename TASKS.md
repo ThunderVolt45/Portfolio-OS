@@ -203,6 +203,7 @@
 | E5-T6 | 외부 유료 에셋(MPUIKit) gitignore 제외 | ✅ |
 | E5-T7 | WantedSans SDF **Font Weights 테이블** 설정 (faux bold 제거, 진짜 굵기 폰트 사용) | ✅ |
 | E5-T8 | 공식 Unity CLI + `com.unity.pipeline` 로컬 Editor 연동 | ✅ |
+| E5-T9 | 공통 창 프리팹에 포커스 반응형 soft shadow/elevation 적용 | ✅ |
 
 **구현 노트**
 - E5-T1: 기본 TMP(LiberationSans)에 한글 없어 □로 깨짐 → WantedSans 동적 SDF를 TMP Settings `m_fallbackFontAssets`(전역 폴백)에 추가. 창 텍스트 한글 정상 렌더 확인.
@@ -217,6 +218,7 @@
 - E5-T6: **MPUIKit** = 에셋스토어 **유료** 에셋(재배포 불가) → 저장소에서 **제외**. `.gitignore`에 `/[Aa]ssets/MPUIKit/`·`/[Aa]ssets/MPUIKit.meta` 추가. 빌드는 이 에셋이 설치된 로컬에서 수행(타 환경/CI에는 미설치 → UI 깨질 수 있음, 필요 시 설치 안내 메모로 대체).
   - ⚠️ WantedSans 폰트를 `Assets/Fonts/`에 별도 반입하려다 철회 — **이미 `Assets/UGUIWindowSample/Fonts/`에 동일 7종이 존재**(중복). 폰트는 그쪽을 SSOT로 사용.
 - **E5-T8 (공식 Unity CLI, 완료)**: Unity Hub가 설치한 `unity` 1.0.0-beta.8 확인(`%LOCALAPPDATA%/Unity/bin/unity.exe`). `unity pipeline install --project-path <repo>`로 실험적 패키지 `com.unity.pipeline` 0.6.0-exp.1을 설치했다. 실행 중인 Editor의 로컬 Pipeline 서버 `127.0.0.1:7800`이 reachable, 상태 `ready`임을 확인했고, `unity command eval`로 Unity 6000.6.0f1과 활성 씬 `Assets/Scenes/PortfolioOS.unity`를 live 조회했다. 기존 CoplayDev `com.coplaydev.unity-mcp`는 별개 도구로 유지한다.
+- **E5-T9 (창 elevation, 완료)**: 공통 `UGUIWindow.prefab`의 첫 자식 `SoftShadow`에 `UGUISoftShadow`를 배치했다. `PortfolioSoftShadow.shader`가 기존 10px 라운딩 실루엣 바깥에만 offset+blur 그림자를 한 번의 UI 패스로 렌더하며, 최상단 포커스 창은 더 진하게·뒤쪽 창은 더 옅게 표시한다. 피드백 반영으로 alpha를 포커스 `68→80`, 비포커스 `40→48`로 소폭 강화했다. 최대화 시 그림자를 숨기고, 부모 CanvasGroup/transform/z-order를 그대로 따르므로 fade·DPI·풀링 경로에 별도 동기화가 필요 없다. Play Mode에서 About+DPI 창의 포커스 깊이 차이와 `Maximized shadowAlpha=0`, 콘솔 오류 0건을 확인했다.
 
 ---
 
