@@ -1,7 +1,7 @@
 # TASKS — Portfolio-OS (Epic / Task 보드)
 
 > **Epic**(큰 목표·딜리버러블) 아래 **Task**(실행 단위)로 작업을 관리한다. 날짜 로그가 아니라 영역별 보드.
-> 새 세션은 `CLAUDE.md`(§0~§5: 온보딩·API·git·MCP 레퍼런스)를 먼저 읽고, 현황은 이 문서에서 파악·갱신한다.
+> 새 세션은 `AGENTS.md`(프로젝트 규칙·아키텍처·검증 레퍼런스)를 먼저 읽고, 현황은 이 문서에서 파악·갱신한다.
 >
 > **상태**: ✅ Done · 🔄 In Progress · ⬜ Todo · 🔒 Blocked(외부 의존)
 > **ID 규칙**: Epic = `E<n>`, Task = `E<n>-T<m>`. 완료 Task도 이력 참조용으로 남겨둔다.
@@ -63,7 +63,7 @@
 
 ## E2 — 포트폴리오 앱 창 & 콘텐츠 · 🔄 진행
 
-> 목표: About·Contact·Resume + Projects 런처(7종)를 앱 창으로 구현. 모두 `Assets/Scripts/Portfolio/`(namespace `UGUIWindow`), 프리팹 `Assets/Resources/Windows/<클래스명>.prefab`. 콘텐츠 SSOT는 CLAUDE.md §1 `index.md`.
+> 목표: About·Contact·Resume + Projects 런처(7종)를 앱 창으로 구현. 모두 `Assets/Scripts/Portfolio/`(namespace `UGUIWindow`), 프리팹 `Assets/Resources/Windows/<클래스명>.prefab`. 콘텐츠 SSOT는 `AGENTS.md` §1의 외부 `portfolio/index.md`.
 
 | ID | Task | 상태 |
 |---|---|---|
@@ -71,7 +71,7 @@
 | E2-T2 | `DocumentViewerWindow` + PDF별 서브클래스 3 (`BrawlStarsTPSDocWindow`/`NovaRevolutionDocWindow`/`ProjectBlackoutDocWindow`) | ✅ |
 | E2-T3 | 구 `ProjectBlackoutWindow`(전용 창) 제거 → PDF 뷰어로 대체 | ✅ |
 | E2-T4 | **`ProjectsWindow`(런처)** — 7종 리스트+상세, 항목 선택 시 라우팅(PDF 뷰어 / UGUI 창 / 런처 내 상세) | ⬜ |
-| E2-T5 | `ContactWindow` — 이메일·GitHub·전화 | ⬜ |
+| E2-T5 | `ContactWindow` — 이메일·GitHub(공개 개인정보 정책 준수) | ⬜ |
 | E2-T6 | 창 본문 스크롤(E1 프레임워크 반영분) 포트폴리오 창에 실제 적용/동작 확인 | 🔄 |
 | E2-T7 | `UGUISampleWindow` — UGUI-Window-Sample 소개 전용 창(PDF 미사용, UGUI만). GitHub repo 링크 포함 | ✅ |
 | E2-T8 | 데스크톱 아이콘 집약 → **About·Contact·Resume·Projects 4개**. 개별 PDF 아이콘 3개는 Projects 런처로 이동(제거) | ⬜ |
@@ -99,7 +99,7 @@
 
 **구현 노트 — UGUISampleWindow 콘텐츠(E2-T7, 프레임워크 자기소개)**
 - 창 프레임워크(UGUI-Window-Sample) **자체를 소개하는 메타 창** — "지금 이 창이 곧 그 프레임워크"라는 dogfooding 콜아웃을 상단에 배치(핵심 어필 포인트). PDF 미사용, 순수 UGUI.
-- 디자인 기반: HTML/CSS 시안 `scratchpad/ugui-sample-mockup.html`(About과 동일 macOS 라이트 톤 + 다크 코드블록·앱 아이콘·번호 배지). 콘텐츠 SSOT: `C:\Users\zxc98\Documents\GitHub\-\portfolio\projects\ugui-window-sample.md`(+ `-deck.md`). ⚠️ 구 SSOT 경로(`Claude\Projects\취업 포트폴리오 프로젝트\`)는 이전(移轉)됨 → `Documents\GitHub\-\portfolio\`가 현 원천.
+- 디자인 기반: HTML/CSS 시안 `scratchpad/ugui-sample-mockup.html`(About과 동일 macOS 라이트 톤 + 다크 코드블록·앱 아이콘·번호 배지). 콘텐츠 SSOT: `C:\Users\zxc98\Documents\GitHub\-\portfolio\projects\ugui-window-sample.md`(+ `-deck.md`). 이전 SSOT 위치는 더 이상 사용하지 않으며 `Documents\GitHub\-\portfolio\`가 현 원천이다.
 - 파일: 창 클래스 `Assets/Scripts/Portfolio/UGUISampleWindow.cs`(`OnEnable`에서 `Resize(500,620)`, `Start`에서 제목 "UGUI-Window-Sample"). 콘텐츠 빌더 `Assets/Editor/PortfolioUGUISampleContent.cs`(메뉴 **Portfolio → Build UGUISample Content**). 프리팹 스켈레톤 = `PortfolioPrefabTools`에 등록: 단독 메뉴 **Portfolio → Build UGUISample Window**(변형+콘텐츠) + `RebuildVariants`에도 편입(전체 재빌드 시 자동 복원).
 - 섹션 10종: Hero(앱 아이콘) · dogfood 콜아웃 · 소개+코드블록 · 기본정보 · 핵심특징(6) · 아키텍처 3선 · 강조구현 3 · 엔지니어링 디테일 · 링크(GitHub repo URL 포함) · 슬로건. 폰트 전부 **WantedSans SDF** 가중치별, 카드는 MPUIKit `MPImage`.
 - **아이콘 일관성(수정)**: (1) Content **Hero 아이콘 = 데스크톱/작업표시줄과 동일한 스프라이트**(`Icons/UGUISample.png`)를 `Image`로 그대로 사용 — 예전엔 UGUI 도형으로 따로 그려 달라 보였음. (2) **핵심특징 아이콘 = HTML 시안 글리프**(⌘◱♻⿴⤢⚙)를 스프라이트로 재현. ⚠️ 이 심볼들은 **WantedSans/폴백에 없어 TMP 텍스트로는 □**(play mode로 확인) → 심볼폰트(Segoe UI Symbol / ⿴만 SimSun)로 **흰색 모노크롬 PNG를 구워** `Assets/Portfolio/Icons/Features/feat_*.png`(Sprite)로 두고 `Image.color`로 액센트 틴트. 생성 스크립트 `scratchpad/gen_feature_glyphs.py`(PIL+fontTools). 폰트 파일은 미배포(픽셀만).
@@ -157,7 +157,7 @@
 - `Assets/Editor/PortfolioBuild.cs`(`PortfolioOS.EditorTools.PortfolioBuild`) — 배포 설정을 코드로 고정(에디터 UI 상태에 의존 X). 메뉴 **Portfolio → Build WebGL (Release/Development)** + 배치모드(`-executeMethod …BuildWebGLRelease`).
 - release = **Brotli + Decompression Fallback=Enabled** + High 매니지드 스트리핑 + IL2CPP `Release` + 싱글스레드 + linker Wasm. dev = Minimal/Debug.
 - 배포 크기: 압축 Disabled 52MB → **Brotli ~30MB**. GH Pages가 Content-Encoding을 못 넣지만 Unity 내장 JS 디컴프레서(fallback)가 클라이언트에서 `.br`을 풀어 배포 가능.
-- 로컬 `serve.py`: wasm MIME `application/wasm`, `.br`/`.gz` 사전압축 서빙 + `Content-Encoding` 헤더, HTTPS(self-signed; Brotli는 보안 컨텍스트 필요), `Cache-Control: no-store`. preview는 `.claude/launch.json`의 `webgl`(port 8000).
+- 로컬 `serve.py`: wasm MIME `application/wasm`, `.br`/`.gz` 사전압축 서빙 + `Content-Encoding` 헤더, HTTPS(self-signed; Brotli는 보안 컨텍스트 필요), `Cache-Control: no-store`. 미리보기는 `python Tools/serve.py 8000 Build/WebGL`로 실행한다.
 
 **구현 노트 — 배포 (E4-T4/T6/T7)**
 - **배포 경로**: 별도 `ThunderVolt45.github.io` repo를 만들지 않고 **이 저장소의 `gh-pages` 브랜치 루트**로 발행한다.
@@ -207,7 +207,7 @@
   - **Header 프리팹 적용(font-weight 방식 + macOS 타이틀 스타일)**: `Assets/UGUIWindowSample/Resources/BaseComponents/Header.prefab`의 제목 TMP(`TitleText`, 헤더 높이 40)를 **Bold 애셋 직접 지정 → 베이스 `WantedSans-Regular SDF` + `m_fontWeight`(weight table 경유)** 방식으로 전환. 최종 스타일은 **macOS 타이틀바**: `m_fontWeight=600`(SemiBold) · `fontSize=15` · 색 `#6E6E73`(ink-2 회색) · 중앙정렬(기존 유지). 시안(`*-mockup.html`)의 `.titlebar b{font-weight:600;color:ink-2}`와 정합. 한글+라틴 진짜 SemiBold 렌더 확인(□ 없음). 모든 창이 이 프리팹을 공유하므로 전역 반영. ⚠️ Header.prefab은 upstream 프레임워크 파일 → 이미 로컬 커스터마이즈 상태이며, upstream 병합 시 충돌 가능(병합 후 확인).
 - **E5-T4 잠정 방침(2026-07-13)**: 콘텐츠(등장 문자)가 아직 미확정이라 static pre-bake는 시기상조 → **일단 dynamic 유지 + git 노이즈 감수**, 최종 단계(문자셋 확정/E4 배포 직전)에서 static 전환 재결정.
   - 설정 목표: `WantedSans-Regular SDF`(전역 폴백, E5-T1)의 **Multi Atlas Textures = ON**(현재 `m_IsMultiAtlasTexturesEnabled: 0`). Population=Dynamic·1024²는 이미 맞음. 1024² 멀티는 총 바이트 동일(면적 불변)이라 100MB 우려와 무관, 오버플로 시 □ 방지용.
-  - ⚠️ **다음 세션 처리**: 이번 세션엔 Unity MCP가 config에 미등록(`~/.claude.json`의 `mcpServers: {}` 비어 있음)이고 브리지(`127.0.0.1:8080`)도 무응답이라 MCP로 못 바꿨음. → Unity **MCP for Unity 창 → MCP Client Configuration → Auto Configure**(uvx 커맨드 자동 기록)로 Claude Code에 서버 등록 + Bridge=Connected 확인 → **세션 재시작** 후 `manage_asset`로 플래그 변경. (설정 변경은 노이즈 파일과 엉키니 되돌린 뒤 재적용하거나 별도 커밋.)
+  - ⚠️ **다음 세션 처리**: Unity 에디터/MCP 도구가 제공되는 Codex 세션에서 브리지와 활성 인스턴스를 확인한 뒤 `manage_asset` 등 에디터 API로 플래그를 변경한다. 도구가 없으면 Unity Inspector에서 변경하고 serialized diff를 검증한다. 설정 변경은 동적 SDF 노이즈와 분리해 적용하거나 별도 커밋으로 관리한다.
 - E5-T6: **MPUIKit** = 에셋스토어 **유료** 에셋(재배포 불가) → 저장소에서 **제외**. `.gitignore`에 `/[Aa]ssets/MPUIKit/`·`/[Aa]ssets/MPUIKit.meta` 추가. 빌드는 이 에셋이 설치된 로컬에서 수행(타 환경/CI에는 미설치 → UI 깨질 수 있음, 필요 시 설치 안내 메모로 대체).
   - ⚠️ WantedSans 폰트를 `Assets/Fonts/`에 별도 반입하려다 철회 — **이미 `Assets/UGUIWindowSample/Fonts/`에 동일 7종이 존재**(중복). 폰트는 그쪽을 SSOT로 사용.
 

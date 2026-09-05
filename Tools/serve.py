@@ -11,7 +11,7 @@ Brotli/gzip 압축 빌드 지원:
   `.br`(또는 `.gz`)로 나온다. 이때 서버가 `Content-Encoding: br`(또는 gzip)과
   '원본' Content-Type(application/wasm 등)을 보내야 브라우저가 네이티브로
   풀어서 로드한다. 이 서버가 그 헤더를 붙인다.
-  (GitHub Pages는 이 헤더를 못 넣어 이 방식이 불가 → 배포는 CLAUDE.md §4-C 참조.
+  (GitHub Pages는 이 헤더를 못 넣어 이 방식이 불가 → 배포는 AGENTS.md §6 참조.
    로컬에서는 우리가 헤더를 제어하므로 .br을 그대로 서빙해 용량을 줄일 수 있다.)
 
 HTTPS:

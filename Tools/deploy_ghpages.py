@@ -14,7 +14,7 @@
   gh-pages는 항상 최신 빌드 1개분만 보관한다(gh-pages 히스토리는 보존 가치가 없음).
   작업 저장소는 건드리지 않고 임시 디렉터리에서 수행한다.
 
-Brotli / .nojekyll (CLAUDE.md §4-C):
+Brotli / .nojekyll (AGENTS.md §6):
   빌드는 Brotli + Decompression Fallback = Enabled 로 만든다. GitHub Pages는
   `Content-Encoding` 헤더를 넣어줄 수 없지만, Unity 내장 JS 디컴프레서가 클라이언트에서
   `.br`을 풀어주므로 헤더 없이도 동작한다. `.nojekyll`을 넣어 Jekyll 전처리도 끈다.
