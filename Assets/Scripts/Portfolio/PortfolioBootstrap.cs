@@ -5,7 +5,7 @@ namespace UGUIWindow
 {
     /// <summary>
     /// URL 해시 딥링크로 특정 앱 창을 자동으로 연다.
-    /// 예) <c>index.html#open=DocumentViewerWindow</c> → 해당 창을 시작 시 오픈.
+    /// 예) <c>index.html#open=DocumentViewerWindow</c> → 이력서 안내 창을 시작 시 오픈.
     /// 씬 오브젝트 없이 RuntimeInitializeOnLoadMethod로 부팅한다.
     /// (테스트 편의 + 향후 monitor.html 셸에서 특정 앱으로 진입하는 딥링크에 사용)
     /// </summary>

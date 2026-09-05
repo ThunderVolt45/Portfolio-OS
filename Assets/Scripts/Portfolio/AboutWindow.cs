@@ -31,7 +31,7 @@ namespace UGUIWindow
         }
 
         // 콘텐츠에 구워진 "이력서 전체 보기" 버튼(ResumeCta)을 이름으로 찾아
-        // 클릭 시 이력서 PDF 뷰어(DocumentViewerWindow)를 열도록 배선한다.
+        // 클릭 시 이력서 안내 창(DocumentViewerWindow)을 열도록 배선한다.
         // (베이커는 버튼만 생성하고 배선은 하지 않는다 — 배선은 여기 코드로.)
         private void WireResumeButton()
         {
@@ -43,7 +43,7 @@ namespace UGUIWindow
             btn.onClick.AddListener(OpenResume);
         }
 
-        // 이력서 전체 PDF 창을 연다. (기존 Icon_Resume 아이콘과 동일한 대상)
+        // 이력서 안내 창을 연다. 자세히 보기 버튼이 브라우저 기본 PDF 뷰어로 연결된다.
         public void OpenResume()
         {
             UGUIWindowManager.CreateWindow<DocumentViewerWindow>();

@@ -19,9 +19,9 @@
 3. **부팅 완료 → 3창 자동 오픈**: 자기소개(About) · Contact · **Projects 런처**. (겹침 방지 cascade 배치.)
 4. **데스크톱 사용법 학습** — 바탕화면의 사용 방법 텍스트를 읽고 조작 학습(아이콘 실행, 창 드래그/최소화/닫기, 작업표시줄 복원 등).
 5. **데스크톱 아이콘으로 콘텐츠 접근** — 아이콘 **4개**로 집약:
-   - **About**(자기소개) · **Contact** · **Resume**(이력서 PDF)
+   - **About**(자기소개) · **Contact** · **Resume**(안내 창 → 브라우저 PDF)
    - **Projects 런처 창** — 프로젝트 **7종**을 리스트+상세로 집약, 항목 선택 시 라우팅:
-     - PDF형: BrawlStarsTPS · Nova-Revolution · ProjectBlackout → PDF 뷰어(E3)로 오픈
+     - 문서형: BrawlStarsTPS · Nova-Revolution · ProjectBlackout → 프로젝트별 UGUI 소개 창 → 자세히 보기로 브라우저 PDF(E3)
      - UGUI형: UGUI-Window-Sample → 전용 UGUI 소개 창(PDF 미사용)
      - 그 외: 고아미 캠프 · Colyseus-Server-Sample · Gyeongseong97 → 런처 내 상세(SSOT 기반)
 6. **모바일 / WebGL 미지원 폴백** — 정적 안내 + 핵심 링크(이력서·연락처·GitHub) 페이지 제공. 단, **WebGL 구동 가능한 모바일은 "그래도 입장" 허용**.
@@ -32,7 +32,7 @@
 |---|---|---|---|
 | **E1** | 창 프레임워크 유지 (upstream 동기화) | ✅ 최신 | `UGUIWindowSwitcher` 실사용 점검 (E1-T2) |
 | **E2** | 포트폴리오 앱 창 & 콘텐츠 | 🔄 진행 | Projects 런처 창 (E2-T4) |
-| **E3** | PDF 문서 뷰어 (PDF.js 오버레이) | 🔄 핵심완결 | release 빌드에서 PDF 눈확인 (E3-T6) |
+| **E3** | PDF 문서 열기 (브라우저 기본 뷰어) | 🔄 핵심완결 | release WebGL에서 새 탭 동작 눈확인 (E3-T8) |
 | **E4** | WebGL 빌드 & 배포 | ✅ **배포됨** | 모바일/미지원 폴백 재설계 (E4-T5) |
 | **E5** | 폴리시 & 위생 | 🔄 진행 | 폰트 SDF 노이즈 방침 (E5-T4) |
 | **E6** | 부팅 & 데스크톱 셸 연출 | ⬜ 미착수 | 커스텀 WebGL 템플릿 부팅 (E6-T1) |
@@ -50,7 +50,7 @@
 | ID | Task | 상태 |
 |---|---|---|
 | E1-T1 | upstream 1~3차 동기화 반영 (본문 스크롤·작업표시줄 복구·창 전환 오버레이·스케일 드래그 보정) | ✅ |
-| E1-T2 | 신규 `UGUIWindowSwitcher`(창 전환 오버레이) 포트폴리오 실사용 여부 + PDF 오버레이(E3)와 상호작용 점검 | ⬜ |
+| E1-T2 | 신규 `UGUIWindowSwitcher`(창 전환 오버레이) 포트폴리오 실사용 점검 | ⬜ |
 
 **들어온 upstream 기능** — 창 본문 스크롤(ScrollRect) · 작업표시줄/최대화 영역 복구 fix · 창 전환 오버레이 `UGUIWindowSwitcher.cs`(`a1bf9f5`,`edb7939`) · 스케일 환경 드래그 보정 `UGUIWindowManager.GetPointerDeltaInRect(eventData, relativeTo)`(`a64fde2`).
 
@@ -68,26 +68,27 @@
 | ID | Task | 상태 |
 |---|---|---|
 | E2-T1 | `AboutWindow` — 이력서 1페이지 전체(소개·핵심역량·경력·학력/자격/교육·프로필·슬로건)를 구조화 UGUI 레이아웃으로 구현 | ✅ |
-| E2-T2 | `DocumentViewerWindow` + PDF별 서브클래스 3 (`BrawlStarsTPSDocWindow`/`NovaRevolutionDocWindow`/`ProjectBlackoutDocWindow`) | ✅ |
-| E2-T3 | 구 `ProjectBlackoutWindow`(전용 창) 제거 → PDF 뷰어로 대체 | ✅ |
-| E2-T4 | **`ProjectsWindow`(런처)** — 7종 리스트+상세, 항목 선택 시 라우팅(PDF 뷰어 / UGUI 창 / 런처 내 상세) | ⬜ |
+| E2-T2 | 초기 `DocumentViewerWindow` + PDF별 서브클래스 3의 PDF.js 내장 뷰어 구현 (E2-T9/E3-T7에서 폐기) | ✅ |
+| E2-T3 | 구 `ProjectBlackoutWindow`(전용 창) 제거 → 초기 PDF 뷰어로 대체 (E2-T9에서 소개 창으로 재전환) | ✅ |
+| E2-T4 | **`ProjectsWindow`(런처)** — 7종 리스트+상세, 항목 선택 시 라우팅(프로젝트 소개 창 / UGUI 창 / 런처 내 상세) | ⬜ |
 | E2-T5 | `ContactWindow` — 이메일·GitHub(공개 개인정보 정책 준수) | ⬜ |
 | E2-T6 | 창 본문 스크롤(E1 프레임워크 반영분) 포트폴리오 창에 실제 적용/동작 확인 | 🔄 |
 | E2-T7 | `UGUISampleWindow` — UGUI-Window-Sample 소개 전용 창(PDF 미사용, UGUI만). GitHub repo 링크 포함 | ✅ |
 | E2-T8 | 데스크톱 아이콘 집약 → **About·Contact·Resume·Projects 4개**. 개별 PDF 아이콘 3개는 Projects 런처로 이동(제거) | ⬜ |
+| E2-T9 | 문서형 프로젝트 3종을 `UGUISampleWindow` 스타일의 소개 창으로 전환 + 프로젝트별 팔레트 + 브라우저 PDF CTA | ✅ |
 
 > **E2-T4 프로젝트 7종 라우팅**
-> - PDF형(뷰어): ProjectBlackout · Nova-Revolution · BrawlStarsTPS
+> - 문서형(소개 창 → 브라우저 PDF): ProjectBlackout · Nova-Revolution · BrawlStarsTPS
 > - UGUI형(전용 창, E2-T7): UGUI-Window-Sample
 > - 런처 내 상세(SSOT 텍스트): 고아미 캠프 · Colyseus-Server-Sample · Gyeongseong97
 
 **구현 노트 — 프리팹 = Prefab Variant (필수 패턴)**
 - 창 프리팹은 base `UGUIWindow.prefab`(guid `23a3495e…`)의 **Variant**로 만든다(GUID 교체 독립복제 금지: upstream 창 개선을 못 받음).
 - Unity는 Variant에서 컴포넌트 `m_Script` 교체 불가 → 에디터툴 `Assets/Editor/PortfolioPrefabTools.cs`로 우회:
-  - 메뉴 **Portfolio → Rebuild Window Prefab Variants** (About/Doc)
-  - 메뉴 **Portfolio → Build PDF Doc Windows + Icons** (PDF 서브클래스 3 + 씬 아이콘)
+  - 메뉴 **Portfolio → Rebuild Window Prefab Variants** (전체 포트폴리오 창)
+  - 메뉴 **Portfolio → Build Project Introduction Windows + Icons** (문서형 프로젝트 소개 창 3 + 씬 아이콘)
   - 동작: base 인스턴스화 → root `UGUIWindow` 컴포넌트 제거 + subclass 추가 → `SerializedObject`로 필드 복사 → `SaveAsPrefabAsset`. 검증: `isVariant=True`, root 컴포넌트 = `UGUIWindowView` + subclass.
-- base body는 `Content/Viewport/ScrollContent`(ScrollRect). **Doc**은 단일 `ContentText`(TMP, stretch) + `documentRelativePath`. **About**은 단일 텍스트 블록을 폐기하고 구조화 레이아웃을 사용 → 아래 별도 노트.
+- base body는 `Content/Viewport/ScrollContent`(ScrollRect). About·UGUISample·프로젝트 소개·Resume 안내 창은 모두 에디터 빌더가 구조화 레이아웃을 굽는다.
 
 **구현 노트 — AboutWindow 콘텐츠(이력서 1페이지)**
 - 디자인 기반: HTML/CSS 시안 `scratchpad/about-mockup.html`(macOS 프로필 카드 톤, 라이트 테마) → UGUI로 이식. 콘텐츠 SSOT는 `C:\Users\zxc98\Documents\GitHub\-\김민영_이력서_2026.pptx`의 **1페이지**(markitdown으로 추출).
@@ -95,7 +96,13 @@
 - 폰트: **WantedSans SDF** 가중치별(ExtraBold 이름 / Bold 회사 / SemiBold 헤더·라벨 / Medium 값 / Regular 본문). 카드 라운드/원형 아바타·dot는 **MPUIKit `MPImage`**(SerializedObject로 `m_DrawShape`=Rectangle/Circle, 사각형 `m_Rectangle.m_CornerRadius`, 원형 `m_Circle.m_FitRadius`=bool). ⚠️ `m_FitRadius`는 float 아님(bool) — floatValue 쓰면 "type is not a supported float value" 경고.
 - 창 크기: `AboutWindow.OnEnable`이 `Resize(480,580)`(가로 스크롤 없이 넉넉, 세로만 스크롤). `contentText` 필드/텍스트 주입 제거.
 - 검증(play mode 스크린샷): 7개 섹션 전부 렌더 + 한글 글리프 정상 + 무경고 확인. 폰트 동적 SDF 노이즈(5종)는 E5-T4 방침대로 `git checkout --`로 되돌림(런타임 재베이크).
-- `DocumentViewerWindow` base에 `protected virtual string DocumentPath/DocumentTitle` override 지점(서브클래스는 경로·제목만). 매니저가 **타입명으로 프리팹 로드**(`Resources.Load("Windows/"+typeName)`)라 PDF별 별도 타입 필수.
+- `ExternalPdfWindow`가 `OnEnable()`에서 크기 초기화·`DetailsButton` 배선·`Application.OpenURL` 호출을 공통 처리한다. `DocumentViewerWindow`는 Resume 아이콘·`#open` 호환을 위해 역사적 타입명을 유지한 이력서 안내 창이며, 프로젝트 3종의 기존 `*DocWindow` 타입명도 씬 아이콘/딥링크 호환을 위해 유지한다.
+
+**구현 노트 — 프로젝트 소개 창(E2-T9)**
+- 콘텐츠 빌더 `Assets/Editor/PortfolioProjectContent.cs`: Hero · 핵심 포커스 · 소개 · 첫 화면 CTA · 기본 정보 · 대표 구현 3선을 `UGUISampleWindow`와 같은 macOS 라이트 톤/MPUIKit 카드/WantedSans 계층으로 구성한다.
+- 팔레트: BrawlStarsTPS = warm amber, Nova-Revolution = orbital blue, Project Blackout = raid red. 각 프로젝트의 기존 스프라이트를 Hero·데스크톱·Dock에 공통 사용하며, Project Blackout은 최신 금속성 `B` 로고(`T_Blackout_Icon_B_Transparent.png`)를 사용한다.
+- `DetailsButton`은 `Assets/StreamingAssets/docs/*.pdf`를 브라우저 새 탭으로 연다. PDF 원본은 유지하되 Unity 내부 PDF 렌더러·iframe·스냅샷은 사용하지 않는다.
+- Unity CLI `eval`로 4개 프리팹이 모두 Variant이며 루트 타입과 `DetailsButton`이 정상임을 검증. Play Mode에서 프로젝트 3종·Resume 렌더, 스크롤 하단, 버튼 활성, 콘솔 오류 0건 확인.
 
 **구현 노트 — UGUISampleWindow 콘텐츠(E2-T7, 프레임워크 자기소개)**
 - 창 프레임워크(UGUI-Window-Sample) **자체를 소개하는 메타 창** — "지금 이 창이 곧 그 프레임워크"라는 dogfooding 콜아웃을 상단에 배치(핵심 어필 포인트). PDF 미사용, 순수 UGUI.
@@ -113,28 +120,26 @@
 
 ---
 
-## E3 — PDF 문서 뷰어 (PDF.js 오버레이) · 🔄 핵심 완결
+## E3 — PDF 문서 열기 (브라우저 기본 뷰어) · 🔄 핵심 완결
 
-> 목표: PDF를 창 안에서 native 수준(선택·검색·폼·하이퍼링크)으로 보여주고, 다중 창/포커스 전환에서 상태 소실 없이 동작. Projects 런처(E2-T4)의 PDF형 항목이 이 뷰어를 띄운다.
+> 목표: Unity에서는 문서 소개와 맥락만 제공하고, 실제 PDF 읽기·확대·검색·다운로드는 브라우저 기본 PDF 뷰어에 맡긴다.
 
 | ID | Task | 상태 |
 |---|---|---|
-| E3-T1 | 포커스-스왑 오버레이 (창별 iframe 유지, 다중창, 좌표 동기) | ✅ |
+| E3-T1 | 초기 포커스-스왑 PDF.js 오버레이 구현 (E3-T7에서 폐기) | ✅ |
 | E3-T2 | URL 해시 `#open=클래스명` 딥링크 (`PortfolioBootstrap.cs`) | ✅ |
 | E3-T3 | ~~monitor.html 셸 좌표 정합 검증~~ — **폐기**(모니터 셸 미사용, 캔버스가 뷰포트 전체라 스케일/오프셋 없음) | ❌ |
-| E3-T4 | 복귀(백그라운드→라이브) 경로 실브라우저 눈확인 + 포커스아웃 스냅샷 플래시 refinement | ⬜ |
-| E3-T5 | 고도화: 다페이지 스크롤 + HTTP Range + 텍스처 가상화 + "PDF 원본 다운로드" 버튼 | ⬜ |
-| E3-T6 | release 빌드에서 각 PDF 항목 → 해당 PDF 눈확인 (실렌더는 WebGL 전용) | ⬜ |
+| E3-T4 | ~~복귀 경로/스냅샷 플래시 refinement~~ — 브라우저 기본 뷰어 전환으로 불필요 | ❌ |
+| E3-T5 | ~~다페이지 스크롤·Range·텍스처 가상화~~ — 브라우저 기본 뷰어에 위임 | ❌ |
+| E3-T6 | 초기 내장 뷰어 release 빌드 눈확인 — E3-T7 방향 변경으로 대체 | ❌ |
+| E3-T7 | 내장 pdf.js/iframe/스냅샷 제거 + UGUI 소개/안내 창의 외부 PDF 버튼으로 전환 | ✅ |
+| E3-T8 | release WebGL에서 프로젝트 3종 + Resume CTA가 새 탭의 브라우저 PDF 뷰어를 여는지 눈확인 | ⬜ |
 
-**구현 노트 — 오버레이 구조**
-- jslib `Assets/Plugins/WebGL/PdfOverlay.jslib`. **창마다 자기 전용 iframe 1개**를 만들어 살려 둠(파괴 안 함, `id`=`GetType().Name` 키잉). `window.__pdfOverlays[id] = {wrap,iframe,url}`, 모든 함수 첫 인자 `id`.
-- 포커스/최상단 창만 자기 iframe 표시(`PdfOverlayShow(id)`), 백그라운드로 밀리면 자기 iframe을 스냅샷으로 굳히고 숨김(`PdfOverlayHide(id)`) → 다시 라이브면 숨김만 해제 = **리로드/상태소실 없음**. 각 창이 자기 iframe만 스냅샷하므로 교차오염 불가.
-- 스왑 트리거: `UGUIWindowManager.OnManagedWindowFocused/Minimized/Closed` **+ `OnManagedWindowOpened`**(Open은 포커스 이벤트 미발생 → Opened도 구독해야 새 창이 기존 라이브를 백그라운드로 밀어냄). `OnAnyWindowActivated`가 Opened+Focused 공용 핸들러.
-- 좌표매핑: 콘텐츠 RectTransform world corners → `RectTransformUtility.WorldToScreenPoint`(Unity px) → jslib에서 `canvas.getBoundingClientRect()`+버퍼크기로 CSS 변환·Y뒤집기·경계 클리핑.
-- 자원: pdf.js 정식 viewer **3.11.174** = `Assets/StreamingAssets/pdfjs/{build,web}`(~9MB). PDF 실파일 = `Assets/StreamingAssets/docs/*.pdf`(ASCII명 `brawlstarstps`/`novarevolution`/`projectblackout`; SSOT는 docs 프로젝트 `portfolio/projects/*.pdf`). `DocumentPath`가 `docs/<name>.pdf` 반환(viewerUrl `../../docs/...`).
-- 딥링크(E3-T2)는 `Type.GetType` 방식이라 IL2CPP 스트리핑 안전.
-
-**검증됨** — 다중 PDF 열기 + 문서 간 포커스 전환 리로드 없음(사용자 수동 WebGL 빌드). 딥링크 오픈→좌표 정합, 리사이즈 재계산·클리핑, 스냅샷 스왑.
+**구현 노트 — 외부 열기 구조**
+- `ExternalPdfWindow.OpenDocument()`가 `Application.streamingAssetsPath + "/docs/<name>.pdf"`를 `Application.OpenURL`로 연다. 호출은 `DetailsButton`의 직접 클릭 이벤트 안에서 실행한다.
+- PDF 실파일은 `Assets/StreamingAssets/docs/`에 유지한다. 내장 뷰어 코드(`PdfOverlay.jslib`, `PdfJsBridge.*`)와 `Assets/StreamingAssets/pdfjs/` 번들은 제거했다.
+- Projects 런처(E2-T4)는 문서형 항목을 각 UGUI 소개 창으로 라우팅하고, 사용자가 맥락을 읽은 뒤 CTA로 브라우저 PDF를 연다.
+- 딥링크(E3-T2)는 기존 타입명을 유지하므로 계속 동작하며, 이제 내장 PDF 대신 소개/안내 창을 연다.
 
 ---
 

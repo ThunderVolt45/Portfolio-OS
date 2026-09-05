@@ -1,12 +1,13 @@
 namespace UGUIWindow
 {
     /// <summary>
-    /// NovaRevolution 기술 문서 전용 PDF 뷰어 창.
-    /// DocumentViewerWindow를 상속해 문서 경로/제목만 지정한다.
+    /// Nova-Revolution 소개 창. 자세한 기술 문서는 브라우저 기본 PDF 뷰어로 연다.
     /// </summary>
-    public class NovaRevolutionDocWindow : DocumentViewerWindow
+    public class NovaRevolutionDocWindow : ProjectIntroductionWindow
     {
-        protected override string DocumentPath { get { return "docs/novarevolution.pdf"; } }
-        protected override string DocumentTitle { get { return "NovaRevolution.pdf"; } }
+        protected override string DocumentPath
+        {
+            get { return "docs/novarevolution.pdf"; }
+        }
     }
 }

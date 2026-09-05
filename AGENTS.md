@@ -151,7 +151,7 @@ C# 또는 Unity 에셋 변경 시:
 - Unity 에디터 도구가 있으면 컴파일 오류와 콘솔을 확인한다.
 - 최소한 변경한 C# 파일을 다시 읽고 `rg`로 깨진 타입명, 프리팹명, 이벤트 참조를 찾는다.
 - UI 변경은 포트폴리오 씬에서 create/open, focus/z-order, minimize/restore, close/pooling, DPI 변화와 관련된 경로를 영향 범위에 맞게 확인한다.
-- WebGL 전용 PDF 오버레이 변경은 실제 WebGL 빌드와 브라우저에서 검증한다.
+- PDF 외부 열기 변경은 실제 WebGL 빌드에서 버튼 클릭 → 새 탭 → 브라우저 기본 PDF 뷰어까지 검증한다.
 - 문서만 수정한 경우 Unity 컴파일은 필요하지 않다. 링크, 경로, 상호 참조와 남은 레거시 에이전트 전용 표현을 검색한다.
 
 ## 9. 진행 상태 관리
@@ -164,5 +164,5 @@ C# 또는 Unity 에셋 변경 시:
 추가로 주의할 점:
 
 - upstream 병합 후 `ProjectSettings.asset`의 productName과 포트폴리오 전용 설정이 덮어쓰이지 않았는지 확인한다.
-- PDF.js 오버레이는 WebGL 전용이며 창별 iframe 상태와 포커스 전환을 유지한다. 자세한 구조와 미완료 검증은 `TASKS.md` E3를 따른다.
+- PDF는 Unity 안에 임베드하지 않는다. UGUI 소개/안내 창의 `DetailsButton`이 `StreamingAssets/docs/*.pdf`를 브라우저 새 탭으로 열며, 구조와 미완료 WebGL 검증은 `TASKS.md` E3를 따른다.
 - 공개 배포물에 전화번호나 주소가 다시 들어가지 않았는지 확인한다.

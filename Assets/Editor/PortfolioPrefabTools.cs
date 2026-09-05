@@ -8,10 +8,10 @@ namespace PortfolioOS.EditorTools
 {
     /// <summary>
     /// 포트폴리오 앱 창 프리팹을 base UGUIWindow.prefab의 Prefab Variant로 재생성한다.
-    /// - root의 UGUIWindow 컴포넌트를 서브클래스(AboutWindow/DocumentViewerWindow)로 스왑
+    /// - root의 UGUIWindow 컴포넌트를 포트폴리오 창 서브클래스로 스왑
     ///   (변형에서 m_Script 교체 불가 → 제거+추가+직렬화 값 복사로 우회)
     /// - Content/Viewport/ScrollContent의 데모 텍스트를 정리하고 단일 ContentText 배선
-    /// - 아이콘/문서 경로 등 서브클래스 특화 필드 설정
+    /// - 창별 아이콘 설정 후 구조화된 콘텐츠 빌더 실행
     /// 메뉴: Portfolio → Rebuild Window Prefab Variants
     /// </summary>
     public static class PortfolioPrefabTools
@@ -33,17 +33,19 @@ namespace PortfolioOS.EditorTools
             BuildVariant(basePrefab, typeof(UGUIWindow.AboutWindow),
                 "Assets/Resources/Windows/AboutWindow.prefab",
                 "Assets/Portfolio/Icons/About.png",
-                wireContentText: false, docPath: null);
+                wireContentText: false);
 
             BuildVariant(basePrefab, typeof(UGUIWindow.DocumentViewerWindow),
                 "Assets/Resources/Windows/DocumentViewerWindow.prefab",
                 "Assets/Portfolio/Icons/Resume.png",
-                wireContentText: false, docPath: "docs/resume.pdf");
+                wireContentText: false);
 
             // UGUI-Window-Sample 소개 창(PDF 미사용, 순수 UGUI). 아이콘은 추후 직접 할당.
             BuildVariant(basePrefab, typeof(UGUIWindow.UGUISampleWindow),
                 "Assets/Resources/Windows/UGUISampleWindow.prefab",
-                "Assets/Portfolio/Icons/UGUISample.png", wireContentText: false, docPath: null);
+                "Assets/Portfolio/Icons/UGUISample.png", wireContentText: false);
+
+            BuildProjectVariants(basePrefab);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -52,6 +54,8 @@ namespace PortfolioOS.EditorTools
             PortfolioAboutContent.Build();
             // UGUISample 변형 스켈레톤 위에 프레임워크 소개 콘텐츠를 다시 구축한다.
             PortfolioUGUISampleContent.Build();
+            // 프로젝트 3종과 이력서 창은 소개 + 브라우저 PDF 열기 화면으로 구축한다.
+            PortfolioProjectContent.BuildAll();
 
             Debug.Log("[PortfolioPrefabTools] Done. Variants rebuilt.");
         }
@@ -70,7 +74,7 @@ namespace PortfolioOS.EditorTools
 
             BuildVariant(basePrefab, typeof(UGUIWindow.UGUISampleWindow),
                 "Assets/Resources/Windows/UGUISampleWindow.prefab",
-                "Assets/Portfolio/Icons/UGUISample.png", wireContentText: false, docPath: null);
+                "Assets/Portfolio/Icons/UGUISample.png", wireContentText: false);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -93,7 +97,7 @@ namespace PortfolioOS.EditorTools
 
             BuildVariant(basePrefab, typeof(UGUIWindow.DpiSettingWindow),
                 "Assets/Resources/Windows/DpiSettingWindow.prefab",
-                "Assets/Portfolio/Icons/DpiSetting.png", false, null);
+                "Assets/Portfolio/Icons/DpiSetting.png", false);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -102,8 +106,8 @@ namespace PortfolioOS.EditorTools
             Debug.Log("[PortfolioPrefabTools] Done. DPI setting window + content built.");
         }
 
-        [MenuItem("Portfolio/Build PDF Doc Windows + Icons")]
-        public static void BuildPdfDocWindows()
+        [MenuItem("Portfolio/Build Project Introduction Windows + Icons")]
+        public static void BuildProjectIntroductionWindows()
         {
             var basePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(BasePath);
             if (basePrefab == null)
@@ -112,29 +116,38 @@ namespace PortfolioOS.EditorTools
                 return;
             }
 
-            // PDF별 전용 창 = base UGUIWindow.prefab의 Variant + 서브클래스 컴포넌트.
-            // 스프라이트(windowIcon)는 미지정(iconPath=null) → 사용자가 추후 직접 할당.
-            BuildVariant(basePrefab, typeof(UGUIWindow.BrawlStarsTPSDocWindow),
-                "Assets/Resources/Windows/BrawlStarsTPSDocWindow.prefab", null, false, null);
-            BuildVariant(basePrefab, typeof(UGUIWindow.NovaRevolutionDocWindow),
-                "Assets/Resources/Windows/NovaRevolutionDocWindow.prefab", null, false, null);
-            BuildVariant(basePrefab, typeof(UGUIWindow.ProjectBlackoutDocWindow),
-                "Assets/Resources/Windows/ProjectBlackoutDocWindow.prefab", null, false, null);
+            BuildProjectVariants(basePrefab);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            AddPdfDocIcons();
-            Debug.Log("[PortfolioPrefabTools] Done. PDF doc windows + icons built.");
+            PortfolioProjectContent.BuildAll();
+            AddProjectIcons();
+            Debug.Log("[PortfolioPrefabTools] Done. Project introduction windows + icons built.");
         }
 
-        // 열려 있는 씬의 IconGrid에 PDF 문서 아이콘 3개를 추가한다(Icon_About 복제 기반).
-        static void AddPdfDocIcons()
+        static void BuildProjectVariants(GameObject basePrefab)
+        {
+            // 기존 *DocWindow 타입명은 씬 아이콘과 공개 #open 딥링크 호환을 위해 유지한다.
+            // 동작은 PDF 임베드가 아니라 UGUI 소개 + 브라우저 PDF 열기다.
+            BuildVariant(basePrefab, typeof(UGUIWindow.BrawlStarsTPSDocWindow),
+                "Assets/Resources/Windows/BrawlStarsTPSDocWindow.prefab",
+                "Assets/Textures/icon_main.png", false);
+            BuildVariant(basePrefab, typeof(UGUIWindow.NovaRevolutionDocWindow),
+                "Assets/Resources/Windows/NovaRevolutionDocWindow.prefab",
+                "Assets/Textures/노바 1492 로고.png", false);
+            BuildVariant(basePrefab, typeof(UGUIWindow.ProjectBlackoutDocWindow),
+                "Assets/Resources/Windows/ProjectBlackoutDocWindow.prefab",
+                "Assets/Textures/T_Blackout_Icon_B_Transparent.png", false);
+        }
+
+        // 열려 있는 씬의 IconGrid에 프로젝트 아이콘 3개를 추가한다(Icon_About 복제 기반).
+        static void AddProjectIcons()
         {
             var template = GameObject.Find("UGUI_Desktop/IconGrid/Icon_About");
             if (template == null)
             {
-                Debug.LogError("[PortfolioPrefabTools] template 'UGUI_Desktop/IconGrid/Icon_About' not found in open scene.");
+                Debug.LogWarning("[PortfolioPrefabTools] PortfolioOS scene is not active; skipped project icon creation.");
                 return;
             }
             var grid = template.transform.parent;
@@ -147,7 +160,7 @@ namespace PortfolioOS.EditorTools
             var scene = template.scene;
             UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
             UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene);
-            Debug.Log("[PortfolioPrefabTools] PDF doc icons added & scene saved.");
+            Debug.Log("[PortfolioPrefabTools] Project icons added & scene saved.");
         }
 
         static void AddIcon(GameObject template, Transform grid, string className, string label, Vector2 anchoredPos)
@@ -176,7 +189,7 @@ namespace PortfolioOS.EditorTools
         }
 
         static void BuildVariant(GameObject basePrefab, Type windowType, string outPath,
-                                 string iconPath, bool wireContentText, string docPath)
+                                 string iconPath, bool wireContentText)
         {
             GameObject inst = (GameObject)PrefabUtility.InstantiatePrefab(basePrefab);
             try
@@ -231,11 +244,7 @@ namespace PortfolioOS.EditorTools
                 if (wireContentText && contentText != null)
                     SetObjectField(newWin, "contentText", contentText);
 
-                // 5) DocumentViewerWindow.documentRelativePath 설정
-                if (!string.IsNullOrEmpty(docPath))
-                    SetStringField(newWin, "documentRelativePath", docPath);
-
-                // 6) 루트 이름 정리 + Variant로 저장
+                // 5) 루트 이름 정리 + Variant로 저장
                 inst.name = windowType.Name;
                 var saved = PrefabUtility.SaveAsPrefabAsset(inst, outPath);
                 if (saved != null)
@@ -273,12 +282,5 @@ namespace PortfolioOS.EditorTools
             else Debug.LogWarning("[PortfolioPrefabTools] field not found: " + field + " on " + c.GetType().Name);
         }
 
-        static void SetStringField(Component c, string field, string value)
-        {
-            var so = new SerializedObject(c);
-            var p = so.FindProperty(field);
-            if (p != null) { p.stringValue = value; so.ApplyModifiedPropertiesWithoutUndo(); }
-            else Debug.LogWarning("[PortfolioPrefabTools] field not found: " + field + " on " + c.GetType().Name);
-        }
     }
 }

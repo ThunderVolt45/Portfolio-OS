@@ -1,12 +1,13 @@
 namespace UGUIWindow
 {
     /// <summary>
-    /// ProjectBlackout 기술 문서 전용 PDF 뷰어 창.
-    /// DocumentViewerWindow를 상속해 문서 경로/제목만 지정한다.
+    /// ProjectBlackout 소개 창. 자세한 기술 문서는 브라우저 기본 PDF 뷰어로 연다.
     /// </summary>
-    public class ProjectBlackoutDocWindow : DocumentViewerWindow
+    public class ProjectBlackoutDocWindow : ProjectIntroductionWindow
     {
-        protected override string DocumentPath { get { return "docs/projectblackout.pdf"; } }
-        protected override string DocumentTitle { get { return "ProjectBlackout.pdf"; } }
+        protected override string DocumentPath
+        {
+            get { return "docs/projectblackout.pdf"; }
+        }
     }
 }
