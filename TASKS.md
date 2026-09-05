@@ -202,6 +202,7 @@
 | E5-T5 | `ProjectSettings.preloadedAssets`(InputSystem) 노이즈 관리 | 🔄 |
 | E5-T6 | 외부 유료 에셋(MPUIKit) gitignore 제외 | ✅ |
 | E5-T7 | WantedSans SDF **Font Weights 테이블** 설정 (faux bold 제거, 진짜 굵기 폰트 사용) | ✅ |
+| E5-T8 | 공식 Unity CLI + `com.unity.pipeline` 로컬 Editor 연동 | ✅ |
 
 **구현 노트**
 - E5-T1: 기본 TMP(LiberationSans)에 한글 없어 □로 깨짐 → WantedSans 동적 SDF를 TMP Settings `m_fallbackFontAssets`(전역 폴백)에 추가. 창 텍스트 한글 정상 렌더 확인.
@@ -215,6 +216,7 @@
   - ⚠️ **다음 세션 처리**: Unity 에디터/MCP 도구가 제공되는 Codex 세션에서 브리지와 활성 인스턴스를 확인한 뒤 `manage_asset` 등 에디터 API로 플래그를 변경한다. 도구가 없으면 Unity Inspector에서 변경하고 serialized diff를 검증한다. 설정 변경은 동적 SDF 노이즈와 분리해 적용하거나 별도 커밋으로 관리한다.
 - E5-T6: **MPUIKit** = 에셋스토어 **유료** 에셋(재배포 불가) → 저장소에서 **제외**. `.gitignore`에 `/[Aa]ssets/MPUIKit/`·`/[Aa]ssets/MPUIKit.meta` 추가. 빌드는 이 에셋이 설치된 로컬에서 수행(타 환경/CI에는 미설치 → UI 깨질 수 있음, 필요 시 설치 안내 메모로 대체).
   - ⚠️ WantedSans 폰트를 `Assets/Fonts/`에 별도 반입하려다 철회 — **이미 `Assets/UGUIWindowSample/Fonts/`에 동일 7종이 존재**(중복). 폰트는 그쪽을 SSOT로 사용.
+- **E5-T8 (공식 Unity CLI, 완료)**: Unity Hub가 설치한 `unity` 1.0.0-beta.8 확인(`%LOCALAPPDATA%/Unity/bin/unity.exe`). `unity pipeline install --project-path <repo>`로 실험적 패키지 `com.unity.pipeline` 0.6.0-exp.1을 설치했다. 실행 중인 Editor의 로컬 Pipeline 서버 `127.0.0.1:7800`이 reachable, 상태 `ready`임을 확인했고, `unity command eval`로 Unity 6000.6.0f1과 활성 씬 `Assets/Scenes/PortfolioOS.unity`를 live 조회했다. 기존 CoplayDev `com.coplaydev.unity-mcp`는 별개 도구로 유지한다.
 
 ---
 

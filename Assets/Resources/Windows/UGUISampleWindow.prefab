@@ -500,8 +500,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<b><color=#0A84FF>100%</color></b> \u2014 \uC804 \uCF54\uB4DC \uB2E8\uB3C5
-    \uC791\uC131"
+  m_text: "<b><color=#0A84FF>100%</color></b> \u2014 \uC804 \uCF54\uB4DC \uB2E8\uB3C5 \uC791\uC131"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -551,7 +550,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -593,6 +592,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &285823709518335914
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,7 +775,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -816,6 +817,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &400537018786062679
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,6 +904,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &503110132334006927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,7 +1087,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1124,6 +1129,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &563325752359318805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,8 +1196,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "z-\uC21C\uC11C\uC6A9 \uC774\uC911 \uC5F0\uACB0 \uB9AC\uC2A4\uD2B8 \uC9C1\uC811
-    \uAD6C\uD604"
+  m_text: "z-\uC21C\uC11C\uC6A9 \uC774\uC911 \uC5F0\uACB0 \uB9AC\uC2A4\uD2B8 \uC9C1\uC811 \uAD6C\uD604"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 042ef3763e0174d4baeca6d990272c48, type: 2}
   m_sharedMaterial: {fileID: 6210721459045984608, guid: 042ef3763e0174d4baeca6d990272c48, type: 2}
@@ -1240,7 +1246,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1358,6 +1364,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &730597464301258976
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,6 +1451,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &840389150216745205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1806,6 +1816,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &859101703881684936
 GameObject:
   m_ObjectHideFlags: 0
@@ -1871,11 +1883,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "z-\uC21C\uC11C \uBCC0\uACBD = \"\uC784\uC758 \uCC3D\uC744 \uBE7C\uC11C
-    \uB9E8 \uC55E\uC73C\uB85C\" \u2192 <b>List\uB85C\uB294 O(n)</b>. \uC81C\uB124\uB9AD
-    DoublyLinkedList<T>\uB97C \uC9C1\uC811 \uAD6C\uD604\uD574, \uD3EC\uCEE4\uC2A4
-    \uC2DC \uB178\uB4DC \uCC38\uC870\uB85C <b>\uB9D0\uB2E8 \uC774\uB3D9 O(1)</b>
-    + SetAsLastSibling()."
+  m_text: "z-\uC21C\uC11C \uBCC0\uACBD = \"\uC784\uC758 \uCC3D\uC744 \uBE7C\uC11C \uB9E8 \uC55E\uC73C\uB85C\" \u2192 <b>List\uB85C\uB294 O(n)</b>. \uC81C\uB124\uB9AD DoublyLinkedList<T>\uB97C \uC9C1\uC811 \uAD6C\uD604\uD574, \uD3EC\uCEE4\uC2A4 \uC2DC \uB178\uB4DC \uCC38\uC870\uB85C <b>\uB9D0\uB2E8 \uC774\uB3D9 O(1)</b> + SetAsLastSibling()."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -1925,7 +1933,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -2033,6 +2041,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &917679006902535254
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,6 +2221,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1010834083851747873
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,7 +2588,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -2618,6 +2630,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1072863317269507765
 GameObject:
   m_ObjectHideFlags: 0
@@ -2733,7 +2747,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -2840,6 +2854,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1111529799078331907
 GameObject:
   m_ObjectHideFlags: 0
@@ -3060,6 +3076,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1151185129218734708
 GameObject:
   m_ObjectHideFlags: 0
@@ -3156,6 +3174,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1161557460170153886
 GameObject:
   m_ObjectHideFlags: 0
@@ -3252,6 +3272,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1175527661043123195
 GameObject:
   m_ObjectHideFlags: 0
@@ -3431,7 +3453,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -3697,7 +3719,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -3739,6 +3761,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1371953248252333218
 GameObject:
   m_ObjectHideFlags: 0
@@ -3855,7 +3879,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -3897,6 +3921,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1519424242452231628
 GameObject:
   m_ObjectHideFlags: 0
@@ -4013,7 +4039,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -4055,6 +4081,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1547046113550633432
 GameObject:
   m_ObjectHideFlags: 0
@@ -4362,7 +4390,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -4500,7 +4528,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -4542,6 +4570,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1793612750833558629
 GameObject:
   m_ObjectHideFlags: 0
@@ -4720,6 +4750,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1848822444780880565
 GameObject:
   m_ObjectHideFlags: 0
@@ -4940,6 +4972,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1858914801852393092
 GameObject:
   m_ObjectHideFlags: 0
@@ -5056,7 +5090,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -5098,6 +5132,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &1918105424071196310
 GameObject:
   m_ObjectHideFlags: 0
@@ -5213,7 +5249,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -5300,10 +5336,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<b>Header \xB7 Border\xD74 \xB7 Edge\xD74 \xB7 Content</b>\uB97C \uBD80\uC704\uBCC4\uB85C
-    \uD569\uC131. \uAC01 \uBD80\uC704\uAC00 \uC790\uAE30 \uC785\uB825\uB9CC \uCC98\uB9AC\uD558\uACE0
-    \uCC3D\uC5D0 \uC704\uC784 \u2014 \uB044\uACE0 \uCF1C\uAE30\xB7\uD655\uC7A5\uC774
-    \uC26C\uC6C0."
+  m_text: "<b>Header \xB7 Border\xD74 \xB7 Edge\xD74 \xB7 Content</b>\uB97C \uBD80\uC704\uBCC4\uB85C \uD569\uC131. \uAC01 \uBD80\uC704\uAC00 \uC790\uAE30 \uC785\uB825\uB9CC \uCC98\uB9AC\uD558\uACE0 \uCC3D\uC5D0 \uC704\uC784 \u2014 \uB044\uACE0 \uCF1C\uAE30\xB7\uD655\uC7A5\uC774 \uC26C\uC6C0."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -5353,7 +5386,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -5490,7 +5523,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -5690,6 +5723,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &2432990499437670270
 GameObject:
   m_ObjectHideFlags: 0
@@ -5807,7 +5842,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -5849,6 +5884,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!114 &2842891957743432370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6235,7 +6272,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -6277,6 +6314,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &2651415882313735374
 GameObject:
   m_ObjectHideFlags: 0
@@ -6342,12 +6381,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "UGUI\uB9CC\uC73C\uB85C \uC6B4\uC601\uCCB4\uC81C \uC218\uC900\uC758 GUI\uB97C
-    \uC124\uACC4\xB7\uAD6C\uD604\uD558\uBA70 UI \uC544\uD0A4\uD14D\uCC98 \xB7 \uC790\uB8CC\uAD6C\uC870
-    \xB7 \uC608\uBC29\uC801 \uCD5C\uC801\uD654 \xB7 CI/CD\uB97C \uB2E4\uB918\uC2B5\uB2C8\uB2E4.
-    \uBCF5\uC7A1\uD55C UI \uD504\uB808\uC784\uC6CC\uD06C\uB97C \uC124\uACC4\uD558\uB294
-    \uC5ED\uB7C9\uC758 \uC9C1\uC811\uC801\uC778 \uADFC\uAC70 \u2014\n<b><color=#0A84FF>\uC9C0\uAE08
-    \uC774 \uD3EC\uD2B8\uD3F4\uB9AC\uC624\uAC00 \uADF8 \uC704\uC5D0\uC11C \uB3CC\uC544\uAC11\uB2C8\uB2E4.</color></b>"
+  m_text: "UGUI\uB9CC\uC73C\uB85C \uC6B4\uC601\uCCB4\uC81C \uC218\uC900\uC758 GUI\uB97C \uC124\uACC4\xB7\uAD6C\uD604\uD558\uBA70 UI \uC544\uD0A4\uD14D\uCC98 \xB7 \uC790\uB8CC\uAD6C\uC870 \xB7 \uC608\uBC29\uC801 \uCD5C\uC801\uD654 \xB7 CI/CD\uB97C \uB2E4\uB918\uC2B5\uB2C8\uB2E4. \uBCF5\uC7A1\uD55C UI \uD504\uB808\uC784\uC6CC\uD06C\uB97C \uC124\uACC4\uD558\uB294 \uC5ED\uB7C9\uC758 \uC9C1\uC811\uC801\uC778 \uADFC\uAC70 \u2014\n<b><color=#0A84FF>\uC9C0\uAE08 \uC774 \uD3EC\uD2B8\uD3F4\uB9AC\uC624\uAC00 \uADF8 \uC704\uC5D0\uC11C \uB3CC\uC544\uAC11\uB2C8\uB2E4.</color></b>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -6397,7 +6431,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -6504,6 +6538,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &2773669440323845790
 GameObject:
   m_ObjectHideFlags: 0
@@ -6754,10 +6790,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "SetDPI()\uB85C \uBAA8\uB4E0 \uCE94\uBC84\uC2A4 referenceResolution \uC77C\uAD04
-    \uC870\uC815 + PlayerPrefs \uC800\uC7A5. \uB4DC\uB798\uADF8\uAC00 DPI\uC640 \uBB34\uAD00\uD558\uAC8C
-    \uC77C\uC815 \uC18D\uB3C4\uAC00 \uB418\uB3C4\uB85D <b>ScreenMultiplier\uB85C
-    \uD3EC\uC778\uD130 \uB378\uD0C0\uB97C \uBCF4\uC815</b>."
+  m_text: "SetDPI()\uB85C \uBAA8\uB4E0 \uCE94\uBC84\uC2A4 referenceResolution \uC77C\uAD04 \uC870\uC815 + PlayerPrefs \uC800\uC7A5. \uB4DC\uB798\uADF8\uAC00 DPI\uC640 \uBB34\uAD00\uD558\uAC8C \uC77C\uC815 \uC18D\uB3C4\uAC00 \uB418\uB3C4\uB85D <b>ScreenMultiplier\uB85C \uD3EC\uC778\uD130 \uB378\uD0C0\uB97C \uBCF4\uC815</b>."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -6807,7 +6840,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -6945,7 +6978,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -6987,6 +7020,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3196876246868899729
 GameObject:
   m_ObjectHideFlags: 0
@@ -7052,11 +7087,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCC3D \uC0DD\uC131 \uBE44\uC6A9\uC774 \uD06C\uBBC0\uB85C \uB2EB\uC544\uB3C4
-    <b>\uD30C\uAD34\uD558\uC9C0 \uC54A\uACE0 \uD480\uC5D0 \uBCF4\uAD00</b>(\uD0A4
-    = Type.Name), \uC7AC\uC694\uCCAD \uC2DC \uC7AC\uC0AC\uC6A9. Application.lowMemory
-    \uC2DC TrimWindow()\uB85C \uBE44\uD65C\uC131 \uCC3D\uC744 \uD30C\uAD34\uD574
-    \uBA54\uBAA8\uB9AC \uD68C\uC218."
+  m_text: "\uCC3D \uC0DD\uC131 \uBE44\uC6A9\uC774 \uD06C\uBBC0\uB85C \uB2EB\uC544\uB3C4 <b>\uD30C\uAD34\uD558\uC9C0 \uC54A\uACE0 \uD480\uC5D0 \uBCF4\uAD00</b>(\uD0A4 = Type.Name), \uC7AC\uC694\uCCAD \uC2DC \uC7AC\uC0AC\uC6A9. Application.lowMemory \uC2DC TrimWindow()\uB85C \uBE44\uD65C\uC131 \uCC3D\uC744 \uD30C\uAD34\uD574 \uBA54\uBAA8\uB9AC \uD68C\uC218."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -7106,7 +7137,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -7306,6 +7337,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3469929703790225406
 GameObject:
   m_ObjectHideFlags: 0
@@ -7484,6 +7517,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3524514092599546638
 GameObject:
   m_ObjectHideFlags: 0
@@ -7768,6 +7803,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3555773044194140823
 GameObject:
   m_ObjectHideFlags: 0
@@ -7946,6 +7983,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3613379970701626098
 GameObject:
   m_ObjectHideFlags: 0
@@ -8124,6 +8163,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3650788385974445123
 GameObject:
   m_ObjectHideFlags: 0
@@ -8344,6 +8385,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3719821640031148359
 GameObject:
   m_ObjectHideFlags: 0
@@ -8628,6 +8671,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3832931406388215446
 GameObject:
   m_ObjectHideFlags: 0
@@ -8724,6 +8769,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &3861137391551521972
 GameObject:
   m_ObjectHideFlags: 0
@@ -9145,6 +9192,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &4002314364908374365
 GameObject:
   m_ObjectHideFlags: 0
@@ -9323,6 +9372,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &4085667265261904887
 GameObject:
   m_ObjectHideFlags: 0
@@ -9389,8 +9440,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBA54\uB274\uC5D0\uC11C \uCC3D \uD15C\uD50C\uB9BF \uC0DD\uC131 + \uCEF4\uD3EC\uB10C\uD2B8
-    \uC790\uB3D9 \uBD80\uCC29/\uD560\uB2F9, \uCEE4\uC2A4\uD140 \uC778\uC2A4\uD399\uD130"
+  m_text: "\uBA54\uB274\uC5D0\uC11C \uCC3D \uD15C\uD50C\uB9BF \uC0DD\uC131 + \uCEF4\uD3EC\uB10C\uD2B8 \uC790\uB3D9 \uBD80\uCC29/\uD560\uB2F9, \uCEE4\uC2A4\uD140 \uC778\uC2A4\uD399\uD130"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -9440,7 +9490,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -9482,6 +9532,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &4096085849352748008
 GameObject:
   m_ObjectHideFlags: 0
@@ -9578,6 +9630,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &4102361601303519382
 GameObject:
   m_ObjectHideFlags: 0
@@ -9664,6 +9718,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &4140256399871929585
 GameObject:
   m_ObjectHideFlags: 0
@@ -9779,7 +9835,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -9995,8 +10051,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC774\uC911 \uC5F0\uACB0 \uB9AC\uC2A4\uD2B8\uB85C \uD3EC\uCEE4\uC2A4
-    \uCC3D\uC744 O(1)\uB85C \uCD5C\uC0C1\uB2E8 \uC774\uB3D9"
+  m_text: "\uC774\uC911 \uC5F0\uACB0 \uB9AC\uC2A4\uD2B8\uB85C \uD3EC\uCEE4\uC2A4 \uCC3D\uC744 O(1)\uB85C \uCD5C\uC0C1\uB2E8 \uC774\uB3D9"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -10046,7 +10101,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -10247,7 +10302,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -10334,8 +10389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Unity UGUI\uB9CC\uC73C\uB85C \uB9CC\uB4E0\n\uB370\uC2A4\uD06C\uD1B1 OS
-    \uC2A4\uD0C0\uC77C \uCC3D(Window) UI \uD504\uB808\uC784\uC6CC\uD06C"
+  m_text: "Unity UGUI\uB9CC\uC73C\uB85C \uB9CC\uB4E0\n\uB370\uC2A4\uD06C\uD1B1 OS \uC2A4\uD0C0\uC77C \uCC3D(Window) UI \uD504\uB808\uC784\uC6CC\uD06C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -10385,7 +10439,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -10713,7 +10767,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -10801,8 +10855,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "GitHub Actions: Windows \uBE4C\uB4DC \u2192 \uC2DC\uB9E8\uD2F1 \uBC84\uC804
-    \uD0DC\uADF8 \u2192 Release \uC790\uB3D9 \uC0DD\uC131"
+  m_text: "GitHub Actions: Windows \uBE4C\uB4DC \u2192 \uC2DC\uB9E8\uD2F1 \uBC84\uC804 \uD0DC\uADF8 \u2192 Release \uC790\uB3D9 \uC0DD\uC131"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -10852,7 +10905,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -10894,6 +10947,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &5240921055344462454
 GameObject:
   m_ObjectHideFlags: 0
@@ -10990,6 +11045,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &5269513317612665814
 GameObject:
   m_ObjectHideFlags: 0
@@ -11130,8 +11187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB2EB\uC740 \uCC3D\uC744 \uD30C\uAD34\uD558\uC9C0 \uC54A\uACE0 \uC7AC\uC0AC\uC6A9,
-    \uC800\uBA54\uBAA8\uB9AC \uC2DC \uC790\uB3D9 \uC815\uB9AC"
+  m_text: "\uB2EB\uC740 \uCC3D\uC744 \uD30C\uAD34\uD558\uC9C0 \uC54A\uACE0 \uC7AC\uC0AC\uC6A9, \uC800\uBA54\uBAA8\uB9AC \uC2DC \uC790\uB3D9 \uC815\uB9AC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -11181,7 +11237,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -11449,6 +11505,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &5540607531075468648
 GameObject:
   m_ObjectHideFlags: 0
@@ -11564,7 +11622,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -11651,8 +11709,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD5E4\uB354 \uB4DC\uB798\uADF8 \uC774\uB3D9, 4\uBCC0\xB74\uBAA8\uC11C\uB9AC
-    \uB9AC\uC0AC\uC774\uC988, \uCD5C\uB300\uD654/\uBCF5\uC6D0/\uCD5C\uC18C\uD654"
+  m_text: "\uD5E4\uB354 \uB4DC\uB798\uADF8 \uC774\uB3D9, 4\uBCC0\xB74\uBAA8\uC11C\uB9AC \uB9AC\uC0AC\uC774\uC988, \uCD5C\uB300\uD654/\uBCF5\uC6D0/\uCD5C\uC18C\uD654"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -11702,7 +11759,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -11839,7 +11896,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -12111,11 +12168,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC0DD\uC131\xB7\uD480\uB9C1\xB7z-\uC21C\uC11C\xB7DPI\uB97C \uCD1D\uAD04\uD558\uB294
-    <b>\uC2A4\uB808\uB4DC \uC138\uC774\uD504 \uC2F1\uAE00\uD1A4</b>. \uAC1C\uBCC4
-    \uCC3D\uC740 \uC790\uAE30 \uB3D9\uC791\uB9CC \uCC45\uC784\uC9C0\uACE0 \uC804\uC5ED
-    \uC815\uCC45\uC740 \uB9E4\uB2C8\uC800\uAC00 \uB2F4\uB2F9 \u2014 \uAD00\uC2EC\uC0AC
-    \uBD84\uB9AC. (UGUIWindowManager)"
+  m_text: "\uC0DD\uC131\xB7\uD480\uB9C1\xB7z-\uC21C\uC11C\xB7DPI\uB97C \uCD1D\uAD04\uD558\uB294 <b>\uC2A4\uB808\uB4DC \uC138\uC774\uD504 \uC2F1\uAE00\uD1A4</b>. \uAC1C\uBCC4 \uCC3D\uC740 \uC790\uAE30 \uB3D9\uC791\uB9CC \uCC45\uC784\uC9C0\uACE0 \uC804\uC5ED \uC815\uCC45\uC740 \uB9E4\uB2C8\uC800\uAC00 \uB2F4\uB2F9 \u2014 \uAD00\uC2EC\uC0AC \uBD84\uB9AC. (UGUIWindowManager)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -12165,7 +12218,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -12272,6 +12325,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &5705988398983146486
 GameObject:
   m_ObjectHideFlags: 0
@@ -12388,7 +12443,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -12430,6 +12485,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &5738262884400854966
 GameObject:
   m_ObjectHideFlags: 0
@@ -12546,7 +12603,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -12588,6 +12645,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &5969412527005391361
 GameObject:
   m_ObjectHideFlags: 0
@@ -12654,8 +12713,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC5D0\uB514\uD130 = Info / \uAC1C\uBC1C = Warning / \uB9B4\uB9AC\uC988
-    = Error"
+  m_text: "\uC5D0\uB514\uD130 = Info / \uAC1C\uBC1C = Warning / \uB9B4\uB9AC\uC988 = Error"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -12705,7 +12763,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -12747,6 +12805,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &5988154012353377935
 GameObject:
   m_ObjectHideFlags: 0
@@ -12877,12 +12937,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<b><color=#0A84FF>\uC9C0\uAE08 \uC774 \uCC3D\uC774 \uBC14\uB85C \uADF8
-    \uD504\uB808\uC784\uC6CC\uD06C\uC785\uB2C8\uB2E4.</color></b> \uC774 \uD3EC\uD2B8\uD3F4\uB9AC\uC624\uC758
-    \uBAA8\uB4E0 \uCC3D\uC740 UGUI-Window-Sample \uC704\uC5D0\uC11C \uB3D9\uC791\uD569\uB2C8\uB2E4.
-    \uD5E4\uB354\uB97C \uB04C\uC5B4 \uC62E\uAE30\uACE0, \uBAA8\uC11C\uB9AC\uB97C
-    \uC7A1\uC544 \uD06C\uAE30\uB97C \uBC14\uAFB8\uACE0, \uCD5C\uB300\uD654\xB7\uCD5C\uC18C\uD654\uD574
-    \uBCF4\uC138\uC694."
+  m_text: "<b><color=#0A84FF>\uC9C0\uAE08 \uC774 \uCC3D\uC774 \uBC14\uB85C \uADF8 \uD504\uB808\uC784\uC6CC\uD06C\uC785\uB2C8\uB2E4.</color></b> \uC774 \uD3EC\uD2B8\uD3F4\uB9AC\uC624\uC758 \uBAA8\uB4E0 \uCC3D\uC740 UGUI-Window-Sample \uC704\uC5D0\uC11C \uB3D9\uC791\uD569\uB2C8\uB2E4. \uD5E4\uB354\uB97C \uB04C\uC5B4 \uC62E\uAE30\uACE0, \uBAA8\uC11C\uB9AC\uB97C \uC7A1\uC544 \uD06C\uAE30\uB97C \uBC14\uAFB8\uACE0, \uCD5C\uB300\uD654\xB7\uCD5C\uC18C\uD654\uD574 \uBCF4\uC138\uC694."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -12932,7 +12987,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -12974,6 +13029,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &6006129847578161524
 GameObject:
   m_ObjectHideFlags: 0
@@ -13089,7 +13146,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -13226,7 +13283,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -13427,7 +13484,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -13469,6 +13526,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &6251883389369824686
 GameObject:
   m_ObjectHideFlags: 0
@@ -13534,8 +13593,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCE94\uBC84\uC2A4 \uC77C\uAD04 \uC870\uC815 + \uC124\uC815 \uC601\uAD6C
-    \uC800\uC7A5 + \uB4DC\uB798\uADF8 \uC18D\uB3C4 \uBCF4\uC815"
+  m_text: "\uCE94\uBC84\uC2A4 \uC77C\uAD04 \uC870\uC815 + \uC124\uC815 \uC601\uAD6C \uC800\uC7A5 + \uB4DC\uB798\uADF8 \uC18D\uB3C4 \uBCF4\uC815"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -13585,7 +13643,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -13723,7 +13781,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -13765,6 +13823,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &6439940833088546257
 GameObject:
   m_ObjectHideFlags: 0
@@ -13880,7 +13940,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -14018,7 +14078,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -14060,6 +14120,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &6527763116325821233
 GameObject:
   m_ObjectHideFlags: 0
@@ -14303,7 +14365,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -14485,6 +14547,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &6687464166252191716
 GameObject:
   m_ObjectHideFlags: 0
@@ -14600,7 +14664,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -14737,7 +14801,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -14900,8 +14964,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "README + \uB9E4\uB274\uC5BC 8\uC7A5 + \uD074\uB798\uC2A4 \uB2E4\uC774\uC5B4\uADF8\uB7A8
-    8\uC885"
+  m_text: "README + \uB9E4\uB274\uC5BC 8\uC7A5 + \uD074\uB798\uC2A4 \uB2E4\uC774\uC5B4\uADF8\uB7A8 8\uC885"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -14951,7 +15014,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -14993,6 +15056,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &6969789656476884138
 GameObject:
   m_ObjectHideFlags: 0
@@ -15058,8 +15123,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "CreateWindow<T>() \uD55C \uC904, \uC774\uB984 \uADDC\uC57D\uC73C\uB85C
-    \uD504\uB9AC\uD339 \uC790\uB3D9 \uB85C\uB4DC"
+  m_text: "CreateWindow<T>() \uD55C \uC904, \uC774\uB984 \uADDC\uC57D\uC73C\uB85C \uD504\uB9AC\uD339 \uC790\uB3D9 \uB85C\uB4DC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -15109,7 +15173,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -15571,7 +15635,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -15613,6 +15677,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &7407160162751806245
 GameObject:
   m_ObjectHideFlags: 0
@@ -15728,7 +15794,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -15928,6 +15994,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &7504255273150781545
 GameObject:
   m_ObjectHideFlags: 0
@@ -15993,15 +16061,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBCC4\uB3C4 UI \uC5D0\uC14B \uC5C6\uC774 <b>Unity UGUI \uB9CC\uC73C\uB85C</b>
-    \uB370\uC2A4\uD06C\uD1B1 OS\uC640 \uAC19\uC740 \uCC3D \uAE30\uBC18 UI\uB97C \uAD6C\uD604\uD55C
-    \uD504\uB808\uC784\uC6CC\uD06C \uC0D8\uD50C\uC785\uB2C8\uB2E4. \uCC3D\uC758 \uC0DD\uC131\xB7\uC774\uB3D9\xB7\uB9AC\uC0AC\uC774\uC988\xB7\uCD5C\uB300\uD654/\uCD5C\uC18C\uD654/\uBCF5\uC6D0\uC740
-    \uBB3C\uB860, \uC624\uBE0C\uC81D\uD2B8 \uD480\uB9C1\xB7z-\uC21C\uC11C \uAD00\uB9AC\xB7DPI
-    \uC2A4\uCF00\uC77C\uB9C1\xB7\uC5D0\uB514\uD130 \uB3C4\uAD6C\xB7CI/CD\uAE4C\uC9C0
-    \uAC16\uCDB0 <b>\uC7AC\uC0AC\uC6A9 \uAC00\uB2A5\uD55C \uB77C\uC774\uBE0C\uB7EC\uB9AC</b>
-    \uC218\uC900\uC744 \uBAA9\uD45C\uB85C \uD588\uC2B5\uB2C8\uB2E4. \uCC3D\uC744
-    \uB744\uC6B0\uB294 \uB370\uC5D0\uB294 \uCF54\uB4DC \uD55C \uC904\uC774\uBA74
-    \uCDA9\uBD84\uD569\uB2C8\uB2E4."
+  m_text: "\uBCC4\uB3C4 UI \uC5D0\uC14B \uC5C6\uC774 <b>Unity UGUI \uB9CC\uC73C\uB85C</b> \uB370\uC2A4\uD06C\uD1B1 OS\uC640 \uAC19\uC740 \uCC3D \uAE30\uBC18 UI\uB97C \uAD6C\uD604\uD55C \uD504\uB808\uC784\uC6CC\uD06C \uC0D8\uD50C\uC785\uB2C8\uB2E4. \uCC3D\uC758 \uC0DD\uC131\xB7\uC774\uB3D9\xB7\uB9AC\uC0AC\uC774\uC988\xB7\uCD5C\uB300\uD654/\uCD5C\uC18C\uD654/\uBCF5\uC6D0\uC740 \uBB3C\uB860, \uC624\uBE0C\uC81D\uD2B8 \uD480\uB9C1\xB7z-\uC21C\uC11C \uAD00\uB9AC\xB7DPI \uC2A4\uCF00\uC77C\uB9C1\xB7\uC5D0\uB514\uD130 \uB3C4\uAD6C\xB7CI/CD\uAE4C\uC9C0 \uAC16\uCDB0 <b>\uC7AC\uC0AC\uC6A9 \uAC00\uB2A5\uD55C \uB77C\uC774\uBE0C\uB7EC\uB9AC</b> \uC218\uC900\uC744 \uBAA9\uD45C\uB85C \uD588\uC2B5\uB2C8\uB2E4. \uCC3D\uC744 \uB744\uC6B0\uB294 \uB370\uC5D0\uB294 \uCF54\uB4DC \uD55C \uC904\uC774\uBA74 \uCDA9\uBD84\uD569\uB2C8\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4ac1408574c6c5b49bf0f896fc1901a0, type: 2}
   m_sharedMaterial: {fileID: 1896807855410100413, guid: 4ac1408574c6c5b49bf0f896fc1901a0, type: 2}
@@ -16051,7 +16111,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -16276,8 +16336,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC624\uBE0C\uC81D\uD2B8 \uD480\uB9C1 + \uBA54\uBAA8\uB9AC \uC790\uB3D9
-    \uC815\uB9AC"
+  m_text: "\uC624\uBE0C\uC81D\uD2B8 \uD480\uB9C1 + \uBA54\uBAA8\uB9AC \uC790\uB3D9 \uC815\uB9AC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 042ef3763e0174d4baeca6d990272c48, type: 2}
   m_sharedMaterial: {fileID: 6210721459045984608, guid: 042ef3763e0174d4baeca6d990272c48, type: 2}
@@ -16327,7 +16386,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -16593,7 +16652,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -16635,6 +16694,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &7836059296313300768
 GameObject:
   m_ObjectHideFlags: 0
@@ -16751,7 +16812,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -16793,6 +16854,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &7919617132708647331
 GameObject:
   m_ObjectHideFlags: 0
@@ -17156,7 +17219,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -17295,7 +17358,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -17337,6 +17400,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!114 &4285032671311569157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17651,7 +17716,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -17738,8 +17803,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBB38\uC81C\uC5D0 \uB9DE\uB294 \uC790\uB8CC\uAD6C\uC870 \uC9C1\uC811
-    \uAD6C\uD604"
+  m_text: "\uBB38\uC81C\uC5D0 \uB9DE\uB294 \uC790\uB8CC\uAD6C\uC870 \uC9C1\uC811 \uAD6C\uD604"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 042ef3763e0174d4baeca6d990272c48, type: 2}
   m_sharedMaterial: {fileID: 6210721459045984608, guid: 042ef3763e0174d4baeca6d990272c48, type: 2}
@@ -17789,7 +17853,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -17927,7 +17991,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -17969,6 +18033,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &8257089904333898501
 GameObject:
   m_ObjectHideFlags: 0
@@ -18034,8 +18100,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#79B8FF>using</color> UGUIWindow;\nUGUIWindowManager.CreateWindow<<color=#B392F0>UGUIWindow</color>>();\nUGUIWindowManager.CreateWindowEx<<color=#B392F0>UGUIMenu</color>>(<color=#9ECBFF>\"\uBA54\uB274\"</color>,
-    x:0, y:0, width:300, height:400);"
+  m_text: "<color=#79B8FF>using</color> UGUIWindow;\nUGUIWindowManager.CreateWindow<<color=#B392F0>UGUIWindow</color>>();\nUGUIWindowManager.CreateWindowEx<<color=#B392F0>UGUIMenu</color>>(<color=#9ECBFF>\"\uBA54\uB274\"</color>, x:0, y:0, width:300, height:400);"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -18085,7 +18150,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -18172,10 +18237,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCC3D \uD558\uB098\uB97C <b>Controller(\uB3D9\uC791) \xB7 View(\uC2DC\uAC01)
-    \xB7 State(\uC2A4\uB0C5\uC0F7)</b>\uB85C \uBD84\uB9AC. \uC678\uD615\uC744 \uBC14\uAFD4\uB3C4
-    \uCEE8\uD2B8\uB864\uB7EC \uBB34\uAD00, \uCD5C\uB300\uD654 \uC9C1\uC804 \uC0C1\uD0DC
-    \uC800\uC7A5\xB7\uBCF5\uC6D0\uC774 \uB2E8\uC21C\uD574\uC9D1\uB2C8\uB2E4."
+  m_text: "\uCC3D \uD558\uB098\uB97C <b>Controller(\uB3D9\uC791) \xB7 View(\uC2DC\uAC01) \xB7 State(\uC2A4\uB0C5\uC0F7)</b>\uB85C \uBD84\uB9AC. \uC678\uD615\uC744 \uBC14\uAFD4\uB3C4 \uCEE8\uD2B8\uB864\uB7EC \uBB34\uAD00, \uCD5C\uB300\uD654 \uC9C1\uC804 \uC0C1\uD0DC \uC800\uC7A5\xB7\uBCF5\uC6D0\uC774 \uB2E8\uC21C\uD574\uC9D1\uB2C8\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -18225,7 +18287,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -18795,7 +18857,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -19037,6 +19099,8 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &8599600941124331443
 GameObject:
   m_ObjectHideFlags: 0
@@ -19152,7 +19216,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -19259,6 +19323,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &8709213898904533328
 GameObject:
   m_ObjectHideFlags: 0
@@ -19540,6 +19606,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &8872345518757707250
 GameObject:
   m_ObjectHideFlags: 0
@@ -19605,8 +19673,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCC3D \uD15C\uD50C\uB9BF \uC0DD\uC131\uAE30 + GitHub Actions \uBE4C\uB4DC\xB7\uB9B4\uB9AC\uC988
-    \uC790\uB3D9\uD654"
+  m_text: "\uCC3D \uD15C\uD50C\uB9BF \uC0DD\uC131\uAE30 + GitHub Actions \uBE4C\uB4DC\xB7\uB9B4\uB9AC\uC988 \uC790\uB3D9\uD654"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
   m_sharedMaterial: {fileID: -4713886358771526221, guid: 6c8f9bfa943a48d469ee542ac56d0032, type: 2}
@@ -19656,7 +19723,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -19793,7 +19860,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -19995,7 +20062,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -20037,6 +20104,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &9057405365095951339
 GameObject:
   m_ObjectHideFlags: 0
@@ -20152,7 +20221,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -20259,6 +20328,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &9174998145206878429
 GameObject:
   m_ObjectHideFlags: 0
@@ -20345,6 +20416,8 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &9220522042649422020
 GameObject:
   m_ObjectHideFlags: 0
@@ -20460,7 +20533,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1

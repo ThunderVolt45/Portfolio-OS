@@ -11,7 +11,7 @@
 
 1. 이 문서와 `TASKS.md`를 읽는다. 이 문서는 지속적인 작업 규칙, `TASKS.md`는 최신 진행 상태와 구현 이력의 원천이다.
 2. 변경 전 `git status --short`로 사용자 변경을 확인하고 보존한다.
-3. Unity 버전은 `ProjectSettings/ProjectVersion.txt`에서 확인한다. 현재 기준 버전은 `6000.3.19f1`이다.
+3. Unity 버전은 `ProjectSettings/ProjectVersion.txt`에서 확인한다. 현재 기준 버전은 `6000.6.0f1`이다.
 4. 실제 포트폴리오 작업은 `Assets/Scenes/PortfolioOS.unity`에서 한다. `Assets/UGUIWindowSample/Scenes/UGUIWindowSampleScene.unity`는 프레임워크 원본 샘플 씬이다.
 5. Unity MCP 또는 에디터 도구가 현재 세션에 제공되면 연결 상태와 활성 Unity 인스턴스를 확인한 뒤 사용한다. 도구가 보이지 않는다는 이유만으로 설치나 연결 상태를 추측하지 않는다.
 
