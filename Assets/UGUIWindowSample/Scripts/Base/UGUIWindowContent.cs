@@ -13,6 +13,8 @@ namespace UGUIWindow
         [SerializeField] private bool enableVerticalScroll = true;
         [SerializeField] private Vector2 minimumContentSize = Vector2.zero;
         [SerializeField] private float scrollbarThickness = 12f;
+        [Min(0f)]
+        [SerializeField] private float scrollSensitivity = 8f;
 
         [Header("Scroll Components")]
         [SerializeField] private RectTransform viewport;
@@ -108,6 +110,7 @@ namespace UGUIWindow
             scrollRect.content = scrollContent;
             scrollRect.horizontalScrollbar = horizontalScrollbar;
             scrollRect.verticalScrollbar = verticalScrollbar;
+            scrollRect.scrollSensitivity = Mathf.Max(0f, scrollSensitivity);
             scrollRect.movementType = ScrollRect.MovementType.Clamped;
             scrollRect.horizontalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
             scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;

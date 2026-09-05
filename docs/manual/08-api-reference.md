@@ -129,6 +129,7 @@ RectTransform RectTransform { get; }
 bool enableHorizontalScroll   // 기본 false
 bool enableVerticalScroll     // 기본 true
 Vector2 minimumContentSize    // LayoutUtility min 값보다 큰 수동 최소 크기
+float scrollSensitivity      // ScrollRect 휠 감도, 기본 8
 
 RectTransform viewport
 RectTransform scrollContent

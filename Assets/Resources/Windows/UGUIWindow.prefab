@@ -1617,7 +1617,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 8
   m_Viewport: {fileID: 2116619533648912203}
   m_HorizontalScrollbar: {fileID: 7016701122664874348}
   m_VerticalScrollbar: {fileID: 9135701964218721876}
@@ -1644,6 +1644,7 @@ MonoBehaviour:
   enableVerticalScroll: 1
   minimumContentSize: {x: 250, y: 150}
   scrollbarThickness: 7.94
+  scrollSensitivity: 8
   viewport: {fileID: 2116619533648912203}
   scrollContent: {fileID: 5564712873524780439}
   horizontalScrollbar: {fileID: 7016701122664874348}

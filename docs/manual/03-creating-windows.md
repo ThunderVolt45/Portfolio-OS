@@ -138,6 +138,7 @@ Content
 - `Content`에는 `UGUIWindowContent`와 `ScrollRect`가 붙어 있어야 합니다.
 - `Viewport`에는 `RectMask2D`가 붙어 있어, 내용이 창 바깥으로 그려지지 않습니다.
 - `enableVerticalScroll`은 기본으로 켜져 있고, `enableHorizontalScroll`은 기본으로 꺼져 있습니다.
+- 마우스 휠 속도는 `UGUIWindowContent.scrollSensitivity`로 조절합니다(기본 `8`).
 - 내용이 줄어들 수 있는 동안에는 스크롤바를 만들지 않고, `ScrollContent`의 최소 요구 크기보다 `Viewport`가 작아질 때만 해당 방향 스크롤바가 나타납니다.
 - 최소 요구 크기는 `LayoutElement.minWidth/minHeight`, LayoutGroup 계열의 min 값, 또는 `UGUIWindowContent.minimumContentSize`로 표현합니다.
 

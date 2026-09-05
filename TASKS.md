@@ -115,6 +115,7 @@
 - **아이콘(완료)**: `Assets/Portfolio/Icons/UGUISample.png`(256², 파란→인디고 그라디언트 타일 + 겹친 창 글리프 — About/ProjectBlackout와 동일 플랫 스타일, Sprite import) 생성 → PrefabTools에서 `windowIcon`으로 배선(iconPath 지정). 시안 스크립트 `scratchpad/gen_icon.py`(PIL). 데스크톱 아이콘 `UGUI_Desktop/IconGrid/Icon_UGUISample`(targetClassName=`UGUISampleWindow`, 라벨 "UGUI-Window\nSample", anchoredPosition (50,-610)) 씬에 추가·저장. `UGUIIcon.ApplyTargetWindowIcon`이 데스크톱+작업표시줄(Dock)에 스프라이트 자동 적용 확인. 아이콘 더블클릭(→`OpenWindow`) 창 오픈 end-to-end 검증.
 
 **구현 노트 — 함정**
+- **창 본문 마우스 휠 속도(2026-09-05)**: 공통 `UGUIWindowContent.scrollSensitivity`를 추가하고 기본값을 `8`로 설정했다. `ConfigureScrollRect()`가 이 값을 내부 `ScrollRect`에 적용하므로 base `UGUIWindow.prefab`의 모든 Variant에 공통 반영되며, 창별 인스펙터 override도 가능하다. `PortfolioOS` Input System의 `m_ScrollDeltaPerTick=6`과 결합해 휠 1틱당 약 48 UI px를 이동하며 드래그/스크롤바 핸들 조작은 변경하지 않는다.
 - ⚠️ 창 초기화(콘텐츠·크기)는 `Start()`가 아니라 **`OnEnable()`**에서. `execute_code`로 만든 오브젝트는 Start가 안 뜨고, 매니저가 Instantiate 직후 제목을 클래스명으로 덮어씀.
 - E2-T8 데스크톱 아이콘: 씬 `UGUI_Desktop/IconGrid`에 `Icon_About` 복제로 추가, `targetClassName`+라벨+`anchoredPosition`만 변경. (현재 개별 PDF 아이콘 3개가 배치돼 있으나 런처 집약으로 제거 예정.)
 

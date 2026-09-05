@@ -53,6 +53,8 @@ UGUIWindow
 
 `Content`에는 `UGUIWindowContent`가 붙어 있으며, 이 컴포넌트가 `ScrollRect`, `RectMask2D`, 스크롤바 표시 상태를 관리합니다. 기본값은 **세로 스크롤만 사용**이며, 가로 스크롤은 필요한 창에서 `enableHorizontalScroll`을 켜서 사용합니다.
 
+마우스 휠 이동량은 `scrollSensitivity`로 조절하며 기본값은 `8`입니다. 이 값은 `ScrollRect.scrollSensitivity`에 적용되므로, 특정 창에서 더 느리거나 빠른 스크롤이 필요하면 해당 `Content`의 인스펙터에서 덮어쓸 수 있습니다.
+
 스크롤바는 창 크기가 내용의 선호 크기보다 작아지는 즉시 나타나지 않습니다. 먼저 `ScrollContent`가 `Viewport` 안에서 줄어들고, `LayoutUtility.GetMinWidth/Height`와 `minimumContentSize`로 계산한 최소 요구 크기보다 `Viewport`가 작아지는 축에서만 스크롤바가 표시됩니다. 따라서 최소 크기 기준이 필요한 UI는 `LayoutElement` 또는 LayoutGroup 계열 컴포넌트로 min 값을 표현하세요.
 
 ## 중앙 관리자: UGUIWindowManager
